@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day_121 学习单 · 小韩英语角</title>
+<style>
+  :root {
+    --bg: #F7F5F2;
+    --card: #ffffff;
+    --ink: #1A1A2E;
+    --muted: #8B8FA3;
+    --line: #E8E4DE;
+    --accent: #E85D3A;
+    --accent-light: #FFF0EA;
+    --navy: #1B2A4A;
+    --ok: #2E9E6B;
+    --bad: #E74C3C;
+    --soft: #F5F2ED;
+    --radius: 24px;
+    --radius-sm: 14px;
+    --radius-xs: 10px;
+    --shadow: 0 1px 4px rgba(27,42,74,0.04), 0 2px 12px rgba(27,42,74,0.06);
+    --shadow-lg: 0 4px 12px rgba(27,42,74,0.06), 0 8px 32px rgba(27,42,74,0.10);
+    --shadow-xl: 0 8px 24px rgba(27,42,74,0.10), 0 16px 48px rgba(27,42,74,0.12);
+    --font: "PingFang SC", "Microsoft YaHei", -apple-system, sans-serif;
+    --c-etym: #1B8C3A;
+    --c-memory: #6C5CE7;
+    --c-usage: #2D7FC1;
+    --c-error: #E74C3C;
+    --c-exam: #8B5CF6;
+    --c-family: #10B981;
+    --c-colloc: #3B82F6;
+    --c-example: #7C3AED;
+    --c-confuse: #F59E0B;
+    --bg-etym: #F0F9F2;
+    --bg-memory: #F5F3FF;
+    --bg-usage: #F0F7FC;
+    --bg-error: #FEF2F2;
+    --bg-exam: #F8F4FF;
+    --bg-family: #ECFDF5;
+    --bg-colloc: #EFF6FF;
+    --bg-example: #F9F4FF;
+    --bg-confuse: #FFFBEB;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font); background: var(--bg);
+    color: var(--ink); padding-bottom: 100px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .topbar {
+    position: sticky; top: 0; z-index: 20;
+    background: linear-gradient(135deg, #1B2A4A 0%, #243B5E 100%);
+    color: #fff; padding: 12px 18px;
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  }
+  .topbar .brand {
+    font-weight: 700; font-size: 16px;
+    background: linear-gradient(90deg, #FFD9A0, #F0B37A);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; letter-spacing: 0.5px;
+  }
+  .topbar .progress {
+    flex: 1; min-width: 80px; height: 6px;
+    background: rgba(255,255,255,0.15); border-radius: 4px; overflow: hidden;
+  }
+  .topbar .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #E85D3A, #F0B37A);
+    width: 0%; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .topbar .counter {
+    font-size: 14px; color: rgba(255,255,255,0.6);
+    font-variant-numeric: tabular-nums; min-width: 50px; text-align: right;
+  }
+  .topbar .blocks { display: flex; gap: 4px; }
+  .topbar .blocks button {
+    font-size: 13px; padding: 4px 10px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.6); border-radius: 8px;
+    cursor: pointer; transition: all 0.2s; font-weight: 500;
+  }
+  .topbar .blocks button:hover { background: rgba(255,255,255,0.12); color: #fff; }
+  .topbar .blocks button.on {
+    background: #E85D3A; color: #fff; border-color: #E85D3A;
+  }
+  .meta {
+    text-align: center; padding: 10px 12px 4px;
+    color: var(--muted); font-size: 14px; letter-spacing: 0.3px;
+  }
+  .stage { max-width: 700px; margin: 0 auto; padding: 8px 14px 20px; min-height: 65vh; }
+  .q {
+    display: none; background: var(--card); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 32px 28px 36px;
+    min-height: 380px; position: relative;
+    overflow: hidden; border: 1px solid rgba(232,228,222,0.6);
+  }
+  .q.active {
+    display: block;
+    animation: cardIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(20px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .hidden { display: none !important; }
+  .qhead {
+    font-size: 16px; margin-bottom: 16px; color: var(--muted);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .qn { font-weight: 700; color: var(--accent); margin-right: 4px; }
+  .intro-card { text-align: center; padding-top: 40px; }
+  .intro-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #E85D3A, #F0A07A);
+    color: #fff; font-size: 13px; font-weight: 700; padding: 5px 16px;
+    border-radius: 999px; letter-spacing: 1px; text-transform: uppercase;
+    box-shadow: 0 2px 8px rgba(232,93,58,0.25);
+  }
+  .intro-day {
+    font-size: 48px; font-weight: 800; margin: 14px 0 4px;
+    color: var(--navy); letter-spacing: -1px;
+    background: linear-gradient(135deg, #1B2A4A, #2D4A7A);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .intro-date { color: var(--muted); font-size: 16px; margin-bottom: 20px; }
+  .intro-goal {
+    display: flex; gap: 16px; justify-content: center; margin: 20px 0;
+  }
+  .intro-goal div {
+    background: linear-gradient(135deg, var(--soft), #F0EBE4);
+    border-radius: 18px; padding: 14px 24px; min-width: 90px;
+    border: 1px solid rgba(232,228,222,0.5);
+  }
+  .intro-goal b { font-size: 32px; color: var(--accent); display: block; }
+  .intro-goal span { font-size: 13px; color: var(--muted); }
+  .intro-story {
+    background: linear-gradient(135deg, #F0F9F2, #E8F5EC);
+    border: 1px solid #C8E0D0; border-radius: 18px;
+    padding: 18px; margin: 14px 0; text-align: left;
+  }
+  .intro-story .story-title {
+    font-weight: 700; font-size: 20px; color: var(--navy); margin: 0 0 8px;
+  }
+  .intro-flow {
+    color: var(--muted); font-size: 15px; line-height: 1.8;
+    margin-top: 18px; padding: 0 12px;
+  }
+  .intro-flow b { color: var(--navy); }
+  .wcard { padding-top: 28px; }
+  .wcard-top {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 16px;
+  }
+  .wtag {
+    font-size: 13px; padding: 6px 16px; border-radius: 999px;
+    font-weight: 700; letter-spacing: 0.5px;
+  }
+  .wtag.new { background: #E8F2FC; color: #1D6FA8; }
+  .wtag.review { background: #FEF0E7; color: #D4782A; }
+  .wnum {
+    font-size: 13px; color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .phase { margin: 16px 0; }
+  .phase-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 13px; font-weight: 700; padding: 6px 18px 6px 14px;
+    border-radius: 999px; margin-bottom: 12px;
+  }
+  .phase-tag.think { background: #E8F0FC; color: #1D6FA8; }
+  .phase-tag.think::before { content: '💭'; font-size: 13px; }
+  .phase-tag.input { background: #E4F5EC; color: #1A8A5A; }
+  .phase-tag.input::before { content: '📖'; font-size: 13px; }
+  .phase-tag.output { background: #FEF0E7; color: #D4782A; }
+  .phase-tag.output::before { content: '✏️'; font-size: 13px; }
+  .think-q {
+    color: var(--muted); font-size: 17px; margin: 10px 0 16px;
+    line-height: 1.6;
+  }
+  .meaning {
+    font-size: 28px; line-height: 1.5; color: var(--navy);
+    font-weight: 700; margin: 0 0 16px; padding: 18px 24px;
+    background: #F8F4EE; border-radius: 16px; text-align: center;
+    border: 1px dashed var(--line);
+  }
+  .hint { color: var(--muted); font-size: 14px; margin-top: 10px; }
+  .rate-msg {
+    color: var(--accent); font-size: 16px; margin-top: 12px;
+    min-height: 20px; font-weight: 600;
+  }
+  .rbtns {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+  }
+  .rbtns button {
+    font-size: 16px; padding: 12px 6px;
+    border: 1px solid var(--line); border-radius: 14px;
+    background: var(--soft); cursor: pointer; font-weight: 600;
+    transition: all 0.2s; color: var(--ink);
+  }
+  .rbtns button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+  .rbtns button.rate.sel {
+    background: linear-gradient(135deg, #E85D3A, #F0A07A);
+    color: #fff; border-color: #E85D3A; transform: scale(1.05);
+    box-shadow: 0 4px 16px rgba(232,93,58,0.3);
+  }
+  .opts {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+    margin-top: 12px;
+  }
+  .opt {
+    padding: 16px 18px; background: #F9F6EF;
+    border: 1px solid var(--line); border-radius: 16px;
+    cursor: pointer; font-size: 16px; line-height: 1.5;
+    transition: all 0.15s; display: flex; align-items: center; gap: 8px;
+  }
+  .opt:hover {
+    border-color: #D4C9B8; background: #F5F0E8;
+    transform: translateY(-1px);
+  }
+  .opt input { margin: 0; accent-color: var(--accent); }
+  .opt.right {
+    background: #E4F5EC; border-color: var(--ok);
+    animation: pulse 0.3s ease;
+  }
+  .opt.wrong { background: #FEF2F2; border-color: var(--bad); }
+  .opt.soft { opacity: 0.45; }
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+  }
+  .feedback {
+    margin-top: 16px; padding: 16px 18px; border-radius: 16px;
+    background: #F0F9F2; border: 1px solid #C8E0D0;
+    animation: cardIn 0.2s ease;
+  }
+  .feedback.wrong { background: #FEF2F2; border-color: #F0C8C8; }
+  .fb-line { margin: 6px 0; font-size: 17px; line-height: 1.6; }
+  .fb-ok { color: var(--ok); }
+  .fb-wrong { color: var(--bad); }
+  .explain { margin: 8px 0; padding-left: 20px; }
+  .explain li { margin: 4px 0; font-size: 16px; }
+  .opt-explain { margin: 6px 0; font-size: 16px; line-height: 1.6; }
+  .opt-reason { color: var(--muted); font-size: 14px; }
+  .think-path {
+    margin: 12px 0; padding: 12px 14px; border-radius: 14px;
+    background: #FFF8E8; border: 1px solid #F0E3C0;
+  }
+  .distractor-item {
+    margin: 5px 0; font-size: 15px; line-height: 1.6;
+    color: var(--ink);
+  }
+  .distractors {
+    margin: 12px 0; padding: 12px 14px; border-radius: 14px;
+    background: #FEF2F2; border: 1px solid #F5D0D0;
+  }
+  .tag-correct { color: var(--ok); font-weight: 700; }
+  .out-q { font-size: 17px; line-height: 1.7; margin-bottom: 10px; color: var(--navy); font-weight: 600; }
+  .out-sentence { font-size: 18px; line-height: 1.8; background: var(--soft); padding: 14px 18px; border-radius: 16px; margin: 10px 0 14px; }
+  .out-fb {
+    margin-top: 14px; padding: 14px 16px; border-radius: 14px;
+    background: #F0F9F2; border: 1px solid #C8E0D0;
+    animation: cardIn 0.2s ease;
+  }
+  .story-title {
+    font-weight: 700; font-size: 18px; color: var(--navy);
+    margin: 8px 0; line-height: 1.4;
+  }
+  .story-body { font-size: 18px; line-height: 2; color: #1A3040; }
+  .story-paragraph { margin: 12px 0; line-height: 1.9; }
+  mark {
+    background: linear-gradient(180deg, transparent 60%, #FFE9C9 60%);
+    padding: 0 3px; border-radius: 2px;
+  }
+  audio {
+    height: 36px; width: 100%; margin-top: 10px;
+    border-radius: 10px;
+  }
+  .dict-word {
+    padding: 1px 4px; border-radius: 4px; cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s; font-weight: 600;
+  }
+  .dict-word.dict-new {
+    background: linear-gradient(180deg, transparent 60%, #FFE9C9 60%);
+    border-bottom-color: var(--accent);
+  }
+  .dict-word.dict-new:hover { background: #FFDCA8; }
+  .dict-word.dict-review {
+    background: linear-gradient(180deg, transparent 60%, #F0E8FF 60%);
+    border-bottom-color: #8B5CF6;
+  }
+  .dict-word.dict-review:hover { background: #E2D4F5; }
+  .dict-modal {
+    display: none; position: fixed; inset: 0; z-index: 50;
+    background: rgba(27,42,74,0.4);
+    align-items: center; justify-content: center;
+    backdrop-filter: blur(6px);
+  }
+  .dict-modal.show { display: flex; }
+  .dict-box {
+    width: min(88vw, 460px); background: #fff; border-radius: 24px;
+    padding: 28px; box-shadow: var(--shadow-xl);
+    animation: cardIn 0.15s ease;
+  }
+  .dict-box .d-en {
+    font-size: 30px; font-weight: 800; color: var(--navy);
+  }
+  .dict-box .d-ph {
+    color: var(--muted); font-size: 15px; margin: 4px 0 10px;
+  }
+  .dict-box .d-zh {
+    font-size: 17px; line-height: 1.5; margin-bottom: 12px;
+    color: var(--ink);
+  }
+  .dict-close {
+    position: absolute; top: 14px; right: 18px; font-size: 26px;
+    color: var(--muted); cursor: pointer; background: none; border: none;
+    line-height: 1; transition: color 0.15s;
+  }
+  .dict-close:hover { color: var(--navy); }
+  .dict-box-wrap { position: relative; }
+  .rich { padding: 0; }
+  .rich-head {
+    margin-bottom: 24px; padding-bottom: 20px;
+    border-bottom: 2px solid var(--line);
+    background: linear-gradient(180deg, #FAF8F5 0%, transparent 100%);
+    margin: -16px -16px 20px -16px;
+    padding: 24px 24px 20px 24px;
+    border-radius: var(--radius) var(--radius) 0 0;
+    position: relative;
+  }
+  .rich-head::after {
+    content: '';
+    position: absolute; bottom: -2px; left: 24px; right: 24px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    border-radius: 2px;
+  }
+  .rich-head .head-line1 {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  }
+  .rich-head .en {
+    font-size: 36px; font-weight: 800; color: var(--navy);
+    letter-spacing: -0.5px; line-height: 1.1;
+  }
+  .rich-head .pos-chip {
+    background: linear-gradient(135deg, #F0E2CC, #E8D6B8);
+    color: #8A5A1C; font-size: 12px;
+    font-weight: 700; padding: 3px 14px; border-radius: 8px;
+  }
+  .rich-head .phon {
+    color: var(--muted); font-size: 15px;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .rich-head .head-meaning {
+    margin-top: 10px; font-size: 20px; font-weight: 700;
+    color: var(--accent); line-height: 1.5;
+  }
+  .rich-sec {
+    margin: 18px 0; padding: 18px 20px;
+    background: #FAF8F5; border-radius: 18px;
+    border: 1px solid #EDE8E0;
+    position: relative; overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .rich-sec:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(27,42,74,0.08);
+  }
+  .rich-sec::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 5px; height: 100%;
+    border-radius: 0 3px 3px 0;
+  }
+  .rich-sec .sec-title {
+    font-size: 17px; font-weight: 700;
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .rich-sec .sec-body {
+    font-size: 17px; line-height: 1.8; color: #333; margin: 0;
+  }
+  .rich-sec .sec-list {
+    margin: 6px 0 6px 18px; padding: 0;
+  }
+  .rich-sec .sec-list li {
+    font-size: 16px; line-height: 1.9; margin: 6px 0;
+  }
+  .rich-sec .sec-list li .en {
+    font-size: 17px; font-weight: 600; color: var(--navy);
+  }
+  .rich-sec .sec-list li .zh {
+    color: var(--muted); font-size: 15px;
+  }
+  .rich-sec .sec-list li.err-pair {
+    list-style: none; margin: 12px 0;
+    padding: 12px 14px;
+    background: rgba(231,76,60,0.04);
+    border-radius: 12px;
+    border: 1px solid rgba(231,76,60,0.1);
+  }
+  .err-wrong {
+    color: #C0392B; font-size: 16px;
+    text-decoration: line-through;
+  }
+  .err-right {
+    color: #1A8A5A; font-size: 16px; font-weight: 600;
+    margin-top: 4px;
+  }
+  .err-note {
+    color: #888; font-size: 15px; margin-top: 4px;
+    line-height: 1.6;
+  }
+  mark.target {
+    background: #FFD9A0; color: #8A4A12; font-weight: 700;
+    padding: 0 4px; border-radius: 3px;
+  }
+  .rich-sec.sec-etym::before { background: var(--c-etym); }
+  .rich-sec.sec-etym .sec-title { color: var(--c-etym); }
+  .rich-sec.sec-etym { background: var(--bg-etym); border-color: #C8E0D0; }
+  .rich-sec.sec-memory::before { background: var(--c-memory); }
+  .rich-sec.sec-memory .sec-title { color: var(--c-memory); }
+  .rich-sec.sec-memory { background: var(--bg-memory); border-color: #DCD4F5; }
+  .rich-sec.sec-usage::before { background: var(--c-usage); }
+  .rich-sec.sec-usage .sec-title { color: var(--c-usage); }
+  .rich-sec.sec-usage { background: var(--bg-usage); border-color: #C8DCE8; }
+  .rich-sec.sec-error::before { background: var(--c-error); }
+  .rich-sec.sec-error .sec-title { color: var(--c-error); }
+  .rich-sec.sec-error { background: var(--bg-error); border-color: #F0C8C8; }
+  .rich-sec.sec-exam::before { background: var(--c-exam); }
+  .rich-sec.sec-exam .sec-title { color: var(--c-exam); }
+  .rich-sec.sec-exam { background: var(--bg-exam); border-color: #DCC4E8; }
+  .rich-sec.sec-family::before { background: var(--c-family); }
+  .rich-sec.sec-family .sec-title { color: var(--c-family); }
+  .rich-sec.sec-family { background: var(--bg-family); border-color: #A8D5BA; }
+  .rich-sec.sec-colloc::before { background: var(--c-colloc); }
+  .rich-sec.sec-colloc .sec-title { color: var(--c-colloc); }
+  .rich-sec.sec-colloc { background: var(--bg-colloc); border-color: #B8D4E8; }
+  .rich-sec.sec-example::before { background: var(--c-example); }
+  .rich-sec.sec-example .sec-title { color: var(--c-example); }
+  .rich-sec.sec-example { background: var(--bg-example); border-color: #DCD4EC; }
+  .rich-sec.sec-confuse::before { background: var(--c-confuse); }
+  .rich-sec.sec-confuse .sec-title { color: var(--c-confuse); }
+  .rich-sec.sec-confuse { background: var(--bg-confuse); border-color: #F0D4B8; }
+  .chips {
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .chip {
+    background: #fff; border: 1px solid var(--line);
+    border-radius: 999px; padding: 8px 20px;
+    font-size: 16px; transition: all 0.15s;
+  }
+  .chip:hover {
+    border-color: var(--accent);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .chip b { color: var(--navy); }
+  .chip .chip-zh { color: var(--muted); font-weight: 400; font-size: 15px; margin-left: 4px; }
+  .wf-card { border-top: none; }
+  .wf-card .qhead { color: #7C3AED; }
+  .wf-card .wf-word { font-weight: 700; color: var(--navy); }
+  .wf-card .wf-stem {
+    background: #F5F3FF; border: 1px solid #D3C4EA;
+    padding: 16px 18px; border-radius: 14px; font-size: 17px;
+    line-height: 1.8; margin: 10px 0 14px;
+  }
+  .al-card { border-top: none; }
+  .al-card .qhead { color: #D4782A; }
+  .al-card .para-sentence {
+    background: var(--soft); padding: 16px 18px;
+    border-radius: 16px; font-size: 17px; line-height: 1.8;
+    margin: 10px 0 14px; color: var(--ink);
+  }
+  .al-card .para-blank {
+    display: inline-block; background: #fff;
+    border: 2px dashed #D4782A; padding: 0 12px;
+    border-radius: 8px; color: #D4782A; font-weight: 700;
+    font-family: monospace; font-size: 14px;
+  }
+  .cloze .sentence {
+    font-size: 18px; line-height: 1.9; background: var(--soft);
+    padding: 16px 18px; border-radius: 16px; margin: 10px 0 14px;
+  }
+  .writing textarea {
+    width: 100%; padding: 14px 16px; border: 1px solid var(--line);
+    border-radius: 16px; font-size: 15px; font-family: var(--font);
+    resize: vertical; margin: 10px 0; transition: border-color 0.2s;
+  }
+  .writing textarea:focus {
+    outline: none; border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(232,93,58,0.1);
+  }
+  .writing button {
+    font-size: 15px; padding: 12px 24px; border: none;
+    border-radius: 14px; background: var(--accent); color: #fff;
+    cursor: pointer; font-weight: 600; transition: all 0.2s;
+  }
+  .writing button:hover {
+    background: #D04D2A; transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(232,93,58,0.3);
+  }
+  .writing button:disabled { background: #CCB; cursor: not-allowed; }
+  .writing-msg { margin-top: 12px; font-size: 16px; color: var(--navy); }
+  .writing .prompt {
+    font-size: 17px; line-height: 1.8; color: var(--navy);
+    font-weight: 600; margin: 6px 0;
+  }
+  .report-card { text-align: center; }
+  .report-hero { font-size: 60px; margin-bottom: 6px; }
+  .report-title {
+    color: var(--navy); margin: 8px 0 4px; font-size: 28px;
+    font-weight: 800;
+  }
+  .report-sub {
+    color: var(--muted); font-size: 16px; margin-bottom: 24px;
+  }
+  .report-stats {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+    margin-bottom: 20px;
+  }
+  .stat {
+    background: linear-gradient(135deg, var(--soft), #F0EBE4);
+    border-radius: 18px; padding: 16px 8px;
+    border: 1px solid rgba(232,228,222,0.5);
+  }
+  .stat b { display: block; font-size: 34px; color: var(--navy); }
+  .stat span { font-size: 13px; color: var(--muted); }
+  .report-weak {
+    background: #FEF0E7; border: 1px solid #F5D9BD;
+    border-radius: 18px; padding: 16px; font-size: 16px; line-height: 1.8;
+  }
+  .report-tip { color: var(--muted); font-size: 15px; margin-top: 18px; }
+  .card-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid var(--line);
+    padding: 12px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 14px; box-shadow: 0 -4px 24px rgba(0,0,0,0.06);
+    z-index: 30;
+  }
+  .card-nav button {
+    font-size: 17px; padding: 12px 24px; border: none;
+    border-radius: 14px; background: var(--accent); color: #fff;
+    cursor: pointer; font-weight: 600; transition: all 0.15s;
+  }
+  .card-nav button:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(232,93,58,0.3);
+  }
+  .card-nav button:disabled { background: #DDD; cursor: not-allowed; }
+  .card-nav .nav-prev {
+    background: transparent; color: var(--accent);
+    border: 1px solid var(--accent);
+  }
+  .card-nav .nav-prev:hover:not(:disabled) {
+    background: var(--accent-light);
+  }
+  .card-nav .nav-pos {
+    color: var(--muted); font-size: 13px;
+    font-variant-numeric: tabular-nums;
+  }
+  .footer {
+    text-align: center; padding: 18px; color: #BBB; font-size: 11px;
+    letter-spacing: 0.5px;
+  }
+  .hero-area {
+    display: flex; gap: 28px; margin-bottom: 24px; align-items: center;
+    background: linear-gradient(135deg, #FAF8F5, #F5F2ED);
+    border-radius: 18px; padding: 20px; border: 1px solid #EDE8E0;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-area::before {
+    content: '';
+    position: absolute; top: 0; right: 0;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(232,93,58,0.04) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero-info { flex: 1; min-width: 0; position: relative; z-index: 1; }
+  .hero-word {
+    font-size: 52px;
+    line-height: 1.1; margin: 0 0 8px; letter-spacing: -0.5px;
+  }
+  .hero-phon {
+    font-size: 20px;
+    display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+  }
+  .hero-pos {
+    display: inline-block; font-size: 14px; font-weight: 600;
+    color: #fff; background: var(--accent);
+    padding: 3px 12px; border-radius: 8px; margin-right: 8px;
+  }
+  .hero-meaning {
+    font-size: 28px;
+    margin: 8px 0 0; line-height: 1.4;
+  }
+  .hero-img {
+    flex-shrink: 0; width: 240px; height: 240px;
+    border-radius: 18px; overflow: hidden;
+    box-shadow: 0 6px 20px rgba(27,42,74,0.15);
+    border: 3px solid #fff;
+    background: #ffffff;
+    position: relative; z-index: 1;
+    transition: transform 0.2s;
+  }
+  .hero-img:hover { transform: scale(1.03); }
+  .hero-img img {
+    width: 100%; height: 100%; object-fit: cover;
+    object-position: center; display: block;
+  }
+  .concept-map {
+    position: relative; width: 100%; margin: 20px auto;
+    padding: 20px 0;
+    display: flex; justify-content: center; align-items: center;
+    gap: 20px; flex-wrap: wrap;
+    background: linear-gradient(135deg, #FAF8F5, #F5F2ED);
+    border-radius: 18px; border: 1px solid #EDE8E0;
+    min-height: 120px;
+  }
+  .concept-center {
+    width: 88px; height: 88px; border-radius: 50%;
+    background: linear-gradient(135deg, #1B2A4A, #2D4A7A);
+    color: #fff; display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 14px; text-align: center;
+    box-shadow: 0 6px 24px rgba(27,42,74,0.3);
+    z-index: 2; line-height: 1.2; padding: 6px;
+    border: 3px solid #fff;
+    position: relative;
+  }
+  .concept-center::after {
+    content: ''; position: absolute; inset: -8px; border-radius: 50%;
+    border: 2px dashed rgba(27,42,74,0.12);
+  }
+  .concept-center::before {
+    content: ''; position: absolute; inset: -16px; border-radius: 50%;
+    border: 1px solid rgba(27,42,74,0.05);
+  }
+  .concept-nodes {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    justify-content: center; max-width: 320px;
+  }
+  .concept-node {
+    padding: 8px 18px; border-radius: 999px; font-size: 13px;
+    font-weight: 600; white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    transition: all 0.2s; border: 1px solid transparent;
+    cursor: default;
+  }
+  .concept-node:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  }
+  .concept-node.family {
+    background: #E4F5EC; color: #1A8A5A;
+    border-color: #A8D5BA;
+  }
+  .concept-node.colloc {
+    background: #E8F2FC; color: #1D6FA8;
+    border-color: #B8D4E8;
+  }
+  .concept-node.synonym {
+    background: #FEF0E7; color: #D4782A;
+    border-color: #F0D4B8;
+  }
+  .concept-node.antonym {
+    background: #FEF2F2; color: #C0392B;
+    border-color: #F0B8B8;
+  }
+  .concept-node.example {
+    background: #F5F3FF; color: #7C3AED;
+    border-color: #D4C4EC;
+  }
+    .morph-prefix { color: #3B82F6; }
+  .morph-root { color: #1B8C3A; }
+  .morph-suffix { color: #8B5CF6; }
+  .hero-word { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0; }
+  .hero-word .morph-prefix,
+  .hero-word .morph-root,
+  .hero-word .morph-suffix { font-size: inherit; font-weight: 800; letter-spacing: -0.5px; }
+
+@media (max-width: 600px) {
+    .hero-area { flex-direction: column; align-items: center; text-align: center; }
+    .hero-area::before { display: none; }
+    .hero-img { width: 170px; height: 170px; }
+    .hero-word { font-size: 32px; text-align: center; }
+    .hero-meaning { text-align: center; }
+    .hero-phon { justify-content: center; }
+    .concept-map { gap: 12px; padding: 16px 0; }
+    .concept-center { width: 72px; height: 72px; font-size: 12px; }
+    .concept-nodes { max-width: 240px; }
+    .opts { grid-template-columns: 1fr; }
+    .rbtns { grid-template-columns: repeat(4, 1fr); gap: 4px; }
+    .q { padding: 24px 18px 28px; min-height: 320px; }
+    .meaning { font-size: 21px; }
+    .intro-day { font-size: 34px; }
+    .rich-head .en { font-size: 28px; }
+    .rich-head { margin: -12px -12px 16px -12px; padding: 20px 18px 16px 18px; }
+    .stage { max-width: 100%; padding: 8px 10px 20px; }
+    .card-nav button { font-size: 13px; padding: 10px 16px; }
+    .intro-goal { gap: 10px; }
+    .intro-goal div { padding: 12px 16px; min-width: 70px; }
+    .report-stats { grid-template-columns: repeat(2, 1fr); }
+    .rich-sec { padding: 14px 16px; }
+    .rich-sec .sec-body { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">小韩英语角 · Day_121</div>
+  <div class="progress"><div class="progress-bar" id="bar"></div></div>
+  <div class="counter" id="counter">0 / 24</div>
+  <div class="blocks" id="blocks"></div>
+</div>
+<div class="meta">2026-08-23 · 主题：日常生活与家居 · 键盘 1-4 评分，←/→ 翻卡</div>
+<div class="stage" id="stage">
+  <section class='q intro-card' data-block='intro' data-card='1'><div class='intro-badge'>今日学习单</div><h1 class='intro-day'>Day_121</h1><p class='intro-date'>2026-08-23 · 主题：日常生活与家居</p><div class='intro-goal'><div><b>8</b> 新词</div><div><b>4</b> 复习</div><div><b>1</b> 短文</div></div><div class='intro-story'><p class='story-title'></p><audio controls preload='none' src='audio/story.mp3'><source src='audio/story.m4a'></audio></div><p class='intro-flow'>每个词按 <b>先思考 → 再输入 → 再输出</b> 三步走。先想一遍，再看答案，最后动手用一次。</p></section><section class='q wcard new' data-block='words' data-card='1' data-word='apron'><div class='wcard-top'><span class='wtag new'>新词</span><span class='wnum'>01 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>围裙</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-root'>apron</span></p><p class='hero-phon'><span class='hero-pos'>n.</span> <audio controls preload='none' src='audio/apron_en.mp3'><source src='audio/apron_en.m4a'></audio></p><p class='hero-meaning'>围裙</p></div><div class='hero-img'><img class='anchor-img' src='../../data/images/apron.png' alt='apron 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>源自中古英语 &#x27;napron&#x27;，原意为 &#x27;桌布&#x27;。由于 &#x27;a napron&#x27; 被误听为 &#x27;an apron&#x27;，词首的 &#x27;n&#x27; 脱落，最终演变为现代英语的 &#x27;apron&#x27;。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>谐音法：&#x27;apron&#x27; 听起来像 &#x27;爱扑软&#x27;，想象你穿着围裙扑向软软的蛋糕面团。</li><li>拆分法：a + pron，&#x27;a&#x27; 是 &#x27;一个&#x27;，&#x27;pron&#x27; 像 &#x27;pro&#x27;（专业），联想：一个专业的厨师穿着围裙。</li><li>场景联想法：想象妈妈在厨房里，穿着带花边的围裙，一边哼歌一边煎鸡蛋，围裙上沾着面粉。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>可数名词，常与 &#x27;wear&#x27; 或 &#x27;put on&#x27; 搭配，表示穿围裙的动作。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>I need to wear a apron.</s></div><div class='err-right'>✅ I need to wear an apron.</div><div class='err-note'>apron 以元音音素开头，不定冠词要用 &#x27;an&#x27;。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>He put on his apron and went to work in the garden.</s></div><div class='err-right'>✅ He put on his apron and went to work in the kitchen.</div><div class='err-note'>apron 通常用于厨房或烹饪场景，花园里更常用 &#x27;gardening apron&#x27; 或 &#x27;overalls&#x27;。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>CET-4 完形填空：注意冠词 &#x27;an&#x27; 的用法，apron 是元音音素开头。</li><li>高考阅读：可能出现在描述家庭生活或烹饪场景的短文中，需理解其功能。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>aproned</b> adj. 穿着围裙的</span><span class='chip'><b>apronful</b> n. 一围裙的量</span><span class='chip'><b>apronless</b> adj. 不穿围裙的</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'>wear an apron</span><span class='chip'>put on an apron</span><span class='chip'>kitchen apron</span><span class='chip'>apron strings</span><span class='chip'>apron pocket</span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>She tied her <mark class='target'>apron</mark> tightly before starting to bake the cake.</span><br><span class='zh'>她开始烤蛋糕前，把围裙系得紧紧的。</span></li><li><span class='en'>The chef&#x27;s <mark class='target'>apron</mark> was stained with tomato sauce after a long shift.</span><br><span class='zh'>厨师的长围裙在长时间轮班后沾满了番茄酱。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>overalls</b>（工装裤）— apron 只遮住身体前部，overalls 是连体工装，覆盖全身。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>apron</div><div class='concept-nodes'><span class='concept-node family'>aproned</span><span class='concept-node family'>apronful</span><span class='concept-node family'>apronless</span><span class='concept-node colloc'>wear an apron</span><span class='concept-node colloc'>put on an apron</span><span class='concept-node colloc'>kitchen apron</span><span class='concept-node colloc'>apron strings</span><span class='concept-node colloc'>apron pocket</span><span class='concept-node synonym'>overalls</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 apron 填回句子：</p><p class='out-sentence'>She tied her ______ tightly before starting to bake the cake.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out1' value='accustomed'> accustomed</label><label class='opt ' data-correct='0'><input type='radio' name='out1' value='bookcase'> bookcase</label><label class='opt ' data-correct='1'><input type='radio' name='out1' value='apron'> apron</label><label class='opt ' data-correct='0'><input type='radio' name='out1' value='greenhouse'> greenhouse</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>apron</b> </p><p class='fb-line'>📝 完整句：She tied her apron tightly before starting to bake the cake.</p><p class='fb-line'>🀄 译文：她开始烤蛋糕前，把围裙系得紧紧的。</p></div></div></section><section class='q wcard new' data-block='words' data-card='2' data-word='bookcase'><div class='wcard-top'><span class='wtag new'>新词</span><span class='wnum'>02 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>书柜</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-root'>bookcase</span></p><p class='hero-phon'><span class='hero-pos'>n.</span> <audio controls preload='none' src='audio/bookcase_en.mp3'><source src='audio/bookcase_en.m4a'></audio></p><p class='hero-meaning'>书柜</p></div><div class='hero-img'><img class='anchor-img' src='../../data/images/bookcase.png' alt='bookcase 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>bookcase 由 book（书）和 case（容器）组合而成，源自中古英语 bok 和古法语 casse，意为存放书籍的家具。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>谐音法：bookcase 读作 &#x27;布克凯斯&#x27;，想象一个布克（书）被凯斯（箱子）装起来，就是书柜。</li><li>拆分法：book + case，书 + 箱子 = 装书的箱子，即书柜。</li><li>场景联想法：想象你走进图书馆，看到一排排高大的书柜，上面摆满了书，你伸手去拿一本，这就是 bookcase。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>bookcase 是可数名词，通常指有隔板的家具，用于存放书籍。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>There are many books on the bookcase.</s></div><div class='err-right'>✅ There are many books in the bookcase.</div><div class='err-note'>书放在书柜里用 in，而不是 on。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>CET-4/高考完形填空：常考 bookcase 与 bookshelf 的辨析，注意上下文是否强调封闭性。</li><li>写作：在描述家居环境时，可用 bookcase 体现细节，如 &#x27;a wooden bookcase against the wall&#x27;。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>book</b> n. 书</span><span class='chip'><b>case</b> n. 箱子</span><span class='chip'><b>bookshelf</b> n. 书架</span><span class='chip'><b>bookstore</b> n. 书店</span><span class='chip'><b>bookworm</b> n. 书虫</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'>built-in bookcase</span><span class='chip'>wooden bookcase</span><span class='chip'>fill a bookcase</span><span class='chip'>bookcase shelf</span><span class='chip'>tall bookcase</span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>I bought a new <mark class='target'>bookcase</mark> to organize my growing collection of novels.</span><br><span class='zh'>我买了一个新书柜来整理我日益增多的小说收藏。</span></li><li><span class='en'>The <mark class='target'>bookcase</mark> in the living room is filled with old textbooks and photo albums.</span><br><span class='zh'>客厅里的书柜塞满了旧课本和相册。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>bookshelf</b>（书架）— bookcase 通常指有门或封闭式的书柜，而 bookshelf 多指开放式书架。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>bookcase</div><div class='concept-nodes'><span class='concept-node family'>book</span><span class='concept-node family'>case</span><span class='concept-node family'>bookshelf</span><span class='concept-node family'>bookstore</span><span class='concept-node family'>bookworm</span><span class='concept-node colloc'>built-in bookcase</span><span class='concept-node colloc'>wooden bookcase</span><span class='concept-node colloc'>fill a bookcase</span><span class='concept-node colloc'>bookcase shelf</span><span class='concept-node colloc'>tall bookcase</span><span class='concept-node synonym'>bookshelf</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 bookcase 填回句子：</p><p class='out-sentence'>I bought a new ______ to organize my growing collection of novels.</p><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='out2' value='bookcase'> bookcase</label><label class='opt ' data-correct='0'><input type='radio' name='out2' value='greenhouse'> greenhouse</label><label class='opt ' data-correct='0'><input type='radio' name='out2' value='apron'> apron</label><label class='opt ' data-correct='0'><input type='radio' name='out2' value='accustomed'> accustomed</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>bookcase</b> </p><p class='fb-line'>📝 完整句：I bought a new bookcase to organize my growing collection of novels.</p><p class='fb-line'>🀄 译文：我买了一个新书柜来整理我日益增多的小说收藏。</p></div></div></section><section class='q wcard new' data-block='words' data-card='3' data-word='greenhouse'><div class='wcard-top'><span class='wtag new'>新词</span><span class='wnum'>03 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>温室，玻璃暖房</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-root'>greenhouse</span></p><p class='hero-phon'><span class='hero-pos'>n</span>UK /griːnhaʊs/ US /ɡrinhaʊs/ <audio controls preload='none' src='audio/greenhouse_en.mp3'><source src='audio/greenhouse_en.m4a'></audio></p><p class='hero-meaning'>温室，玻璃暖房</p></div><div class='hero-img'><img class='anchor-img' src='../../data/images/greenhouse.png' alt='greenhouse 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>源自中古英语，由 green（绿色）和 house（房子）组合而成，字面意思就是“绿色的房子”。最初指种植绿色植物的暖房，后来引申为“温室效应”中的温室。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>谐音法：green（格林）+ house（豪斯）→ 格林家的豪斯是个种满绿植的温室。</li><li>拆分法：green（绿色）+ house（房子）→ 绿色的房子，里面种满植物，就是温室。</li><li>场景联想法：想象一个寒冷的冬天，你走进一个玻璃房子，里面温暖如春，到处都是绿色的植物，这就是 greenhouse。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>作名词，常与 the 连用表示温室效应（the greenhouse effect），也可指具体的温室建筑。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>The greenhouse effect is caused by greenhouse gases.</s></div><div class='err-right'>✅ The greenhouse effect is caused by greenhouse gases.</div><div class='err-note'>此句正确，但常见错误是误将 greenhouse 当作形容词，实际上它本身就是名词，可作定语。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>He built a green house in his backyard.</s></div><div class='err-right'>✅ He built a greenhouse in his backyard.</div><div class='err-note'>green house 是“绿色的房子”，greenhouse 才是“温室”，注意连写与分开写意义不同。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>CET-4 阅读中常考 greenhouse effect 和 greenhouse gases 的概念理解。</li><li>高考完形填空可能考查 greenhouse 与 glasshouse 的辨析。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>green</b> adj 绿色的</span><span class='chip'><b>house</b> n 房子</span><span class='chip'><b>greenhouse gas</b> n 温室气体</span><span class='chip'><b>greenhouse effect</b> n 温室效应</span><span class='chip'><b>greenhouse farming</b> n 温室农业</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'>greenhouse effect</span><span class='chip'>greenhouse gas</span><span class='chip'>greenhouse emissions</span><span class='chip'>greenhouse farming</span><span class='chip'>greenhouse gases</span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>The farmer grows tomatoes in his <mark class='target'>greenhouse</mark> during the winter.</span><br><span class='zh'>冬天，农民在温室里种植西红柿。</span></li><li><span class='en'>The <mark class='target'>greenhouse</mark> effect is causing global temperatures to rise.</span><br><span class='zh'>温室效应正在导致全球气温上升。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>glasshouse</b>（玻璃温室）— greenhouse 更常用，glasshouse 多用于英式英语，且常指大型商业温室。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>greenhouse</div><div class='concept-nodes'><span class='concept-node family'>green</span><span class='concept-node family'>house</span><span class='concept-node family'>greenhouse gas</span><span class='concept-node family'>greenhouse effect</span><span class='concept-node family'>greenhouse farming</span><span class='concept-node colloc'>greenhouse effect</span><span class='concept-node colloc'>greenhouse gas</span><span class='concept-node colloc'>greenhouse emissions</span><span class='concept-node colloc'>greenhouse farming</span><span class='concept-node colloc'>greenhouse gases</span><span class='concept-node synonym'>glasshouse</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 greenhouse 填回句子：</p><p class='out-sentence'>The farmer grows tomatoes in his ______ during the winter.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out3' value='accustomed'> accustomed</label><label class='opt ' data-correct='0'><input type='radio' name='out3' value='apron'> apron</label><label class='opt ' data-correct='0'><input type='radio' name='out3' value='bookcase'> bookcase</label><label class='opt ' data-correct='1'><input type='radio' name='out3' value='greenhouse'> greenhouse</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>greenhouse</b> UK /griːnhaʊs/ US /ɡrinhaʊs/</p><p class='fb-line'>📝 完整句：The farmer grows tomatoes in his greenhouse during the winter.</p><p class='fb-line'>🀄 译文：冬天，农民在温室里种植西红柿。</p></div></div></section><section class='q wcard new' data-block='words' data-card='4' data-word='accustomed'><div class='wcard-top'><span class='wtag new'>新词</span><span class='wnum'>04 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>习惯的；惯常的</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-root'>accustom</span><span class='morph-suffix'>ed</span></p><p class='hero-phon'><span class='hero-pos'>adj.</span>/ə&#x27;kʌstəmd/ <audio controls preload='none' src='audio/accustomed_en.mp3'><source src='audio/accustomed_en.m4a'></audio></p><p class='hero-meaning'>习惯的；惯常的</p></div><div class='hero-img'><img class='anchor-img' src='../../data/images/accustomed.png' alt='accustomed 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>源自拉丁语 &#x27;consuetudo&#x27;（习惯），通过古法语 &#x27;acostumer&#x27; 进入英语。字面意思是 &#x27;使习惯于&#x27;，前缀 ad- 表示 &#x27;朝向&#x27;，&#x27;custom&#x27; 是 &#x27;习惯&#x27;。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>谐音法：&#x27;啊卡斯特姆的&#x27; → 想象一个叫卡斯特姆的人，他每天固定时间做固定的事，&#x27;啊，卡斯特姆的&#x27;习惯。</li><li>拆分法：ac（加强）+ custom（习惯）+ ed（形容词后缀）→ 被习惯加强的 → 习惯的。</li><li>场景联想法：你每天早上7点起床，闹钟一响就自动坐起来，这个动作就是 &#x27;accustomed&#x27; 的体现。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>常用搭配 &#x27;be/get accustomed to&#x27;，to 是介词，后接名词或动名词。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>I am accustomed to get up early.</s></div><div class='err-right'>✅ I am accustomed to getting up early.</div><div class='err-note'>to 是介词，后接动名词，不是不定式。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>He is accustomed with the cold weather.</s></div><div class='err-right'>✅ He is accustomed to the cold weather.</div><div class='err-note'>固定搭配是 accustomed to，不是 with。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>CET-4 完形填空：常考 &#x27;be accustomed to&#x27; 的介词搭配，选项可能给 to/with/for。</li><li>高考写作：可用 &#x27;be accustomed to&#x27; 替换 &#x27;be used to&#x27;，提升词汇多样性。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>accustom</b> v. 使习惯</span><span class='chip'><b>custom</b> n. 习惯；风俗</span><span class='chip'><b>customary</b> adj. 习惯的；惯例的</span><span class='chip'><b>unaccustomed</b> adj. 不习惯的</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'>be accustomed to</span><span class='chip'>get accustomed to</span><span class='chip'>become accustomed to</span><span class='chip'>accustomed to doing</span><span class='chip'>accustomed way</span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>She is <mark class='target'>accustomed</mark> to waking up early every morning.</span><br><span class='zh'>她习惯每天早上早起。</span></li><li><span class='en'>After living in the city for years, he became <mark class='target'>accustomed</mark> to the noise.</span><br><span class='zh'>在城市生活多年后，他习惯了噪音。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>used to</b>（过去常常）— accustomed to 强调状态，used to 强调过去习惯且现在不再。</li><li><b>habitual</b>（习惯性的）— habitual 更强调行为本身，accustomed 更强调适应状态。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>accustomed</div><div class='concept-nodes'><span class='concept-node family'>accustom</span><span class='concept-node family'>custom</span><span class='concept-node family'>customary</span><span class='concept-node family'>unaccustomed</span><span class='concept-node colloc'>be accustomed to</span><span class='concept-node colloc'>get accustomed to</span><span class='concept-node colloc'>become accustomed to</span><span class='concept-node colloc'>accustomed to doing</span><span class='concept-node colloc'>accustomed way</span><span class='concept-node synonym'>used to</span><span class='concept-node synonym'>habitual</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 accustomed 填回句子：</p><p class='out-sentence'>She is ______ to waking up early every morning.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out4' value='bookcase'> bookcase</label><label class='opt ' data-correct='0'><input type='radio' name='out4' value='apron'> apron</label><label class='opt ' data-correct='1'><input type='radio' name='out4' value='accustomed'> accustomed</label><label class='opt ' data-correct='0'><input type='radio' name='out4' value='greenhouse'> greenhouse</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>accustomed</b> /ə&#x27;kʌstəmd/</p><p class='fb-line'>📝 完整句：She is accustomed to waking up early every morning.</p><p class='fb-line'>🀄 译文：她习惯每天早上早起。</p></div></div></section><section class='q wcard new' data-block='words' data-card='5' data-word='balcony'><div class='wcard-top'><span class='wtag new'>新词</span><span class='wnum'>05 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>阳台</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-root'>balcony</span></p><p class='hero-phon'><span class='hero-pos'>n.</span>UK /bælkəni/ US /bælkənɪ/ <audio controls preload='none' src='audio/balcony_en.mp3'><source src='audio/balcony_en.m4a'></audio></p><p class='hero-meaning'>阳台</p></div><div class='hero-img'><img class='anchor-img' src='../../data/images/balcony.png' alt='balcony 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>来自意大利语 balcone，原指‘大窗户’或‘阳台’，源自日耳曼语 balk（意为‘梁、横木’），因为早期的阳台是用横木搭建的。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>谐音法：谐音‘掰开你’，想象你掰开阳台的栏杆，探出头去看风景。</li><li>拆分法：bal + cony，bal 像‘ball（球）’，cony 像‘cony（兔子）’，一只兔子在阳台上玩球。</li><li>场景联想法：夏天傍晚，你坐在阳台上，手里拿着一杯冰柠檬水，看着楼下的街道。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>可数名词，通常指建筑物外部的平台，有栏杆或围墙。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>I am sitting in the balcony.</s></div><div class='err-right'>✅ I am sitting on the balcony.</div><div class='err-note'>在阳台上用介词 on，因为阳台是一个平面，不是封闭空间。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>CET-4 完形填空常考介词搭配 on the balcony。</li><li>高考阅读中可能出现 balcony 作为场景描述词，需理解其与 terrace 的区别。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>balconied</b> adj. 有阳台的</span><span class='chip'><b>balconies</b> n. 阳台（复数）</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'>on the balcony</span><span class='chip'>balcony door</span><span class='chip'>balcony garden</span><span class='chip'>balcony railing</span><span class='chip'>private balcony</span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>She stood on the <mark class='target'>balcony</mark> and waved goodbye to her friends.</span><br><span class='zh'>她站在阳台上，向朋友们挥手告别。</span></li><li><span class='en'>The hotel room has a small <mark class='target'>balcony</mark> with a view of the ocean.</span><br><span class='zh'>酒店房间有一个小阳台，可以看到海景。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>terrace</b>（露台）— terrace 通常指地面或屋顶的平坦露天区域，面积较大；balcony 是突出于建筑外墙的狭长平台。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>balcony</div><div class='concept-nodes'><span class='concept-node family'>balconied</span><span class='concept-node family'>balconies</span><span class='concept-node colloc'>on the balcony</span><span class='concept-node colloc'>balcony door</span><span class='concept-node colloc'>balcony garden</span><span class='concept-node colloc'>balcony railing</span><span class='concept-node colloc'>private balcony</span><span class='concept-node synonym'>terrace</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 balcony 填回句子：</p><p class='out-sentence'>She stood on the ______ and waved goodbye to her friends.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out5' value='greenhouse'> greenhouse</label><label class='opt ' data-correct='0'><input type='radio' name='out5' value='apron'> apron</label><label class='opt ' data-correct='1'><input type='radio' name='out5' value='balcony'> balcony</label><label class='opt ' data-correct='0'><input type='radio' name='out5' value='bookcase'> bookcase</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>balcony</b> UK /bælkəni/ US /bælkənɪ/</p><p class='fb-line'>📝 完整句：She stood on the balcony and waved goodbye to her friends.</p><p class='fb-line'>🀄 译文：她站在阳台上，向朋友们挥手告别。</p></div></div></section><section class='q wcard new' data-block='words' data-card='6' data-word='basement'><div class='wcard-top'><span class='wtag new'>新词</span><span class='wnum'>06 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>地下室</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-root'>base</span><span class='morph-suffix'>ment</span></p><p class='hero-phon'><span class='hero-pos'>n.</span> <audio controls preload='none' src='audio/basement_en.mp3'><source src='audio/basement_en.m4a'></audio></p><p class='hero-meaning'>地下室</p></div><div class='hero-img'><img class='anchor-img' src='../../data/images/basement.png' alt='basement 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>来自古法语 &#x27;bas&#x27;（低） + 拉丁语后缀 &#x27;-mentum&#x27;（表示场所或结果）。字面意思就是 &#x27;低处的地方&#x27;，后来演变为指建筑物地面以下的房间。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>谐音法：&#x27;背死门&#x27;——地下室的门背对着你，一进去就感觉要死，又黑又闷。</li><li>拆分法：base（基础）+ ment（名词后缀）→ 房子的基础层就是地下室。</li><li>场景联想法：想象你家的房子像一块蛋糕，地下室就是最底下那层巧克力底座，上面才是客厅和卧室。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>basement 通常指完全或部分位于地面以下的楼层，常用来储物、放洗衣机或当游戏室。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>I live in the cellar.</s></div><div class='err-right'>✅ I live in the basement apartment.</div><div class='err-note'>cellar 通常不是住人的地方，basement 可以指有居住功能的地下室。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>The basement is under the ground floor.</s></div><div class='err-right'>✅ The basement is below the ground floor.</div><div class='err-note'>under 强调正下方，below 更通用，表示位置更低。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>CET-4 阅读中可能出现在描述房屋结构或自然灾害（如洪水）的语境中。</li><li>写作中可用于描述家庭生活场景，如 &#x27;We have a party in the basement.&#x27;</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>base</b> n. 基础；底部</span><span class='chip'><b>basal</b> adj. 基部的；基础的</span><span class='chip'><b>baseless</b> adj. 无根据的</span><span class='chip'><b>basementless</b> adj. 没有地下室的</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'>basement apartment</span><span class='chip'>basement window</span><span class='chip'>finished basement</span><span class='chip'>basement stairs</span><span class='chip'>basement floor</span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>We store old furniture and holiday decorations in the <mark class='target'>basement</mark>.</span><br><span class='zh'>我们把旧家具和节日装饰品存放在地下室里。</span></li><li><span class='en'>The <mark class='target'>basement</mark> flooded after the heavy rain, so we had to pump out the water.</span><br><span class='zh'>大雨过后地下室淹了，我们不得不把水抽出去。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>cellar</b>（地窖）— cellar 通常指专门用来储存食物或酒的地下室，而 basement 更通用，可以住人或做其他用途。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>basement</div><div class='concept-nodes'><span class='concept-node family'>base</span><span class='concept-node family'>basal</span><span class='concept-node family'>baseless</span><span class='concept-node family'>basementless</span><span class='concept-node colloc'>basement apartment</span><span class='concept-node colloc'>basement window</span><span class='concept-node colloc'>finished basement</span><span class='concept-node colloc'>basement stairs</span><span class='concept-node colloc'>basement floor</span><span class='concept-node synonym'>cellar</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 basement 填回句子：</p><p class='out-sentence'>We store old furniture and holiday decorations in the ______.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out6' value='greenhouse'> greenhouse</label><label class='opt ' data-correct='0'><input type='radio' name='out6' value='bookcase'> bookcase</label><label class='opt ' data-correct='0'><input type='radio' name='out6' value='apron'> apron</label><label class='opt ' data-correct='1'><input type='radio' name='out6' value='basement'> basement</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>basement</b> </p><p class='fb-line'>📝 完整句：We store old furniture and holiday decorations in the basement.</p><p class='fb-line'>🀄 译文：我们把旧家具和节日装饰品存放在地下室里。</p></div></div></section><section class='q wcard new' data-block='words' data-card='7' data-word='beard'><div class='wcard-top'><span class='wtag new'>新词</span><span class='wnum'>07 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>胡须，胡子</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-root'>beard</span></p><p class='hero-phon'><span class='hero-pos'>n.</span>UK /bɪəd/ US /bɪrd/ <audio controls preload='none' src='audio/beard_en.mp3'><source src='audio/beard_en.m4a'></audio></p><p class='hero-meaning'>胡须，胡子</p></div><div class='hero-img'><img class='anchor-img' src='../../data/images/beard.png' alt='beard 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>源自古英语 beard，与德语 Bart、拉丁语 barba 同源，都来自原始印欧语 *bʰardʰā，意为“胡须”。拉丁语 barba 还演变成 barber（理发师）——专门打理胡子的人。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>谐音法：beard 谐音“比尔得”，想象比尔·盖茨留着一把大胡子，跟朋友说“这是我比尔得的胡子”。</li><li>拆分法：把 beard 拆成 b + ear + d：b 像一个人，ear 是耳朵，d 是“的”，人耳朵旁边的毛就是胡须。看到 ear 就记住胡子长在脸的两侧。</li><li>场景联想法：想象圣诞老人坐在壁炉边，长长的白胡子垂到胸前，上面还挂着一滴牛奶。这个画面一出现，beard 就忘不掉了。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>beard 是可数名词，特指下巴及两颊的胡须；上唇的小胡子用 moustache。另外 beard 做动词时意为“勇敢面对”，但极不常用。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>He has a beard on his nose.</s></div><div class='err-right'>✅ He has a moustache under his nose.</div><div class='err-note'>鼻子下方的胡须是 moustache，不是 beard。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>The man has long beard.</s></div><div class='err-right'>✅ The man has a long beard.</div><div class='err-note'>beard 是可数名词，指一个人的胡子时要用 a beard 或复数 beards。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>阅读理解中，描述人物外貌时会出现 beard，常考它与 moustache、whiskers 的区分。</li><li>书面表达（人物介绍）中，使用 have a beard 或 wear a beard 可增加细节，但注意冠词不能丢。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>bearded</b> adj. 有胡须的</span><span class='chip'><b>beardless</b> adj. 没有胡须的</span><span class='chip'><b>barber</b> n. 理发师（源自拉丁语 barba，与 beard 同源）</span><span class='chip'><b>beard</b> v. 勇敢面对（仅用于 beard the lion in his den 等少数习语）</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'>grow a beard（留胡子）</span><span class='chip'>trim a beard（修剪胡子）</span><span class='chip'>a full beard（浓密的络腮胡）</span><span class='chip'>a gray beard（花白的胡子）</span><span class='chip'>shave off a beard（剃掉胡须）</span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>His grandfather has a long gray <mark class='target'>beard</mark> that reaches his chest.</span><br><span class='zh'>他祖父留着长到胸口的灰白胡须。</span></li><li><span class='en'>She gave her boyfriend a <mark class='target'>beard</mark> trimmer for his birthday.</span><br><span class='zh'>她送给男朋友一把胡须修剪器作为生日礼物。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>moustache</b>（小胡子，唇须）— beard 指下巴和脸颊的胡须，moustache 只指上唇的胡须，位置不同，不可混用。</li><li><b>whiskers</b>（络腮胡；(动物的)须）— whiskers 常指猫、鼠等动物嘴边长的长须，形容人时多指两颊连着的络腮胡子，比 beard 更口语。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>beard</div><div class='concept-nodes'><span class='concept-node family'>bearded</span><span class='concept-node family'>beardless</span><span class='concept-node family'>barber</span><span class='concept-node family'>beard</span><span class='concept-node colloc'>grow a beard（留胡子）</span><span class='concept-node colloc'>trim a beard（修剪胡子）</span><span class='concept-node colloc'>a full beard（浓密的络腮胡）</span><span class='concept-node colloc'>a gray beard（花白的胡子）</span><span class='concept-node colloc'>shave off a beard（剃掉胡须）</span><span class='concept-node synonym'>moustache</span><span class='concept-node synonym'>whiskers</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 beard 填回句子：</p><p class='out-sentence'>His grandfather has a long gray ______ that reaches his chest.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out7' value='greenhouse'> greenhouse</label><label class='opt ' data-correct='1'><input type='radio' name='out7' value='beard'> beard</label><label class='opt ' data-correct='0'><input type='radio' name='out7' value='bookcase'> bookcase</label><label class='opt ' data-correct='0'><input type='radio' name='out7' value='apron'> apron</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>beard</b> UK /bɪəd/ US /bɪrd/</p><p class='fb-line'>📝 完整句：His grandfather has a long gray beard that reaches his chest.</p><p class='fb-line'>🀄 译文：他祖父留着长到胸口的灰白胡须。</p></div></div></section><section class='q wcard new' data-block='words' data-card='8' data-word='bin'><div class='wcard-top'><span class='wtag new'>新词</span><span class='wnum'>08 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>垃圾箱；箱子</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-root'>bin</span></p><p class='hero-phon'><span class='hero-pos'>n.</span> <audio controls preload='none' src='audio/bin_en.mp3'><source src='audio/bin_en.m4a'></audio></p><p class='hero-meaning'>垃圾箱；箱子</p></div><div class='hero-img'><img class='anchor-img' src='../../data/images/bin.png' alt='bin 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>来自古英语 &#x27;binne&#x27;，意为 &#x27;篮子、马槽&#x27;，最初指一种容器。后来在英式英语中特指 &#x27;垃圾箱&#x27;，与美式英语的 &#x27;trash can&#x27; 对应。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>谐音法：&#x27;bin&#x27; 发音像 &#x27;饼&#x27;，想象你把吃剩的饼扔进垃圾箱。</li><li>拆分法：b + in，b 像垃圾桶的盖子，in 表示 &#x27;在里面&#x27;，盖子盖住垃圾在里面。</li><li>场景联想法：厨房里，你打开垃圾桶（bin）的盖子，把苹果核扔进去，盖子 &#x27;啪&#x27; 一声关上。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>在英式英语中，&#x27;bin&#x27; 是 &#x27;垃圾箱&#x27; 的常用词；美式英语更常用 &#x27;trash can&#x27; 或 &#x27;garbage can&#x27;。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>I put the rubbish in the bin.</s></div><div class='err-right'>✅ I put the rubbish in the bin.</div><div class='err-note'>这个句子本身正确，但注意 &#x27;rubbish&#x27; 是英式用法，美式用 &#x27;trash&#x27; 或 &#x27;garbage&#x27;。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>He threw the paper into the bin.</s></div><div class='err-right'>✅ He threw the paper into the bin.</div><div class='err-note'>句子正确，但注意 &#x27;bin&#x27; 前通常用 &#x27;the&#x27; 或 &#x27;a&#x27;，除非是专有名词。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>CET-4 阅读中可能作为生活场景词汇出现，注意区分英式与美式表达。</li><li>高考完形填空中可能考察 &#x27;bin&#x27; 与 &#x27;box&#x27;、&#x27;can&#x27; 等近义词的辨析。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>bin</b> n. 垃圾箱</span><span class='chip'><b>bin</b> v. 把…扔进垃圾箱</span><span class='chip'><b>binned</b> adj. 被丢弃的</span><span class='chip'><b>binning</b> n. 丢弃</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'>recycling bin</span><span class='chip'>kitchen bin</span><span class='chip'>bin liner</span><span class='chip'>bin bag</span><span class='chip'>waste bin</span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>Please throw the empty bottle into the recycling <mark class='target'>bin</mark>.</span><br><span class='zh'>请把空瓶子扔进回收箱。</span></li><li><span class='en'>The kitchen <mark class='target'>bin</mark> is full and needs to be emptied.</span><br><span class='zh'>厨房的垃圾箱满了，需要清空。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>can</b>（罐子；垃圾桶（美式））— bin 是英式英语中 &#x27;垃圾箱&#x27; 的常用词，而 can 在美式英语中更常见，如 &#x27;trash can&#x27;。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>bin</div><div class='concept-nodes'><span class='concept-node family'>bin</span><span class='concept-node family'>bin</span><span class='concept-node family'>binned</span><span class='concept-node family'>binning</span><span class='concept-node colloc'>recycling bin</span><span class='concept-node colloc'>kitchen bin</span><span class='concept-node colloc'>bin liner</span><span class='concept-node colloc'>bin bag</span><span class='concept-node colloc'>waste bin</span><span class='concept-node synonym'>can</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 bin 填回句子：</p><p class='out-sentence'>Please throw the empty bottle into the recycling ______.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out8' value='greenhouse'> greenhouse</label><label class='opt ' data-correct='0'><input type='radio' name='out8' value='apron'> apron</label><label class='opt ' data-correct='0'><input type='radio' name='out8' value='bookcase'> bookcase</label><label class='opt ' data-correct='1'><input type='radio' name='out8' value='bin'> bin</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>bin</b> </p><p class='fb-line'>📝 完整句：Please throw the empty bottle into the recycling bin.</p><p class='fb-line'>🀄 译文：请把空瓶子扔进回收箱。</p></div></div></section><section class='q wcard review' data-block='words' data-card='9' data-word='injury'><div class='wcard-top'><span class='wtag review'>复习</span><span class='wnum'>09 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>身体或情感的损伤；受伤；损害</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-root'>injure</span><span class='morph-suffix'>y</span></p><p class='hero-phon'><span class='hero-pos'>n.</span>/ˈɪndʒəri/ <audio controls preload='none' src='audio/injury_en.mp3'><source src='audio/injury_en.m4a'></audio></p><p class='hero-meaning'>身体或情感的损伤；受伤；损害</p></div><div class='hero-img'><img class='anchor-img' src='../../data/images/injury.png' alt='injury 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>来自拉丁语 injuria，意为“不公正”。由 in-（不）+ jus/juris（法律、权利）+-ia 组成，本指“侵犯他人权利”，后引申为“伤害、损伤”.</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>谐音法：“injury”发音像“硬折”，想象骨头硬生生折断，就是受伤。</li><li>拆分法：in（进入）+ jury（陪审团）——你受伤后要进法院，由陪审团裁定赔偿。</li><li>场景联想法：看到运动员被担架抬出场外，电视屏幕上打出“INJURY”红色警示，记住这个词。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>injury 是可数名词，常与 suffer/sustain 搭配表示受伤；have an injury 也可以接受，注意用不定冠词 an injury。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>He injured his injury.</s></div><div class='err-right'>✅ He injured his leg.</div><div class='err-note'>injure 的宾语是身体部位，不能是 injury 本身。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>She has injury on her arm.</s></div><div class='err-right'>✅ She has an injury on her arm.</div><div class='err-note'>injury 是可数名词，单数前需加冠词 a/an。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>CET-4 词汇题常考固定搭配 suffer/sustain an injury，注意与 hurt, wound, damage 的辨析。</li><li>写作中可用 cause injury 替换 simple hurt，提升表达正式度。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>injure</b> v. 使受伤</span><span class='chip'><b>injured</b> adj. 受伤的</span><span class='chip'><b>injurious</b> adj. 有害的</span><span class='chip'><b>injury</b> n. 伤害</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'>sustain an injury</span><span class='chip'>suffer an injury</span><span class='chip'>serious injury</span><span class='chip'>minor injury</span><span class='chip'>injury prevention</span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>He suffered a serious <mark class='target'>injury</mark> in the car accident.</span><br><span class='zh'>他在车祸中受了重伤。</span></li><li><span class='en'>The <mark class='target'>injury</mark> to her ankle kept her out of the game.</span><br><span class='zh'>她脚踝的伤让她无法参加比赛。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>wound</b>（伤口）— wound 指由于切割、射击等造成的外伤，通常有破口；injury 涵盖更广，包括内伤、挫伤等。</li><li><b>hurt</b>（伤痛（动词/名词））— hurt 口语常用，可作动词或名词；injury 更正式，且作为名词时指具体的伤害。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>injury</div><div class='concept-nodes'><span class='concept-node family'>injure</span><span class='concept-node family'>injured</span><span class='concept-node family'>injurious</span><span class='concept-node family'>injury</span><span class='concept-node colloc'>sustain an injury</span><span class='concept-node colloc'>suffer an injury</span><span class='concept-node colloc'>serious injury</span><span class='concept-node colloc'>minor injury</span><span class='concept-node colloc'>injury prevention</span><span class='concept-node synonym'>wound</span><span class='concept-node synonym'>hurt</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 injury 填回句子：</p><p class='out-sentence'>He suffered a serious ______ in the car accident.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out9' value='apron'> apron</label><label class='opt ' data-correct='0'><input type='radio' name='out9' value='greenhouse'> greenhouse</label><label class='opt ' data-correct='1'><input type='radio' name='out9' value='injury'> injury</label><label class='opt ' data-correct='0'><input type='radio' name='out9' value='bookcase'> bookcase</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>injury</b> /ˈɪndʒəri/</p><p class='fb-line'>📝 完整句：He suffered a serious injury in the car accident.</p><p class='fb-line'>🀄 译文：他在车祸中受了重伤。</p></div></div></section><section class='q wcard review' data-block='words' data-card='10' data-word='recover'><div class='wcard-top'><span class='wtag review'>复习</span><span class='wnum'>10 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>恢复，康复；重新获得（体力、意识、数据等）</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-prefix'>re</span><span class='morph-root'>cover</span></p><p class='hero-phon'><span class='hero-pos'>v.</span>/rɪˈkʌvər/ <audio controls preload='none' src='audio/recover_en.mp3'><source src='audio/recover_en.m4a'></audio></p><p class='hero-meaning'>恢复，康复；重新获得（体力、意识、数据等）</p></div><div class='hero-img'><img class='anchor-img' src='../../data/images/recover.png' alt='recover 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>Recover 来自古法语 recoverer，最终源于拉丁语 recuperare，由 re-（再，回来）+ capere（拿取）组成，字面意思是“重新拿回”。最早用于拿回失去的财产，后来引申为恢复健康或精力。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>谐音法：谐音“瑞克服”——想象一个叫瑞克的人，靠顽强意志“克服”了病魔，成功康复。</li><li>拆分法：re-（再）+ cover（覆盖）→ 把失去的体力“重新覆盖”回来；生病时裹好被子（cover）好好休息，才能再次（re）康复。</li><li>场景联想法：生病请假躺在床上，裹着厚被子（cover）昏睡；醒来后感觉好多了，于是“再（re）”次活力满满——这就是 recover。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>recover 作不及物动词时用 recover from sth；作及物动词时直接跟宾语，如 recover lost data。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>He recovered his illness after taking medicine.</s></div><div class='err-right'>✅ He recovered from his illness after taking medicine.</div><div class='err-note'>表示“从疾病中康复”要用 recover from sth，不能把疾病直接放在 recover 后面作宾语。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>The doctors recovered him from pneumonia.</s></div><div class='err-right'>✅ The doctors cured him of pneumonia.</div><div class='err-note'>recover 一般不用作“治愈某人”的及物动词；表示医生“治好”某人，要用 cure sb of sth。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>CET-4 完形/阅读中高频出现 recover from 搭配，注意介词 from。</li><li>写作中表达“恢复健康”可用 recover/recover from，替换 get better，使表达更正式。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>recovery</b> n. 恢复，康复</span><span class='chip'><b>recovered</b> adj. 已恢复的，康复的</span><span class='chip'><b>recoverable</b> adj. 可恢复的，可收回的</span><span class='chip'><b>unrecoverable</b> adj. 无法恢复的</span><span class='chip'><b>recuperate</b> v. 休养，恢复（正式）</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'>recover from an illness</span><span class='chip'>recover quickly</span><span class='chip'>fully recover</span><span class='chip'>recover lost data</span><span class='chip'>recover consciousness</span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>After the surgery, it took him three months to fully <mark class='target'>recover</mark> and return to his normal routine.</span><br><span class='zh'>手术之后，他花了三个月时间才完全康复，回归正常生活。</span></li><li><span class='en'>Police have <mark class='target'>recovered</mark> the stolen paintings from a warehouse outside the city.</span><br><span class='zh'>警方已在城外的一个仓库里找回了被盗的画作。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>heal</b>（治愈，愈合）— recover 强调病人自己从疾病中复原，主语是人；heal 强调伤口或组织愈合，主语常是伤口或损伤。</li><li><b>regain</b>（重新获得）— recover 可指恢复健康，也可指找回丢失物；regain 更正式，强调重新获得失去的状态或能力，如 regain balance。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>recover</div><div class='concept-nodes'><span class='concept-node family'>recovery</span><span class='concept-node family'>recovered</span><span class='concept-node family'>recoverable</span><span class='concept-node family'>unrecoverable</span><span class='concept-node family'>recuperate</span><span class='concept-node colloc'>recover from an illness</span><span class='concept-node colloc'>recover quickly</span><span class='concept-node colloc'>fully recover</span><span class='concept-node colloc'>recover lost data</span><span class='concept-node colloc'>recover consciousness</span><span class='concept-node synonym'>heal</span><span class='concept-node synonym'>regain</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 recover 填回句子：</p><p class='out-sentence'>After the surgery, it took him three months to fully ______ and return to his normal routine.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out10' value='apron'> apron</label><label class='opt ' data-correct='0'><input type='radio' name='out10' value='greenhouse'> greenhouse</label><label class='opt ' data-correct='1'><input type='radio' name='out10' value='recover'> recover</label><label class='opt ' data-correct='0'><input type='radio' name='out10' value='bookcase'> bookcase</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>recover</b> /rɪˈkʌvər/</p><p class='fb-line'>📝 完整句：After the surgery, it took him three months to fully recover and return to his normal routine.</p><p class='fb-line'>🀄 译文：手术之后，他花了三个月时间才完全康复，回归正常生活。</p></div></div></section><section class='q wcard review' data-block='words' data-card='11' data-word='treatment'><div class='wcard-top'><span class='wtag review'>复习</span><span class='wnum'>11 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>治疗，疗法；对待，处理</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-root'>treat</span><span class='morph-suffix'>ment</span></p><p class='hero-phon'><span class='hero-pos'>n.</span>/ˈtriːtmənt/ <audio controls preload='none' src='audio/treatment_en.mp3'><source src='audio/treatment_en.m4a'></audio></p><p class='hero-meaning'>治疗，疗法；对待，处理</p></div><div class='hero-img'><img class='anchor-img' src='../../data/images/treatment.png' alt='treatment 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>来自古法语 &#x27;traitement&#x27;，源于拉丁语 &#x27;tractare&#x27;（处理、对待），由 &#x27;tract-&#x27;（拉、拖）加后缀 &#x27;-ment&#x27; 构成，本意是“处理某事物的方式”，后引申为“医疗上的处理”。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>谐音法：谐音“踹他门特”，想象病人踹开医院的门大喊“我要治疗！”，记住 treatment 是治疗。</li><li>拆分法：treat（对待）+ ment（名词后缀），对待病人的方式就是治疗，所以 treatment 是治疗。</li><li>场景联想法：医生给你开药、打针、手术，这些都是 treatment，就像把病“处理”掉一样。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>表示“治疗某种疾病”时，常用 treatment for + 疾病；表示“对待某人/某物”时，常用 treatment of + 对象。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>He is under treatment of a serious illness.</s></div><div class='err-right'>✅ He is under treatment for a serious illness.</div><div class='err-note'>表示“因……接受治疗”时用 for，不用 of。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>She received a treatment for her back pain.</s></div><div class='err-right'>✅ She received treatment for her back pain.</div><div class='err-note'>表示“接受治疗”时 treatment 通常不可数，不加 a；只有指某种特定疗法时才用 a treatment。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>完形填空：常考 treatment 与 cure、therapy 的词义辨析，注意语境是过程还是结果。</li><li>阅读理解：medical treatment 是高频短语，注意 receive/undergo 等搭配动词。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>treat</b> v. 对待；治疗</span><span class='chip'><b>treatable</b> adj. 可治疗的</span><span class='chip'><b>treated</b> adj. 已处理的</span><span class='chip'><b>untreated</b> adj. 未治疗的</span><span class='chip'><b>maltreatment</b> n. 虐待；粗暴对待</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'>medical treatment</span><span class='chip'>receive treatment</span><span class='chip'>undergo treatment</span><span class='chip'>treatment for</span><span class='chip'>effective treatment</span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>The new <mark class='target'>treatment</mark> for cancer has shown promising results in clinical trials.</span><br><span class='zh'>这种新的癌症治疗方法在临床试验中显示了令人鼓舞的结果。</span></li><li><span class='en'>The <mark class='target'>treatment</mark> of prisoners should respect their basic human rights.</span><br><span class='zh'>对待囚犯的方式应尊重他们的基本人权。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>cure</b>（治愈）— treatment 指治疗的过程或具体治疗方案；cure 指治愈的结果。a treatment for cancer 是正确的，指癌症治疗方案；a cure for cancer 才强调彻底治愈癌症。</li><li><b>therapy</b>（疗法）— therapy 更多指非药物的康复疗法，如 physical therapy；treatment 更宽泛，包括药物、手术等。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>treatment</div><div class='concept-nodes'><span class='concept-node family'>treat</span><span class='concept-node family'>treatable</span><span class='concept-node family'>treated</span><span class='concept-node family'>untreated</span><span class='concept-node family'>maltreatment</span><span class='concept-node colloc'>medical treatment</span><span class='concept-node colloc'>receive treatment</span><span class='concept-node colloc'>undergo treatment</span><span class='concept-node colloc'>treatment for</span><span class='concept-node colloc'>effective treatment</span><span class='concept-node synonym'>cure</span><span class='concept-node synonym'>therapy</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 treatment 填回句子：</p><p class='out-sentence'>The new ______ for cancer has shown promising results in clinical trials.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out11' value='bookcase'> bookcase</label><label class='opt ' data-correct='1'><input type='radio' name='out11' value='treatment'> treatment</label><label class='opt ' data-correct='0'><input type='radio' name='out11' value='apron'> apron</label><label class='opt ' data-correct='0'><input type='radio' name='out11' value='greenhouse'> greenhouse</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>treatment</b> /ˈtriːtmənt/</p><p class='fb-line'>📝 完整句：The new treatment for cancer has shown promising results in clinical trials.</p><p class='fb-line'>🀄 译文：这种新的癌症治疗方法在临床试验中显示了令人鼓舞的结果。</p></div></div></section><section class='q wcard review' data-block='words' data-card='12' data-word='overweight'><div class='wcard-top'><span class='wtag review'>复习</span><span class='wnum'>12 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>超重的，体重超过正常标准的</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-root'>overweight</span></p><p class='hero-phon'><span class='hero-pos'>adj.</span>UK /ˌəʊvəˈweɪt/ US /ˌoʊvərˈweɪt/ <audio controls preload='none' src='audio/overweight_en.mp3'><source src='audio/overweight_en.m4a'></audio></p><p class='hero-meaning'>超重的，体重超过正常标准的</p></div><div class='hero-img'><img class='anchor-img' src='../../data/images/overweight.png' alt='overweight 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>由前缀 over-（超过）和名词 weight（重量）构成。weight 源自古英语 gewiht，本义是“重量”；表示“称重”的是动词 weigh。字面意思是“重量超过标准”。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>谐音法：谐音&#x27;欧文卫特&#x27;，想象一个叫欧文的小伙子特别胖，体重超重，需要特别关注体重。</li><li>拆分法：over（超过）+ weight（重量）→ 超过正常重量 → 超重的。</li><li>场景联想法：想象体检时医生指着体重秤说 &#x27;You are overweight&#x27;，秤的指针越过红色警戒线，你心下一惊。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>常用作形容词，可作定语或表语，如 an overweight person / He is overweight。也可作动词表示&#x27;使负担过重&#x27;，但使用较少。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>She is 20 kilograms overweights.</s></div><div class='err-right'>✅ She is 20 kilograms overweight.</div><div class='err-note'>overweight 是形容词，没有复数形式。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>He overweights 80kg.</s></div><div class='err-right'>✅ He weighs 80kg and is overweight.</div><div class='err-note'>overweight 不能直接接重量，表示&#x27;超重多少&#x27;可用 be overweight by... 或分句。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>高考/四级阅读中常以形容词形式出现在健康话题中，注意与 obesity、obese 等词区分。</li><li>写作中可用于描述健康问题，可搭配 overweight and obesity 以提升表达。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>weight</b> n. 重量</span><span class='chip'><b>weigh</b> v. 称重</span><span class='chip'><b>overweighted</b> adj. 超重的（较少用）</span><span class='chip'><b>underweight</b> adj. 体重过轻的</span><span class='chip'><b>obesity</b> n. 肥胖</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'>be overweight</span><span class='chip'>overweight people</span><span class='chip'>become overweight</span><span class='chip'>overweight and obesity</span><span class='chip'>slightly overweight</span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>According to the latest report, nearly 30% of adults in the country are <mark class='target'>overweight</mark>.</span><br><span class='zh'>根据最新报告，该国近30%的成年人超重。</span></li><li><span class='en'>The doctor advised him to exercise regularly because he was <mark class='target'>overweight</mark>.</span><br><span class='zh'>医生建议他经常锻炼，因为他超重了。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>obese</b>（肥胖的）— obese 指严重肥胖，通常比 overweight 程度更重，且医学上有明确的 BMI 标准（如≥30）。</li><li><b>fat</b>（胖的）— fat 语气口语化、带贬义，overweight 更中性、正式，常用于健康语境。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>overweight</div><div class='concept-nodes'><span class='concept-node family'>weight</span><span class='concept-node family'>weigh</span><span class='concept-node family'>overweighted</span><span class='concept-node family'>underweight</span><span class='concept-node family'>obesity</span><span class='concept-node colloc'>be overweight</span><span class='concept-node colloc'>overweight people</span><span class='concept-node colloc'>become overweight</span><span class='concept-node colloc'>overweight and obesity</span><span class='concept-node colloc'>slightly overweight</span><span class='concept-node synonym'>obese</span><span class='concept-node synonym'>fat</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 overweight 填回句子：</p><p class='out-sentence'>According to the latest report, nearly 30% of adults in the country are ______.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out12' value='greenhouse'> greenhouse</label><label class='opt ' data-correct='0'><input type='radio' name='out12' value='bookcase'> bookcase</label><label class='opt ' data-correct='1'><input type='radio' name='out12' value='overweight'> overweight</label><label class='opt ' data-correct='0'><input type='radio' name='out12' value='apron'> apron</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>overweight</b> UK /ˌəʊvəˈweɪt/ US /ˌoʊvərˈweɪt/</p><p class='fb-line'>📝 完整句：According to the latest report, nearly 30% of adults in the country are overweight.</p><p class='fb-line'>🀄 译文：根据最新报告，该国近30%的成年人超重。</p></div></div></section><section class='q wf-card' data-block='word_forms' data-card='1' data-answer='aproned'><div class='qhead'><span class='qn'>&#36716;&#183;01</span><b>&#35789;&#24615;&#36716;&#21270;</b> &#183; <span class='wf-word'>apron</span></div><p class='prompt'>选词填空，注意词性转化：</p><div class='wf-stem'>The baker was _____ with flour from head to toe.</div><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='wf1' value='apron'> apron</label><label class='opt ' data-correct='1'><input type='radio' name='wf1' value='aproned'> aproned</label><label class='opt ' data-correct='0'><input type='radio' name='wf1' value='apronful'> apronful</label><label class='opt ' data-correct='0'><input type='radio' name='wf1' value='apronless'> apronless</label></div><div class='feedback hidden' data-answer='aproned'><p class='fb-line'>&#128204; <b>&#31572;&#26696;&#65306;</b>aproned &#8212; </p><p class='fb-line'>&#128221; <b>完整句：</b>The baker was aproned with flour from head to toe.</p><div class='think-path'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#128300; 解题思路</p><p class='think-step'>① 确定句子空缺处需要什么词性（主语/谓语/宾语/定语/状语）。</p><p class='think-step'>② 原词 <b>apron</b>（围裙）需要转化为 <b>aproned</b> 形式。词性转化</p><p class='think-step'>③ 将 <b>aproned</b> 代入原句，检查语法和语义是否通顺。</p></div>词性转化<p class='fb-line'>&#127919; <b>考点：</b><li class='opt-explain'><b>apron</b>：围裙<span class='opt-reason'>这是原形，需要派生形式</span></li><li class='opt-explain'><b>aproned</b>：<span class='opt-reason'> — 答案</span> <span class="tag-correct">&#10003;</span></li><li class='opt-explain'><b>apronful</b>：<span class='opt-reason'>词性/形式不匹配</span></li><li class='opt-explain'><b>apronless</b>：<span class='opt-reason'>这是复数形式，此处需要单数/其他形式</span></li><br>&#128218; <b>题目来源：</b>CET-4 / 考研英语 词性转化专项练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><div class='distractors'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#9888; 干扰项分析</p><p class='distractor-item'><b>apron</b>（围裙）：这是原形，需要派生形式</p><p class='distractor-item'><b>apronful</b>（）：词性/形式不匹配</p><p class='distractor-item'><b>apronless</b>（）：这是复数形式，此处需要单数/其他形式</p></div></ul><p class='fb-line'>&#128161; <b>解析：</b>aproned 是形容词，表示 &#x27;穿着围裙的&#x27;，这里描述状态。</p></div></section><section class='q wf-card' data-block='word_forms' data-card='2' data-answer='bookcase'><div class='qhead'><span class='qn'>&#36716;&#183;02</span><b>&#35789;&#24615;&#36716;&#21270;</b> &#183; <span class='wf-word'>bookcase</span></div><p class='prompt'>选词填空，注意词性转化：</p><div class='wf-stem'>The old _____ was full of dust and forgotten novels.</div><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='wf2' value='bookcase'> bookcase</label><label class='opt ' data-correct='0'><input type='radio' name='wf2' value='bookshelf'> bookshelf</label><label class='opt ' data-correct='0'><input type='radio' name='wf2' value='bookstore'> bookstore</label><label class='opt ' data-correct='0'><input type='radio' name='wf2' value='bookworm'> bookworm</label></div><div class='feedback hidden' data-answer='bookcase'><p class='fb-line'>&#128204; <b>&#31572;&#26696;&#65306;</b>bookcase &#8212; 书柜</p><p class='fb-line'>&#128221; <b>完整句：</b>The old bookcase was full of dust and forgotten novels.</p><div class='think-path'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#128300; 解题思路</p><p class='think-step'>题目中给出的词 <b>bookcase</b> 已经符合句子的词性要求，不需要额外的词形变化。直接填入原形即可。</p></div>词形不变，保持原形<p class='fb-line'>&#127919; <b>考点：</b><li class='opt-explain'><b>bookcase</b>：书柜<span class='opt-reason'> — 答案</span> <span class="tag-correct">&#10003;</span></li><li class='opt-explain'><b>bookshelf</b>：<span class='opt-reason'>词性/形式不匹配</span></li><li class='opt-explain'><b>bookstore</b>：<span class='opt-reason'>词性/形式不匹配</span></li><li class='opt-explain'><b>bookworm</b>：<span class='opt-reason'>词性/形式不匹配</span></li><br>&#128218; <b>题目来源：</b>CET-4 / 考研英语 词性转化专项练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><div class='distractors'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#9888; 干扰项分析</p><p class='distractor-item'><b>bookshelf</b>（）：词性/形式不匹配</p><p class='distractor-item'><b>bookstore</b>（）：词性/形式不匹配</p><p class='distractor-item'><b>bookworm</b>（）：词性/形式不匹配</p></div></ul><p class='fb-line'>&#128161; <b>解析：</b>bookcase 指书柜，符合语境；bookshelf 是书架，bookstore 是书店，bookworm 是书虫。</p></div></section><section class='q wf-card' data-block='word_forms' data-card='3' data-answer='greenhouse'><div class='qhead'><span class='qn'>&#36716;&#183;03</span><b>&#35789;&#24615;&#36716;&#21270;</b> &#183; <span class='wf-word'>greenhouse</span></div><p class='prompt'>选词填空，注意词性转化：</p><div class='wf-stem'>Burning fossil fuels releases large amounts of _____ gases.</div><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='wf3' value='green'> green</label><label class='opt ' data-correct='1'><input type='radio' name='wf3' value='greenhouse'> greenhouse</label><label class='opt ' data-correct='0'><input type='radio' name='wf3' value='greenhouses'> greenhouses</label><label class='opt ' data-correct='0'><input type='radio' name='wf3' value='greening'> greening</label></div><div class='feedback hidden' data-answer='greenhouse'><p class='fb-line'>&#128204; <b>&#31572;&#26696;&#65306;</b>greenhouse &#8212; 温室，玻璃暖房</p><p class='fb-line'>&#128221; <b>完整句：</b>Burning fossil fuels releases large amounts of greenhouse gases.</p><div class='think-path'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#128300; 解题思路</p><p class='think-step'>题目中给出的词 <b>greenhouse</b> 已经符合句子的词性要求，不需要额外的词形变化。直接填入原形即可。</p></div>词形不变，保持原形<p class='fb-line'>&#127919; <b>考点：</b><li class='opt-explain'><b>green</b>：绿色的<span class='opt-reason'>词性/形式不匹配</span></li><li class='opt-explain'><b>greenhouse</b>：温室，玻璃暖房<span class='opt-reason'> — 答案</span> <span class="tag-correct">&#10003;</span></li><li class='opt-explain'><b>greenhouses</b>：<span class='opt-reason'>这是复数形式，此处需要单数/其他形式</span></li><li class='opt-explain'><b>greening</b>：<span class='opt-reason'>这是现在分词形式，此处需要名词/形容词</span></li><br>&#128218; <b>题目来源：</b>CET-4 / 考研英语 词性转化专项练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><div class='distractors'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#9888; 干扰项分析</p><p class='distractor-item'><b>green</b>（绿色的）：词性/形式不匹配</p><p class='distractor-item'><b>greenhouses</b>（）：这是复数形式，此处需要单数/其他形式</p><p class='distractor-item'><b>greening</b>（）：这是现在分词形式，此处需要名词/形容词</p></div></ul><p class='fb-line'>&#128161; <b>解析：</b>greenhouse gases 是固定搭配，意为“温室气体”，greenhouse 作定语修饰 gases。</p></div></section><section class='q wf-card' data-block='word_forms' data-card='4' data-answer='accustomed'><div class='qhead'><span class='qn'>&#36716;&#183;04</span><b>&#35789;&#24615;&#36716;&#21270;</b> &#183; <span class='wf-word'>accustomed</span></div><p class='prompt'>选词填空，注意词性转化：</p><div class='wf-stem'>After a few weeks, he finally _____ to the new environment.</div><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='wf4' value='accustomed'> accustomed</label><label class='opt ' data-correct='0'><input type='radio' name='wf4' value='accustom'> accustom</label><label class='opt ' data-correct='0'><input type='radio' name='wf4' value='custom'> custom</label><label class='opt ' data-correct='0'><input type='radio' name='wf4' value='customary'> customary</label></div><div class='feedback hidden' data-answer='accustomed'><p class='fb-line'>&#128204; <b>&#31572;&#26696;&#65306;</b>accustomed &#8212; 习惯的；惯常的</p><p class='fb-line'>&#128221; <b>完整句：</b>After a few weeks, he finally accustomed to the new environment.</p><div class='think-path'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#128300; 解题思路</p><p class='think-step'>题目中给出的词 <b>accustomed</b> 已经符合句子的词性要求，不需要额外的词形变化。直接填入原形即可。</p></div>词形不变，保持原形<p class='fb-line'>&#127919; <b>考点：</b><li class='opt-explain'><b>accustomed</b>：习惯的；惯常的<span class='opt-reason'> — 答案</span> <span class="tag-correct">&#10003;</span></li><li class='opt-explain'><b>accustom</b>：使习惯<span class='opt-reason'>词性/形式不匹配</span></li><li class='opt-explain'><b>custom</b>：习惯，风俗；海关<span class='opt-reason'>词性/形式不匹配</span></li><li class='opt-explain'><b>customary</b>：<span class='opt-reason'>词性/形式不匹配</span></li><br>&#128218; <b>题目来源：</b>CET-4 / 考研英语 词性转化专项练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><div class='distractors'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#9888; 干扰项分析</p><p class='distractor-item'><b>accustom</b>（使习惯）：词性/形式不匹配</p><p class='distractor-item'><b>custom</b>（习惯，风俗；海关）：词性/形式不匹配</p><p class='distractor-item'><b>customary</b>（）：词性/形式不匹配</p></div></ul><p class='fb-line'>&#128161; <b>解析：</b>accustomed 是形容词，表示 &#x27;习惯的&#x27;；accustom 是动词原形；custom 是名词；customary 是形容词但侧重 &#x27;惯例的&#x27;。</p></div></section><section class='q wf-card' data-block='word_forms' data-card='5' data-answer='balconies'><div class='qhead'><span class='qn'>&#36716;&#183;05</span><b>&#35789;&#24615;&#36716;&#21270;</b> &#183; <span class='wf-word'>balcony</span></div><p class='prompt'>选词填空，注意词性转化：</p><div class='wf-stem'>The hotel has several rooms with private _____.</div><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='wf5' value='balcony'> balcony</label><label class='opt ' data-correct='1'><input type='radio' name='wf5' value='balconies'> balconies</label><label class='opt ' data-correct='0'><input type='radio' name='wf5' value='balconied'> balconied</label><label class='opt ' data-correct='0'><input type='radio' name='wf5' value='balcon'> balcon</label></div><div class='feedback hidden' data-answer='balconies'><p class='fb-line'>&#128204; <b>&#31572;&#26696;&#65306;</b>balconies &#8212; </p><p class='fb-line'>&#128221; <b>完整句：</b>The hotel has several rooms with private balconies.</p><div class='think-path'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#128300; 解题思路</p><p class='think-step'>① 确定句子空缺处需要什么词性（主语/谓语/宾语/定语/状语）。</p><p class='think-step'>② 原词 <b>balcony</b>（阳台）需要转化为 <b>balconies</b> 形式。词性转化</p><p class='think-step'>③ 将 <b>balconies</b> 代入原句，检查语法和语义是否通顺。</p></div>词性转化<p class='fb-line'>&#127919; <b>考点：</b><li class='opt-explain'><b>balcony</b>：阳台<span class='opt-reason'>这是原形，需要派生形式</span></li><li class='opt-explain'><b>balconies</b>：<span class='opt-reason'> — 答案</span> <span class="tag-correct">&#10003;</span></li><li class='opt-explain'><b>balconied</b>：<span class='opt-reason'>这是过去式/过去分词，此处需要其他词性</span></li><li class='opt-explain'><b>balcon</b>：<span class='opt-reason'>词性/形式不匹配</span></li><br>&#128218; <b>题目来源：</b>CET-4 / 考研英语 词性转化专项练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><div class='distractors'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#9888; 干扰项分析</p><p class='distractor-item'><b>balcony</b>（阳台）：这是原形，需要派生形式</p><p class='distractor-item'><b>balconied</b>（）：这是过去式/过去分词，此处需要其他词性</p><p class='distractor-item'><b>balcon</b>（）：词性/形式不匹配</p></div></ul><p class='fb-line'>&#128161; <b>解析：</b>several 后接可数名词复数，balcony 的复数是 balconies。</p></div></section><section class='q wf-card' data-block='word_forms' data-card='6' data-answer='basement'><div class='qhead'><span class='qn'>&#36716;&#183;06</span><b>&#35789;&#24615;&#36716;&#21270;</b> &#183; <span class='wf-word'>basement</span></div><p class='prompt'>选词填空，注意词性转化：</p><div class='wf-stem'>The house has a large _____ where we store wine.</div><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='wf6' value='basement'> basement</label><label class='opt ' data-correct='0'><input type='radio' name='wf6' value='base'> base</label><label class='opt ' data-correct='0'><input type='radio' name='wf6' value='basal'> basal</label><label class='opt ' data-correct='0'><input type='radio' name='wf6' value='baseless'> baseless</label></div><div class='feedback hidden' data-answer='basement'><p class='fb-line'>&#128204; <b>&#31572;&#26696;&#65306;</b>basement &#8212; 地下室</p><p class='fb-line'>&#128221; <b>完整句：</b>The house has a large basement where we store wine.</p><div class='think-path'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#128300; 解题思路</p><p class='think-step'>题目中给出的词 <b>basement</b> 已经符合句子的词性要求，不需要额外的词形变化。直接填入原形即可。</p></div>词形不变，保持原形<p class='fb-line'>&#127919; <b>考点：</b><li class='opt-explain'><b>basement</b>：地下室<span class='opt-reason'> — 答案</span> <span class="tag-correct">&#10003;</span></li><li class='opt-explain'><b>base</b>：基础；基地<span class='opt-reason'>需要名词形式（-ment）</span></li><li class='opt-explain'><b>basal</b>：<span class='opt-reason'>需要名词形式（-ment）</span></li><li class='opt-explain'><b>baseless</b>：<span class='opt-reason'>这是复数形式，此处需要单数/其他形式</span></li><br>&#128218; <b>题目来源：</b>CET-4 / 考研英语 词性转化专项练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><div class='distractors'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#9888; 干扰项分析</p><p class='distractor-item'><b>base</b>（基础；基地）：需要名词形式（-ment）</p><p class='distractor-item'><b>basal</b>（）：需要名词形式（-ment）</p><p class='distractor-item'><b>baseless</b>（）：这是复数形式，此处需要单数/其他形式</p></div></ul><p class='fb-line'>&#128161; <b>解析：</b>basement 是名词，指地下室；base 是基础；basal 是形容词；baseless 是无根据的。</p></div></section><section class='q wf-card' data-block='word_forms' data-card='7' data-answer='bearded'><div class='qhead'><span class='qn'>&#36716;&#183;07</span><b>&#35789;&#24615;&#36716;&#21270;</b> &#183; <span class='wf-word'>beard</span></div><p class='prompt'>选词填空，注意词性转化：</p><div class='wf-stem'>The old sailor&#x27;s ______ face showed years of hardship.</div><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='wf7' value='beard'> beard</label><label class='opt ' data-correct='1'><input type='radio' name='wf7' value='bearded'> bearded</label><label class='opt ' data-correct='0'><input type='radio' name='wf7' value='beardless'> beardless</label><label class='opt ' data-correct='0'><input type='radio' name='wf7' value='beards'> beards</label></div><div class='feedback hidden' data-answer='bearded'><p class='fb-line'>&#128204; <b>&#31572;&#26696;&#65306;</b>bearded &#8212; </p><p class='fb-line'>&#128221; <b>完整句：</b>The old sailor&amp;#x27;s bearded face showed years of hardship.</p><div class='think-path'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#128300; 解题思路</p><p class='think-step'>① 确定句子空缺处需要什么词性（主语/谓语/宾语/定语/状语）。</p><p class='think-step'>② 原词 <b>beard</b>（胡须，胡子）需要转化为 <b>bearded</b> 形式。词性转化</p><p class='think-step'>③ 将 <b>bearded</b> 代入原句，检查语法和语义是否通顺。</p></div>词性转化<p class='fb-line'>&#127919; <b>考点：</b><li class='opt-explain'><b>beard</b>：胡须，胡子<span class='opt-reason'>这是原形，需要派生形式</span></li><li class='opt-explain'><b>bearded</b>：<span class='opt-reason'> — 答案</span> <span class="tag-correct">&#10003;</span></li><li class='opt-explain'><b>beardless</b>：<span class='opt-reason'>这是复数形式，此处需要单数/其他形式</span></li><li class='opt-explain'><b>beards</b>：<span class='opt-reason'>这是复数形式，此处需要单数/其他形式</span></li><br>&#128218; <b>题目来源：</b>CET-4 / 考研英语 词性转化专项练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><div class='distractors'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#9888; 干扰项分析</p><p class='distractor-item'><b>beard</b>（胡须，胡子）：这是原形，需要派生形式</p><p class='distractor-item'><b>beardless</b>（）：这是复数形式，此处需要单数/其他形式</p><p class='distractor-item'><b>beards</b>（）：这是复数形式，此处需要单数/其他形式</p></div></ul><p class='fb-line'>&#128161; <b>解析：</b>bearded 是形容词“有胡须的”，修饰 face；beard 是名词，beardless 是“无须的”，beards 是复数名词。</p></div></section><section class='q wf-card' data-block='word_forms' data-card='8' data-answer='bin'><div class='qhead'><span class='qn'>&#36716;&#183;08</span><b>&#35789;&#24615;&#36716;&#21270;</b> &#183; <span class='wf-word'>bin</span></div><p class='prompt'>选词填空，注意词性转化：</p><div class='wf-stem'>She decided to _____ the old clothes instead of donating them.</div><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='wf8' value='bin'> bin</label><label class='opt ' data-correct='0'><input type='radio' name='wf8' value='binned'> binned</label><label class='opt ' data-correct='0'><input type='radio' name='wf8' value='binning'> binning</label><label class='opt ' data-correct='0'><input type='radio' name='wf8' value='bins'> bins</label></div><div class='feedback hidden' data-answer='bin'><p class='fb-line'>&#128204; <b>&#31572;&#26696;&#65306;</b>bin &#8212; 垃圾箱；箱子</p><p class='fb-line'>&#128221; <b>完整句：</b>She decided to bin the old clothes instead of donating them.</p><div class='think-path'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#128300; 解题思路</p><p class='think-step'>题目中给出的词 <b>bin</b> 已经符合句子的词性要求，不需要额外的词形变化。直接填入原形即可。</p></div>词形不变，保持原形<p class='fb-line'>&#127919; <b>考点：</b><li class='opt-explain'><b>bin</b>：垃圾箱；箱子<span class='opt-reason'> — 答案</span> <span class="tag-correct">&#10003;</span></li><li class='opt-explain'><b>binned</b>：<span class='opt-reason'>这是过去式/过去分词，此处需要其他词性</span></li><li class='opt-explain'><b>binning</b>：<span class='opt-reason'>这是现在分词形式，此处需要名词/形容词</span></li><li class='opt-explain'><b>bins</b>：<span class='opt-reason'>这是复数形式，此处需要单数/其他形式</span></li><br>&#128218; <b>题目来源：</b>CET-4 / 考研英语 词性转化专项练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><div class='distractors'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#9888; 干扰项分析</p><p class='distractor-item'><b>binned</b>（）：这是过去式/过去分词，此处需要其他词性</p><p class='distractor-item'><b>binning</b>（）：这是现在分词形式，此处需要名词/形容词</p><p class='distractor-item'><b>bins</b>（）：这是复数形式，此处需要单数/其他形式</p></div></ul><p class='fb-line'>&#128161; <b>解析：</b>这里需要动词原形，&#x27;bin&#x27; 作为动词意为 &#x27;扔掉&#x27;，其他选项是时态或形式变化。</p></div></section><section class='q reading-card' data-block='reading' data-card='1'><div class='qhead'><b>③ 语境阅读</b> <span class='hint-inline'>&#x1F50D; 点击任意词 = 查词义（<span style='color:#E85D3A;font-weight:700;'>新词</span> / <span style='color:#8B5CF6;font-weight:700;'>复习</span> / <span style='color:#6B7280;border-bottom:1px dashed #6B7280;'>其他</span>）</span></div><p class='story-title'></p><audio controls preload='none' src='audio/story.mp3'><source src='audio/story.m4a'></audio><div class='story-body'><p class='story-paragraph'></p></div><details><summary>中文梗概</summary><p></p></details><p class='muted'>读完整篇 → 进入 ④ 输出挑战。</p></section><section class='q writing' data-block='output' data-card='1'><div class='qhead'><b>自由写作</b></div><p class='prompt'></p><textarea rows='4' placeholder='写 2-3 句…'></textarea><button type='button' data-act='check-writing'>检查（LLM 一句反馈）</button><div class='writing-msg'></div></section><section class='q report-card' data-block='report' data-card='1'><div class='report-hero'>🎉</div><h2 class='report-title'>今日学习报告</h2><p class='report-sub'>先思考 → 再输入 → 再输出，完成度记录在这里。</p><div class='report-stats' id='report-stats'></div><div class='report-weak' id='report-weak'></div><p class='report-tip' id='report-tip'></p></section>
+</div>
+<div class="card-nav">
+  <button class="nav-prev" data-nav="prev">← 上一张</button>
+  <span class="nav-pos" id="nav-pos">1 / 1</span>
+  <button class="nav-next" data-nav="next">下一张 →</button>
+</div>
+<div class="footer">小韩陪你学英语 · 先思考 → 再输入 → 再输出</div>
+
+<!-- 点读词典弹窗 -->
+<div class="dict-modal" id="dict-modal"><div class="dict-box-wrap">
+  <button class="dict-close" id="dict-close">×</button>
+  <div class="dict-box" id="dict-box"></div>
+</div></div>
+
+<script>
+(function(){
+  var DICT = {"apron": {"ph": "", "zh": "围裙", "au": "apron_en"}, "bookcase": {"ph": "", "zh": "书柜", "au": "bookcase_en"}, "greenhouse": {"ph": "UK /griːnhaʊs/ US /ɡrinhaʊs/", "zh": "温室，玻璃暖房", "au": "greenhouse_en"}, "accustomed": {"ph": "/ə'kʌstəmd/", "zh": "习惯的；惯常的", "au": "accustomed_en"}, "balcony": {"ph": "UK /bælkəni/ US /bælkənɪ/", "zh": "阳台", "au": "balcony_en"}, "basement": {"ph": "", "zh": "地下室", "au": "basement_en"}, "beard": {"ph": "UK /bɪəd/ US /bɪrd/", "zh": "胡须，胡子", "au": "beard_en"}, "bin": {"ph": "", "zh": "垃圾箱；箱子", "au": "bin_en"}, "injury": {"ph": "/ˈɪndʒəri/", "zh": "身体或情感的损伤；受伤；损害", "au": "injury_en"}, "recover": {"ph": "/rɪˈkʌvər/", "zh": "恢复，康复；重新获得（体力、意识、数据等）", "au": "recover_en"}, "treatment": {"ph": "/ˈtriːtmənt/", "zh": "治疗，疗法；对待，处理", "au": "treatment_en"}, "overweight": {"ph": "UK /ˌəʊvəˈweɪt/ US /ˌoʊvərˈweɪt/", "zh": "超重的，体重超过正常标准的", "au": "overweight_en"}};
+  var stage = document.getElementById('stage');
+  var cards = Array.prototype.slice.call(stage.querySelectorAll('.q'));
+  var bar = document.getElementById('bar');
+  var counter = document.getElementById('counter');
+  var blocksEl = document.getElementById('blocks');
+  var BLOCK_NAMES = { 'intro': '开始', 'words': '一词一卡',
+                      'word_forms': '词性转化', 'article_logic': '文章逻辑',
+                      'reading': '阅读', 'output': '输出', 'report': '报告' };
+  var groups = {};
+  cards.forEach(function(c){
+    var b = c.getAttribute('data-block');
+    (groups[b] = groups[b] || []).push(c);
+  });
+  var firstCardOfBlock = {};
+  Object.keys(groups).forEach(function(b){
+    firstCardOfBlock[b] = groups[b][0];
+    var btn = document.createElement('button');
+    btn.textContent = BLOCK_NAMES[b] || b;
+    btn.setAttribute('data-block', b);
+    btn.addEventListener('click', function(){ showCard(firstCardOfBlock[b]); });
+    blocksEl.appendChild(btn);
+  });
+  var curIdx = 0;
+  function showCard(c){
+    cards.forEach(function(x){ x.classList.remove('active'); });
+    c.classList.add('active');
+    curIdx = cards.indexOf(c);
+    bar.style.width = (100 * (curIdx + 1) / cards.length) + '%';
+    counter.textContent = (curIdx + 1) + ' / ' + cards.length;
+    Array.prototype.forEach.call(blocksEl.children, function(b){
+      b.classList.toggle('on', b.getAttribute('data-block') === c.getAttribute('data-block'));
+    });
+    document.getElementById('nav-pos').textContent = (curIdx + 1) + ' / ' + cards.length;
+    document.querySelectorAll('.card-nav button').forEach(function(b){
+      var dir = b.getAttribute('data-nav');
+      b.disabled = (dir === 'prev' && curIdx === 0) || (dir === 'next' && curIdx === cards.length - 1);
+    });
+    window.scrollTo(0, 0);
+  }
+  function navNext(){ if (curIdx < cards.length - 1) showCard(cards[curIdx + 1]); }
+  function navPrev(){ if (curIdx > 0) showCard(cards[curIdx - 1]); }
+  document.body.addEventListener('click', function(e){
+    var t = e.target.closest('[data-nav]');
+    if (!t) return;
+    if (t.getAttribute('data-nav') === 'next') navNext(); else navPrev();
+  });
+
+  // 词卡：评分 → 揭晓输入 + 展开输出
+  var ratings = {};  // word -> quality
+  document.querySelectorAll('.wcard .rate').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var q = parseInt(btn.getAttribute('data-q'), 10);
+      var card = btn.closest('.wcard');
+      card.querySelectorAll('.rate').forEach(function(b){ b.classList.remove('sel'); });
+      btn.classList.add('sel');
+      card.querySelector('.phase-input').classList.remove('hidden');
+      card.querySelector('.phase-output').classList.remove('hidden');
+      var labels = {1: '忘了', 3: '模糊', 4: '想起', 5: '熟练'};
+      card.querySelector('.rate-msg').textContent = '已记录「' + (labels[q] || q) + '」—— 答案和讲解展开啦';
+      var word = card.getAttribute('data-word');
+      ratings[word] = q;
+      fetch('/api/review', {
+        method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({word: word, quality: q, channel: 'study'})
+      }).catch(function(){});
+    });
+  });
+
+  // 词卡输出小练习：选完立刻反馈
+  document.querySelectorAll('.wcard .opts input').forEach(function(r){
+    r.addEventListener('change', function(){
+      var card = r.closest('.wcard');
+      var word = card.getAttribute('data-word');
+      var ok = r.value === word;
+      card.querySelectorAll('label.opt').forEach(function(l){
+        l.classList.remove('right', 'wrong', 'soft');
+        if (l.getAttribute('data-correct') === '1') l.classList.add('right');
+        else if (l.querySelector('input').checked) l.classList.add('wrong');
+        else l.classList.add('soft');
+      });
+      var fb = card.querySelector('.out-fb');
+      if (fb) fb.classList.remove('hidden');
+    });
+  });
+
+  // 阅读点读词典 — 点击任意词访问小字典
+  function showDict(word, info) {
+    var audioHtml = info.au ? "<audio controls autoplay preload='auto' src='audio/" + info.au + ".mp3'></audio>" : '';
+    var defHtml = '';
+    if (info.def) {
+      defHtml = "<div class='d-def'>" + info.def + "</div>";
+    }
+    document.getElementById('dict-box').innerHTML =
+      "<div class='d-en'>" + word + "</div>" +
+      "<div class='d-ph'>" + (info.ph || '') + "</div>" +
+      "<div class='d-zh'>" + (info.zh || '') + "</div>" + defHtml +
+      audioHtml;
+    document.getElementById('dict-modal').classList.add('show');
+  }
+
+  // 已知词（当日目标词）的点击
+  document.querySelectorAll('.dict-word').forEach(function(sw){
+    sw.addEventListener('click', function(e){
+      e.stopPropagation();
+      var w = sw.getAttribute('data-word');
+      var info = DICT[w] || {};
+      showDict(w, info);
+    });
+  });
+
+  // 任意词点击查询 — 通过在线词典 API
+  document.querySelectorAll('.story-paragraph, .story-body').forEach(function(el){
+    el.addEventListener('click', function(e){
+      // 如果已经是 .dict-word 的点击，不要重复处理
+      if (e.target.closest('.dict-word')) return;
+      // 如果点击的是普通文本节点，获取选中的词
+      var sel = window.getSelection();
+      if (!sel || !sel.toString().trim()) {
+        // 没有选中文字，尝试获取点击位置的词
+        var t = e.target;
+        if (t.nodeType === 3) { // Text node
+          var text = t.textContent;
+          var range = document.createRange();
+          range.selectNodeContents(t);
+          var pos = e.offsetX;
+          // 简单处理：获取点击位置附近的词
+          var words = text.match(/\w+/g) || [];
+          if (words.length > 0) {
+            var word = words[Math.floor(words.length / 2)];
+            lookupWord(word);
+          }
+          return;
+        }
+        return;
+      }
+      var word = sel.toString().trim().toLowerCase();
+      if (word && word.length > 0 && word.length < 30) {
+        lookupWord(word);
+      }
+      sel.removeAllRanges();
+    });
+  });
+
+  function lookupWord(word) {
+    // 先查本地词典
+    var info = DICT[word];
+    if (info) {
+      showDict(word, info);
+      return;
+    }
+    // 再尝试在线 API
+    var apiUrl = 'https://api.dictionaryapi.dev/api/v2/entries/en/' + encodeURIComponent(word);
+    fetch(apiUrl)
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        if (Array.isArray(data) && data.length > 0) {
+          var entry = data[0];
+          var ph = entry.phonetic || (entry.phonetics && entry.phonetics[0] ? entry.phonetics[0].text : '') || '';
+          var meanings = entry.meanings || [];
+          var defs = [];
+          meanings.forEach(function(m){
+            (m.definitions || []).slice(0, 2).forEach(function(d){
+              defs.push('<span class="d-pos">' + (m.partOfSpeech || '') + '</span> ' + (d.definition || ''));
+            });
+          });
+          var defHtml = defs.join('<br>');
+          // 网络翻译（简单处理）
+          var zh = '';
+          if (meanings.length > 0 && meanings[0].definitions && meanings[0].definitions[0]) {
+            var syn = meanings[0].synonyms || [];
+            if (syn.length > 0) zh = '同义词：' + syn.slice(0, 3).join(', ');
+          }
+          showDict(word, {ph: ph, zh: zh, def: defHtml, au: ''});
+        } else {
+          showDict(word, {ph: '', zh: '未找到该词的定义', def: '', au: ''});
+        }
+      })
+      .catch(function(){
+        showDict(word, {ph: '', zh: '网络查询失败', def: '', au: ''});
+      });
+  }
+  document.getElementById('dict-close').addEventListener('click', function(){
+    document.getElementById('dict-modal').classList.remove('show');
+  });
+  document.getElementById('dict-modal').addEventListener('click', function(e){
+    if (e.target === this) this.classList.remove('show');
+  });
+
+  // 完形 / 预热共用反馈
+  function revealFeedback(card, isCorrect){
+    card.querySelectorAll('label.opt').forEach(function(l){
+      var input = l.querySelector('input');
+      l.classList.remove('right', 'wrong', 'soft');
+      if (l.getAttribute('data-correct') === '1') l.classList.add('right');
+      else if (input && input.checked) l.classList.add('wrong');
+      else l.classList.add('soft');
+    });
+    var fb = card.querySelector('.feedback');
+    if (fb) {
+      fb.classList.remove('hidden');
+      fb.classList.toggle('wrong', !isCorrect);
+    }
+  }
+  cards.forEach(function(card){
+    if (card.classList.contains('wcard')) return;
+    card.querySelectorAll('input[type=radio]').forEach(function(r){
+      r.addEventListener('change', function(){
+        var ans = card.getAttribute('data-answer');
+        revealFeedback(card, r.value === ans);
+      });
+    });
+  });
+
+  // 写作反馈
+  document.querySelectorAll('[data-act="check-writing"]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var card = btn.closest('.q');
+      var ta = card.querySelector('textarea');
+      var sentence = (ta.value || '').trim();
+      if (!sentence) { card.querySelector('.writing-msg').textContent = '请先写一句'; return; }
+      var prompt = card.querySelector('.prompt').textContent;
+      var m = prompt.match(/用.{0,20}?(\w+)[、，](\w+)[、，](\w+)/);
+      var word = m ? m[1] : 'word';
+      btn.disabled = true; btn.textContent = '反馈中…';
+      fetch('/api/check', {
+        method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({word: word, sentence: sentence})
+      }).then(function(r){ return r.json(); }).then(function(d){
+        var msg = card.querySelector('.writing-msg');
+        if (d.error) { msg.textContent = d.error; return; }
+        msg.textContent = (d.ok ? '✓ ' : '⚠ ') + d.feedback;
+      }).catch(function(e){
+        card.querySelector('.writing-msg').textContent = '反馈失败：' + e;
+      }).finally(function(){ btn.disabled = false; btn.textContent = '检查（LLM 一句反馈）'; });
+    });
+  });
+
+  // 键盘
+  document.addEventListener('keydown', function(e){
+    if (e.target && (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT')) return;
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); navNext(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); navPrev(); }
+    else if (['1','2','3','4'].indexOf(e.key) >= 0) {
+      var cur = cards[curIdx];
+      if (!cur || !cur.classList.contains('wcard')) return;
+      var map = {'1': 1, '2': 3, '3': 4, '4': 5};
+      var q = map[e.key];
+      var btn = cur.querySelector('.rate[data-q="' + q + '"]');
+      if (btn) btn.click();
+    }
+  });
+
+  // 学习报告：会话内汇总
+  function renderReport(){
+    var stats = {'1': 0, '3': 0, '4': 0, '5': 0};
+    var weak = [];
+    Object.keys(ratings).forEach(function(w){
+      stats[ratings[w]]++;
+      if (ratings[w] <= 3) weak.push(w);
+    });
+    var labels = {1: '忘了', 3: '模糊', 4: '想起', 5: '熟练'};
+    var cols = ['1','3','4','5'].map(function(q){
+      return "<div class='stat'><b>" + stats[q] + "</b><span>" + labels[q] + "</span></div>";
+    }).join('');
+    document.getElementById('report-stats').innerHTML = cols;
+    var weakEl = document.getElementById('report-weak');
+    if (weak.length) {
+      weakEl.innerHTML = "⚠️ 明天优先复习：<b>" + weak.join('、') + "</b><br>" +
+        "睡前再听一遍故事音频，回忆这些词出现的语境。";
+    } else {
+      weakEl.innerHTML = "🌟 今天没有弱项！每个词都记牢了，太棒了。";
+    }
+  }
+  var reportCard = document.querySelector('.report-card');
+  if (reportCard) {
+    // 进入报告卡时渲染（在 showCard 里通过 MutationObserver 太复杂，直接监听点击）
+    var obs = new MutationObserver(function(){
+      if (reportCard.classList.contains('active')) renderReport();
+    });
+    obs.observe(reportCard, {attributes: true, attributeFilter: ['class']});
+  }
+
+  if (cards.length > 0) showCard(cards[0]);
+})();
+</script>
+</body>
+</html>

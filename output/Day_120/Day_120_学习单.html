@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day_120 学习单 · 小韩英语角</title>
+<style>
+  :root {
+    --bg: #F7F5F2;
+    --card: #ffffff;
+    --ink: #1A1A2E;
+    --muted: #8B8FA3;
+    --line: #E8E4DE;
+    --accent: #E85D3A;
+    --accent-light: #FFF0EA;
+    --navy: #1B2A4A;
+    --ok: #2E9E6B;
+    --bad: #E74C3C;
+    --soft: #F5F2ED;
+    --radius: 24px;
+    --radius-sm: 14px;
+    --radius-xs: 10px;
+    --shadow: 0 1px 4px rgba(27,42,74,0.04), 0 2px 12px rgba(27,42,74,0.06);
+    --shadow-lg: 0 4px 12px rgba(27,42,74,0.06), 0 8px 32px rgba(27,42,74,0.10);
+    --shadow-xl: 0 8px 24px rgba(27,42,74,0.10), 0 16px 48px rgba(27,42,74,0.12);
+    --font: "PingFang SC", "Microsoft YaHei", -apple-system, sans-serif;
+    --c-etym: #1B8C3A;
+    --c-memory: #6C5CE7;
+    --c-usage: #2D7FC1;
+    --c-error: #E74C3C;
+    --c-exam: #8B5CF6;
+    --c-family: #10B981;
+    --c-colloc: #3B82F6;
+    --c-example: #7C3AED;
+    --c-confuse: #F59E0B;
+    --bg-etym: #F0F9F2;
+    --bg-memory: #F5F3FF;
+    --bg-usage: #F0F7FC;
+    --bg-error: #FEF2F2;
+    --bg-exam: #F8F4FF;
+    --bg-family: #ECFDF5;
+    --bg-colloc: #EFF6FF;
+    --bg-example: #F9F4FF;
+    --bg-confuse: #FFFBEB;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font); background: var(--bg);
+    color: var(--ink); padding-bottom: 100px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .topbar {
+    position: sticky; top: 0; z-index: 20;
+    background: linear-gradient(135deg, #1B2A4A 0%, #243B5E 100%);
+    color: #fff; padding: 12px 18px;
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  }
+  .topbar .brand {
+    font-weight: 700; font-size: 16px;
+    background: linear-gradient(90deg, #FFD9A0, #F0B37A);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; letter-spacing: 0.5px;
+  }
+  .topbar .progress {
+    flex: 1; min-width: 80px; height: 6px;
+    background: rgba(255,255,255,0.15); border-radius: 4px; overflow: hidden;
+  }
+  .topbar .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #E85D3A, #F0B37A);
+    width: 0%; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .topbar .counter {
+    font-size: 14px; color: rgba(255,255,255,0.6);
+    font-variant-numeric: tabular-nums; min-width: 50px; text-align: right;
+  }
+  .topbar .rate-chip {
+    font-size: 12px; padding: 4px 10px;
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.16);
+    border-radius: 999px; color: #FFE2C9; white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  .topbar .rate-chip.done {
+    background: var(--ok); border-color: var(--ok);
+    color: #fff; font-weight: 700;
+  }
+  .study-done {
+    position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%);
+    background: var(--ok); color: #fff; font-weight: 700;
+    padding: 12px 24px; border-radius: 999px;
+    box-shadow: 0 6px 24px rgba(46,158,107,0.35); z-index: 50;
+    animation: cardIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .topbar .blocks { display: flex; gap: 4px; }
+  .topbar .blocks button {
+    font-size: 13px; padding: 4px 10px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.6); border-radius: 8px;
+    cursor: pointer; transition: all 0.2s; font-weight: 500;
+  }
+  .topbar .blocks button:hover { background: rgba(255,255,255,0.12); color: #fff; }
+  .topbar .blocks button.on {
+    background: #E85D3A; color: #fff; border-color: #E85D3A;
+  }
+  .meta {
+    text-align: center; padding: 10px 12px 4px;
+    color: var(--muted); font-size: 14px; letter-spacing: 0.3px;
+  }
+  .stage { max-width: 700px; margin: 0 auto; padding: 8px 14px 20px; min-height: 65vh; }
+  .q {
+    display: none; background: var(--card); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 32px 28px 36px;
+    min-height: 380px; position: relative;
+    overflow: hidden; border: 1px solid rgba(232,228,222,0.6);
+  }
+  .q.active {
+    display: block;
+    animation: cardIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(20px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .hidden { display: none !important; }
+  .qhead {
+    font-size: 16px; margin-bottom: 16px; color: var(--muted);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .qn { font-weight: 700; color: var(--accent); margin-right: 4px; }
+  .intro-card { text-align: center; padding-top: 40px; }
+  .intro-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #E85D3A, #F0A07A);
+    color: #fff; font-size: 13px; font-weight: 700; padding: 5px 16px;
+    border-radius: 999px; letter-spacing: 1px; text-transform: uppercase;
+    box-shadow: 0 2px 8px rgba(232,93,58,0.25);
+  }
+  .intro-day {
+    font-size: 48px; font-weight: 800; margin: 14px 0 4px;
+    color: var(--navy); letter-spacing: -1px;
+    background: linear-gradient(135deg, #1B2A4A, #2D4A7A);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .intro-date { color: var(--muted); font-size: 16px; margin-bottom: 20px; }
+  .intro-goal {
+    display: flex; gap: 16px; justify-content: center; margin: 20px 0;
+  }
+  .intro-goal div {
+    background: linear-gradient(135deg, var(--soft), #F0EBE4);
+    border-radius: 18px; padding: 14px 24px; min-width: 90px;
+    border: 1px solid rgba(232,228,222,0.5);
+  }
+  .intro-goal b { font-size: 32px; color: var(--accent); display: block; }
+  .intro-goal span { font-size: 13px; color: var(--muted); }
+  .intro-story {
+    background: linear-gradient(135deg, #F0F9F2, #E8F5EC);
+    border: 1px solid #C8E0D0; border-radius: 18px;
+    padding: 18px; margin: 14px 0; text-align: left;
+  }
+  .intro-story .story-title {
+    font-weight: 700; font-size: 20px; color: var(--navy); margin: 0 0 8px;
+  }
+  .intro-flow {
+    color: var(--muted); font-size: 15px; line-height: 1.8;
+    margin-top: 18px; padding: 0 12px;
+  }
+  .intro-flow b { color: var(--navy); }
+  .wcard { padding-top: 28px; }
+  .wcard-top {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 16px;
+  }
+  .wtag {
+    font-size: 13px; padding: 6px 16px; border-radius: 999px;
+    font-weight: 700; letter-spacing: 0.5px;
+  }
+  .wtag.new { background: #E8F2FC; color: #1D6FA8; }
+  .wtag.review { background: #FEF0E7; color: #D4782A; }
+  .wnum {
+    font-size: 13px; color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .phase { margin: 16px 0; }
+  .phase-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 13px; font-weight: 700; padding: 6px 18px 6px 14px;
+    border-radius: 999px; margin-bottom: 12px;
+  }
+  .phase-tag.think { background: #E8F0FC; color: #1D6FA8; }
+  .phase-tag.think::before { content: '💭'; font-size: 13px; }
+  .phase-tag.input { background: #E4F5EC; color: #1A8A5A; }
+  .phase-tag.input::before { content: '📖'; font-size: 13px; }
+  .phase-tag.output { background: #FEF0E7; color: #D4782A; }
+  .phase-tag.output::before { content: '✏️'; font-size: 13px; }
+  .think-q {
+    color: var(--muted); font-size: 17px; margin: 10px 0 16px;
+    line-height: 1.6;
+  }
+  .meaning {
+    font-size: 28px; line-height: 1.5; color: var(--navy);
+    font-weight: 700; margin: 0 0 16px; padding: 18px 24px;
+    background: #F8F4EE; border-radius: 16px; text-align: center;
+    border: 1px dashed var(--line);
+  }
+  .hint { color: var(--muted); font-size: 14px; margin-top: 10px; }
+  .rate-msg {
+    color: var(--accent); font-size: 16px; margin-top: 12px;
+    min-height: 20px; font-weight: 600;
+  }
+  .rbtns {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+  }
+  .rbtns button {
+    font-size: 16px; padding: 12px 6px;
+    border: 1px solid var(--line); border-radius: 14px;
+    background: var(--soft); cursor: pointer; font-weight: 600;
+    transition: all 0.2s; color: var(--ink);
+  }
+  .rbtns button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+  .rbtns button.rate.sel {
+    background: linear-gradient(135deg, #E85D3A, #F0A07A);
+    color: #fff; border-color: #E85D3A; transform: scale(1.05);
+    box-shadow: 0 4px 16px rgba(232,93,58,0.3);
+  }
+  .opts {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+    margin-top: 12px;
+  }
+  .opt {
+    padding: 16px 18px; background: #F9F6EF;
+    border: 1px solid var(--line); border-radius: 16px;
+    cursor: pointer; font-size: 16px; line-height: 1.5;
+    transition: all 0.15s; display: flex; align-items: center; gap: 8px;
+  }
+  .opt:hover {
+    border-color: #D4C9B8; background: #F5F0E8;
+    transform: translateY(-1px);
+  }
+  .opt input { margin: 0; accent-color: var(--accent); }
+  .opt.right {
+    background: #E4F5EC; border-color: var(--ok);
+    animation: pulse 0.3s ease;
+  }
+  .opt.wrong { background: #FEF2F2; border-color: var(--bad); }
+  .opt.soft { opacity: 0.45; }
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+  }
+  .feedback {
+    margin-top: 16px; padding: 16px 18px; border-radius: 16px;
+    background: #F0F9F2; border: 1px solid #C8E0D0;
+    animation: cardIn 0.2s ease;
+  }
+  .feedback.wrong { background: #FEF2F2; border-color: #F0C8C8; }
+  .fb-line { margin: 6px 0; font-size: 17px; line-height: 1.6; }
+  .fb-ok { color: var(--ok); }
+  .fb-wrong { color: var(--bad); }
+  .explain { margin: 8px 0; padding-left: 20px; }
+  .explain li { margin: 4px 0; font-size: 16px; }
+  .opt-explain { margin: 6px 0; font-size: 16px; line-height: 1.6; }
+  .opt-reason { color: var(--muted); font-size: 14px; }
+  .think-path {
+    margin: 12px 0; padding: 12px 14px; border-radius: 14px;
+    background: #FFF8E8; border: 1px solid #F0E3C0;
+  }
+  .distractor-item {
+    margin: 5px 0; font-size: 15px; line-height: 1.6;
+    color: var(--ink);
+  }
+  .distractors {
+    margin: 12px 0; padding: 12px 14px; border-radius: 14px;
+    background: #FEF2F2; border: 1px solid #F5D0D0;
+  }
+  .tag-correct { color: var(--ok); font-weight: 700; }
+  .out-q { font-size: 17px; line-height: 1.7; margin-bottom: 10px; color: var(--navy); font-weight: 600; }
+  .out-sentence { font-size: 18px; line-height: 1.8; background: var(--soft); padding: 14px 18px; border-radius: 16px; margin: 10px 0 14px; }
+  .out-fb {
+    margin-top: 14px; padding: 14px 16px; border-radius: 14px;
+    background: #F0F9F2; border: 1px solid #C8E0D0;
+    animation: cardIn 0.2s ease;
+  }
+  .story-title {
+    font-weight: 700; font-size: 18px; color: var(--navy);
+    margin: 8px 0; line-height: 1.4;
+  }
+  .story-body { font-size: 18px; line-height: 2; color: #1A3040; }
+  .story-paragraph { margin: 12px 0; line-height: 1.9; }
+  mark {
+    background: linear-gradient(180deg, transparent 60%, #FFE9C9 60%);
+    padding: 0 3px; border-radius: 2px;
+  }
+  audio {
+    height: 36px; width: 100%; margin-top: 10px;
+    border-radius: 10px;
+  }
+  .dict-word {
+    padding: 1px 4px; border-radius: 4px; cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s; font-weight: 600;
+  }
+  .dict-word.dict-new {
+    background: linear-gradient(180deg, transparent 60%, #FFE9C9 60%);
+    border-bottom-color: var(--accent);
+  }
+  .dict-word.dict-new:hover { background: #FFDCA8; }
+  .dict-word.dict-review {
+    background: linear-gradient(180deg, transparent 60%, #F0E8FF 60%);
+    border-bottom-color: #8B5CF6;
+  }
+  .dict-word.dict-review:hover { background: #E2D4F5; }
+  .dict-modal {
+    display: none; position: fixed; inset: 0; z-index: 50;
+    background: rgba(27,42,74,0.4);
+    align-items: center; justify-content: center;
+    backdrop-filter: blur(6px);
+  }
+  .dict-modal.show { display: flex; }
+  .dict-box {
+    width: min(88vw, 460px); background: #fff; border-radius: 24px;
+    padding: 28px; box-shadow: var(--shadow-xl);
+    animation: cardIn 0.15s ease;
+  }
+  .dict-box .d-en {
+    font-size: 30px; font-weight: 800; color: var(--navy);
+  }
+  .dict-box .d-ph {
+    color: var(--muted); font-size: 15px; margin: 4px 0 10px;
+  }
+  .dict-box .d-zh {
+    font-size: 17px; line-height: 1.5; margin-bottom: 12px;
+    color: var(--ink);
+  }
+  .dict-close {
+    position: absolute; top: 14px; right: 18px; font-size: 26px;
+    color: var(--muted); cursor: pointer; background: none; border: none;
+    line-height: 1; transition: color 0.15s;
+  }
+  .dict-close:hover { color: var(--navy); }
+  .dict-box-wrap { position: relative; }
+  .rich { padding: 0; }
+  .rich-head {
+    margin-bottom: 24px; padding-bottom: 20px;
+    border-bottom: 2px solid var(--line);
+    background: linear-gradient(180deg, #FAF8F5 0%, transparent 100%);
+    margin: -16px -16px 20px -16px;
+    padding: 24px 24px 20px 24px;
+    border-radius: var(--radius) var(--radius) 0 0;
+    position: relative;
+  }
+  .rich-head::after {
+    content: '';
+    position: absolute; bottom: -2px; left: 24px; right: 24px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    border-radius: 2px;
+  }
+  .rich-head .head-line1 {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  }
+  .rich-head .en {
+    font-size: 36px; font-weight: 800; color: var(--navy);
+    letter-spacing: -0.5px; line-height: 1.1;
+  }
+  .rich-head .pos-chip {
+    background: linear-gradient(135deg, #F0E2CC, #E8D6B8);
+    color: #8A5A1C; font-size: 12px;
+    font-weight: 700; padding: 3px 14px; border-radius: 8px;
+  }
+  .rich-head .phon {
+    color: var(--muted); font-size: 15px;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .rich-head .head-meaning {
+    margin-top: 10px; font-size: 20px; font-weight: 700;
+    color: var(--accent); line-height: 1.5;
+  }
+  .rich-sec {
+    margin: 18px 0; padding: 18px 20px;
+    background: #FAF8F5; border-radius: 18px;
+    border: 1px solid #EDE8E0;
+    position: relative; overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .rich-sec:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(27,42,74,0.08);
+  }
+  .rich-sec::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 5px; height: 100%;
+    border-radius: 0 3px 3px 0;
+  }
+  .rich-sec .sec-title {
+    font-size: 17px; font-weight: 700;
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .rich-sec .sec-body {
+    font-size: 17px; line-height: 1.8; color: #333; margin: 0;
+  }
+  .rich-sec .sec-list {
+    margin: 6px 0 6px 18px; padding: 0;
+  }
+  .rich-sec .sec-list li {
+    font-size: 16px; line-height: 1.9; margin: 6px 0;
+  }
+  .rich-sec .sec-list li .en {
+    font-size: 17px; font-weight: 600; color: var(--navy);
+  }
+  .rich-sec .sec-list li .zh {
+    color: var(--muted); font-size: 15px;
+  }
+  .rich-sec .sec-list li.err-pair {
+    list-style: none; margin: 12px 0;
+    padding: 12px 14px;
+    background: rgba(231,76,60,0.04);
+    border-radius: 12px;
+    border: 1px solid rgba(231,76,60,0.1);
+  }
+  .err-wrong {
+    color: #C0392B; font-size: 16px;
+    text-decoration: line-through;
+  }
+  .err-right {
+    color: #1A8A5A; font-size: 16px; font-weight: 600;
+    margin-top: 4px;
+  }
+  .err-note {
+    color: #888; font-size: 15px; margin-top: 4px;
+    line-height: 1.6;
+  }
+  mark.target {
+    background: #FFD9A0; color: #8A4A12; font-weight: 700;
+    padding: 0 4px; border-radius: 3px;
+  }
+  .rich-sec.sec-etym::before { background: var(--c-etym); }
+  .rich-sec.sec-etym .sec-title { color: var(--c-etym); }
+  .rich-sec.sec-etym { background: var(--bg-etym); border-color: #C8E0D0; }
+  .rich-sec.sec-memory::before { background: var(--c-memory); }
+  .rich-sec.sec-memory .sec-title { color: var(--c-memory); }
+  .rich-sec.sec-memory { background: var(--bg-memory); border-color: #DCD4F5; }
+  .rich-sec.sec-usage::before { background: var(--c-usage); }
+  .rich-sec.sec-usage .sec-title { color: var(--c-usage); }
+  .rich-sec.sec-usage { background: var(--bg-usage); border-color: #C8DCE8; }
+  .rich-sec.sec-error::before { background: var(--c-error); }
+  .rich-sec.sec-error .sec-title { color: var(--c-error); }
+  .rich-sec.sec-error { background: var(--bg-error); border-color: #F0C8C8; }
+  .rich-sec.sec-exam::before { background: var(--c-exam); }
+  .rich-sec.sec-exam .sec-title { color: var(--c-exam); }
+  .rich-sec.sec-exam { background: var(--bg-exam); border-color: #DCC4E8; }
+  .rich-sec.sec-family::before { background: var(--c-family); }
+  .rich-sec.sec-family .sec-title { color: var(--c-family); }
+  .rich-sec.sec-family { background: var(--bg-family); border-color: #A8D5BA; }
+  .rich-sec.sec-colloc::before { background: var(--c-colloc); }
+  .rich-sec.sec-colloc .sec-title { color: var(--c-colloc); }
+  .rich-sec.sec-colloc { background: var(--bg-colloc); border-color: #B8D4E8; }
+  .rich-sec.sec-example::before { background: var(--c-example); }
+  .rich-sec.sec-example .sec-title { color: var(--c-example); }
+  .rich-sec.sec-example { background: var(--bg-example); border-color: #DCD4EC; }
+  .rich-sec.sec-confuse::before { background: var(--c-confuse); }
+  .rich-sec.sec-confuse .sec-title { color: var(--c-confuse); }
+  .rich-sec.sec-confuse { background: var(--bg-confuse); border-color: #F0D4B8; }
+  .chips {
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .chip {
+    background: #fff; border: 1px solid var(--line);
+    border-radius: 999px; padding: 8px 20px;
+    font-size: 16px; transition: all 0.15s;
+  }
+  .chip:hover {
+    border-color: var(--accent);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .chip b { color: var(--navy); }
+  .chip .chip-zh { color: var(--muted); font-weight: 400; font-size: 15px; margin-left: 4px; }
+  .wf-card { border-top: none; }
+  .wf-card .qhead { color: #7C3AED; }
+  .wf-card .wf-word { font-weight: 700; color: var(--navy); }
+  .wf-card .wf-stem {
+    background: #F5F3FF; border: 1px solid #D3C4EA;
+    padding: 16px 18px; border-radius: 14px; font-size: 17px;
+    line-height: 1.8; margin: 10px 0 14px;
+  }
+  .al-card { border-top: none; }
+  .al-card .qhead { color: #D4782A; }
+  .al-card .para-sentence {
+    background: var(--soft); padding: 16px 18px;
+    border-radius: 16px; font-size: 17px; line-height: 1.8;
+    margin: 10px 0 14px; color: var(--ink);
+  }
+  .al-card .para-blank {
+    display: inline-block; background: #fff;
+    border: 2px dashed #D4782A; padding: 0 12px;
+    border-radius: 8px; color: #D4782A; font-weight: 700;
+    font-family: monospace; font-size: 14px;
+  }
+  .cloze .sentence {
+    font-size: 18px; line-height: 1.9; background: var(--soft);
+    padding: 16px 18px; border-radius: 16px; margin: 10px 0 14px;
+  }
+  .writing textarea {
+    width: 100%; padding: 14px 16px; border: 1px solid var(--line);
+    border-radius: 16px; font-size: 15px; font-family: var(--font);
+    resize: vertical; margin: 10px 0; transition: border-color 0.2s;
+  }
+  .writing textarea:focus {
+    outline: none; border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(232,93,58,0.1);
+  }
+  .writing button {
+    font-size: 15px; padding: 12px 24px; border: none;
+    border-radius: 14px; background: var(--accent); color: #fff;
+    cursor: pointer; font-weight: 600; transition: all 0.2s;
+  }
+  .writing button:hover {
+    background: #D04D2A; transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(232,93,58,0.3);
+  }
+  .writing button:disabled { background: #CCB; cursor: not-allowed; }
+  .writing-msg { margin-top: 12px; font-size: 16px; color: var(--navy); }
+  .writing .prompt {
+    font-size: 17px; line-height: 1.8; color: var(--navy);
+    font-weight: 600; margin: 6px 0;
+  }
+  .report-card { text-align: center; }
+  .report-hero { font-size: 60px; margin-bottom: 6px; }
+  .report-title {
+    color: var(--navy); margin: 8px 0 4px; font-size: 28px;
+    font-weight: 800;
+  }
+  .report-sub {
+    color: var(--muted); font-size: 16px; margin-bottom: 24px;
+  }
+  .report-stats {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+    margin-bottom: 20px;
+  }
+  .stat {
+    background: linear-gradient(135deg, var(--soft), #F0EBE4);
+    border-radius: 18px; padding: 16px 8px;
+    border: 1px solid rgba(232,228,222,0.5);
+  }
+  .stat b { display: block; font-size: 34px; color: var(--navy); }
+  .stat span { font-size: 13px; color: var(--muted); }
+  .report-weak {
+    background: #FEF0E7; border: 1px solid #F5D9BD;
+    border-radius: 18px; padding: 16px; font-size: 16px; line-height: 1.8;
+  }
+  .report-tip { color: var(--muted); font-size: 15px; margin-top: 18px; }
+  .card-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid var(--line);
+    padding: 12px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 14px; box-shadow: 0 -4px 24px rgba(0,0,0,0.06);
+    z-index: 30;
+  }
+  .card-nav button {
+    font-size: 17px; padding: 12px 24px; border: none;
+    border-radius: 14px; background: var(--accent); color: #fff;
+    cursor: pointer; font-weight: 600; transition: all 0.15s;
+  }
+  .card-nav button:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(232,93,58,0.3);
+  }
+  .card-nav button:disabled { background: #DDD; cursor: not-allowed; }
+  .card-nav .nav-prev {
+    background: transparent; color: var(--accent);
+    border: 1px solid var(--accent);
+  }
+  .card-nav .nav-prev:hover:not(:disabled) {
+    background: var(--accent-light);
+  }
+  .card-nav .nav-pos {
+    color: var(--muted); font-size: 13px;
+    font-variant-numeric: tabular-nums;
+  }
+  .footer {
+    text-align: center; padding: 18px; color: #BBB; font-size: 11px;
+    letter-spacing: 0.5px;
+  }
+  .hero-area {
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+    gap: 20px; margin-bottom: 24px;
+    background: linear-gradient(135deg, #FAF8F5, #F5F2ED);
+    border-radius: 18px; padding: 24px 20px; border: 1px solid #EDE8E0;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-area::before {
+    content: '';
+    position: absolute; top: 0; right: 0;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(232,93,58,0.04) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero-info { position: relative; z-index: 1; width: 100%; }
+  .hero-word {
+    font-size: 48px;
+    line-height: 1.1; margin: 0 0 8px; letter-spacing: -0.5px; text-align: center;
+  }
+  .hero-phon {
+    font-size: 20px;
+    display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 10px;
+  }
+  .hero-pos {
+    display: inline-block; font-size: 14px; font-weight: 600;
+    color: #fff; background: var(--accent);
+    padding: 3px 12px; border-radius: 8px; margin-right: 8px;
+  }
+  .hero-meaning {
+    font-size: 26px;
+    margin: 8px 0 0; line-height: 1.4; text-align: center;
+  }
+  .hero-img {
+    flex-shrink: 0; width: min(340px, 80vw); height: min(340px, 80vw);
+    border-radius: 20px; overflow: hidden;
+    box-shadow: 0 8px 24px rgba(27,42,74,0.18);
+    border: 3px solid #fff;
+    background: #ffffff;
+    position: relative; z-index: 1; margin: 0 auto;
+    transition: transform 0.2s;
+  }
+  .hero-img:hover { transform: scale(1.03); }
+  .hero-img img {
+    width: 100%; height: 100%; object-fit: cover;
+    object-position: center; display: block;
+  }
+  .concept-map {
+    position: relative; width: 100%; margin: 20px auto;
+    padding: 20px 0;
+    display: flex; justify-content: center; align-items: center;
+    gap: 20px; flex-wrap: wrap;
+    background: linear-gradient(135deg, #FAF8F5, #F5F2ED);
+    border-radius: 18px; border: 1px solid #EDE8E0;
+    min-height: 120px;
+  }
+  .concept-center {
+    width: 88px; height: 88px; border-radius: 50%;
+    background: linear-gradient(135deg, #1B2A4A, #2D4A7A);
+    color: #fff; display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 14px; text-align: center;
+    box-shadow: 0 6px 24px rgba(27,42,74,0.3);
+    z-index: 2; line-height: 1.2; padding: 6px;
+    border: 3px solid #fff;
+    position: relative;
+  }
+  .concept-center::after {
+    content: ''; position: absolute; inset: -8px; border-radius: 50%;
+    border: 2px dashed rgba(27,42,74,0.12);
+  }
+  .concept-center::before {
+    content: ''; position: absolute; inset: -16px; border-radius: 50%;
+    border: 1px solid rgba(27,42,74,0.05);
+  }
+  .concept-nodes {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    justify-content: center; max-width: 320px;
+  }
+  .concept-node {
+    padding: 8px 18px; border-radius: 999px; font-size: 13px;
+    font-weight: 600; white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    transition: all 0.2s; border: 1px solid transparent;
+    cursor: default;
+  }
+  .concept-node:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  }
+  .concept-node.family {
+    background: #E4F5EC; color: #1A8A5A;
+    border-color: #A8D5BA;
+  }
+  .concept-node.colloc {
+    background: #E8F2FC; color: #1D6FA8;
+    border-color: #B8D4E8;
+  }
+  .concept-node.synonym {
+    background: #FEF0E7; color: #D4782A;
+    border-color: #F0D4B8;
+  }
+  .concept-node.antonym {
+    background: #FEF2F2; color: #C0392B;
+    border-color: #F0B8B8;
+  }
+  .concept-node.example {
+    background: #F5F3FF; color: #7C3AED;
+    border-color: #D4C4EC;
+  }
+  /* 词素着色：前缀蓝 / 词根绿 / 后缀紫 / 连接元音墨色（inherit） / 中缀粉；
+     同一类型连续出现时用 -2 / -3 深浅轮换，保证“分几段就有几种颜色”。 */
+  .morph-prefix { color: #3B82F6; }
+  .morph-prefix-2 { color: #60A5FA; }
+  .morph-prefix-3 { color: #2563EB; }
+  .morph-root { color: #1B8C3A; }
+  .morph-root-2 { color: #16A34A; }
+  .morph-root-3 { color: #22C55E; }
+  .morph-suffix { color: #8B5CF6; }
+  .morph-suffix-2 { color: #A78BFA; }
+  .morph-suffix-3 { color: #7C3AED; }
+  .morph-connect { color: inherit; }  /* 连接元音保持原本色（墨色），不额外染色 */
+  .morph-connect-2 { color: inherit; }
+  .morph-connect-3 { color: inherit; }
+  .morph-infix { color: #EC4899; }
+  .morph-other { color: #64748B; }
+  .hero-word { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0; }
+  .hero-word .morph-part { font-size: inherit; font-weight: 800; letter-spacing: -0.5px; }
+
+@media (max-width: 600px) {
+    .hero-area { flex-direction: column; align-items: center; text-align: center; }
+    .hero-area::before { display: none; }
+    .hero-img { width: min(280px, 78vw); height: min(280px, 78vw); }
+    .hero-word { font-size: 32px; text-align: center; }
+    .hero-meaning { text-align: center; }
+    .hero-phon { justify-content: center; }
+    .concept-map { gap: 12px; padding: 16px 0; }
+    .concept-center { width: 72px; height: 72px; font-size: 12px; }
+    .concept-nodes { max-width: 240px; }
+    .opts { grid-template-columns: 1fr; }
+    .rbtns { grid-template-columns: repeat(4, 1fr); gap: 4px; }
+    .q { padding: 24px 18px 28px; min-height: 320px; }
+    .meaning { font-size: 21px; }
+    .intro-day { font-size: 34px; }
+    .rich-head .en { font-size: 28px; }
+    .rich-head { margin: -12px -12px 16px -12px; padding: 20px 18px 16px 18px; }
+    .stage { max-width: 100%; padding: 8px 10px 20px; }
+    .card-nav button { font-size: 13px; padding: 10px 16px; }
+    .intro-goal { gap: 10px; }
+    .intro-goal div { padding: 12px 16px; min-width: 70px; }
+    .report-stats { grid-template-columns: repeat(2, 1fr); }
+    .rich-sec { padding: 14px 16px; }
+    .rich-sec .sec-body { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">小韩英语角 · Day_120</div>
+  <div class="progress"><div class="progress-bar" id="bar"></div></div>
+  <div class="counter" id="counter">0 / 37</div>
+  <span class="rate-chip" id="rate-chip">词卡 0/12</span>
+  <div class="blocks" id="blocks"></div>
+</div>
+<div class="meta">2026-08-22 · 主题：社会与政治 · 键盘 1-4 评分，←/→ 翻卡</div>
+<div class="stage" id="stage">
+  <section class='q intro-card' data-block='intro' data-card='1'><div class='intro-badge'>今日学习单</div><h1 class='intro-day'>Day_120</h1><p class='intro-date'>2026-08-22 · 主题：社会与政治</p><div class='intro-goal'><div><b>8</b> 新词</div><div><b>4</b> 复习</div><div><b>1</b> 短文</div></div><div class='intro-story'><p class='story-title'>社会与政治：从歧视到和平的旅程</p><audio controls preload='none' src='audio/story.mp3'><source src='audio/story.m4a'></audio></div><p class='intro-flow'>每个词按 <b>先思考 → 再输入 → 再输出</b> 三步走。先想一遍，再看答案，最后动手用一次。</p></section><section class='q wcard new' data-block='words' data-card='1' data-word='discrimination'><div class='wcard-top'><span class='wtag new'>新词</span><span class='wnum'>01 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>歧视；区别对待</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-root'>discriminat</span><span class='morph-part morph-suffix'>ion</span></p><p class='hero-phon'><span class='hero-pos'>n.</span>/dɪˌskrɪmɪˈneɪʃn/ <audio controls preload='none' src='audio/discrimination_en.mp3'><source src='audio/discrimination_en.m4a'></audio></p><p class='hero-meaning'>歧视；区别对待</p></div><div class='hero-img'><img class='anchor-img' src='../../data/images/discrimination.png' alt='discrimination 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>源自拉丁语 discriminare，意为“区分、分开”，由 dis-（分开）和 crimen（判决、区分）组成。最初指“辨别能力”，16世纪后逐渐演变为“不公平对待”的负面含义。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>词根法：dis-（分开）+ crimin（判断）+ -ation（名词后缀）→ 把人群“分开判断” → 歧视</li><li>场景法：想象面试官看到简历上的照片，因为肤色直接拒绝，这就是“分开判断”的歧视。</li><li>对比法：discrimination 和 distinction（区别）同源，但 distinction 是中性褒义，discrimination 是贬义。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>常与 against 连用，表示“对……的歧视”；也可作不可数名词。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>discriminate to someone</s></div><div class='err-right'>✅ discriminate against someone</div><div class='err-note'>discriminate 后接 against，表示“歧视某人”，不接 to。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>a discrimination</s></div><div class='err-right'>✅ discrimination</div><div class='err-note'>discrimination 作“歧视”讲时通常不可数，不加 a。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>完形填空：常考搭配 discriminate against，注意介词 against。</li><li>写作：可用于社会问题类作文，如“消除歧视”的论点。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>discriminate</b> v. 歧视；区分</span><span class='chip'><b>discriminatory</b> adj. 歧视性的</span><span class='chip'><b>discriminating</b> adj. 有辨别力的；歧视的</span><span class='chip'><b>indiscriminate</b> adj. 不加区分的</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'><b>racial discrimination</b> <span class='chip-zh'>种族歧视</span></span><span class='chip'><b>gender discrimination</b> <span class='chip-zh'>性别歧视</span></span><span class='chip'><b>age discrimination</b> <span class='chip-zh'>年龄歧视</span></span><span class='chip'><b>discrimination against</b> <span class='chip-zh'>对……的歧视</span></span><span class='chip'><b>discrimination in employment</b> <span class='chip-zh'>就业歧视</span></span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>The new law aims to eliminate racial <mark class='target'>discrimination</mark> in the workplace.</span><br><span class='zh'>新法律旨在消除工作场所的种族歧视。</span></li><li><span class='en'>She filed a lawsuit claiming gender <mark class='target'>discrimination</mark> during the hiring process.</span><br><span class='zh'>她提起诉讼，声称在招聘过程中遭遇了性别歧视。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>prejudice</b>（偏见）— prejudice 指先入为主的负面看法，不一定有行动；discrimination 指基于偏见的实际区别对待行为。</li><li><b>segregation</b>（隔离）— segregation 强调物理上的分开，如种族隔离制度；discrimination 更侧重不公平的待遇，不一定涉及物理隔离。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>discrimination</div><div class='concept-nodes'><span class='concept-node family'>discriminate</span><span class='concept-node family'>discriminatory</span><span class='concept-node family'>discriminating</span><span class='concept-node family'>indiscriminate</span><span class='concept-node colloc'>racial discrimination</span><span class='concept-node colloc'>gender discrimination</span><span class='concept-node colloc'>age discrimination</span><span class='concept-node colloc'>discrimination against</span><span class='concept-node colloc'>discrimination in employment</span><span class='concept-node synonym'>prejudice</span><span class='concept-node synonym'>segregation</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 discrimination 填回句子：</p><p class='out-sentence'>The new law aims to eliminate racial ______ in the workplace.</p><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='out1' value='discrimination'> discrimination</label><label class='opt ' data-correct='0'><input type='radio' name='out1' value='peaceful'> peaceful</label><label class='opt ' data-correct='0'><input type='radio' name='out1' value='fascination'> fascination</label><label class='opt ' data-correct='0'><input type='radio' name='out1' value='republic'> republic</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>discrimination</b> /dɪˌskrɪmɪˈneɪʃn/</p><p class='fb-line'>📝 完整句：The new law aims to eliminate racial discrimination in the workplace.</p><p class='fb-line'>🀄 译文：新法律旨在消除工作场所的种族歧视。</p></div></div></section><section class='q wcard new' data-block='words' data-card='2' data-word='peaceful'><div class='wcard-top'><span class='wtag new'>新词</span><span class='wnum'>02 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>平静的，和平的</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-root'>peace</span><span class='morph-part morph-suffix'>ful</span></p><p class='hero-phon'><span class='hero-pos'>adj</span>UK /ˈpi:sfl/ US /pisfəl/ <audio controls preload='none' src='audio/peaceful_en.mp3'><source src='audio/peaceful_en.m4a'></audio></p><p class='hero-meaning'>平静的，和平的</p></div><div class='hero-img'><img class='anchor-img' src='../../data/images/peaceful.png' alt='peaceful 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>源自拉丁语 pax（和平），通过古法语 pais 进入英语，后缀 -ful 表示“充满……的”，字面意思为“充满和平的”。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>词根法：peace（和平）+ ful（充满）→ 充满和平的 → 平静的、和平的。</li><li>场景法：想象一个阳光明媚的午后，你躺在公园长椅上，周围没有噪音，只有微风和鸟鸣，这就是 peaceful 的感觉。</li><li>对比法：peaceful 强调没有冲突或噪音；而 quiet 只强调声音小，不一定和平。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>常用来形容地方、氛围或活动，也可形容人的性格（温和、不争吵）。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>The room is very peaceful.</s></div><div class='err-right'>✅ The room is very quiet.</div><div class='err-note'>房间通常用 quiet 形容安静，peaceful 更适合形容整体氛围或地点。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>He is a peaceful person.</s></div><div class='err-right'>✅ He is a peace-loving person.</div><div class='err-note'>形容人爱好和平时，常用 peace-loving，peaceful 多形容性格温和、不惹事。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>完形填空：常与 quiet, calm 辨析，注意上下文是强调“无冲突”还是“无声音”。</li><li>写作：可用于描述理想社会、社区环境或个人心境，如 a peaceful society。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>peace</b> n 和平</span><span class='chip'><b>peacefully</b> adv 和平地，平静地</span><span class='chip'><b>peacefulness</b> n 平静，和平</span><span class='chip'><b>peacemaker</b> n 调解人，和事佬</span><span class='chip'><b>peaceable</b> adj 和平的，温和的</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'><b>peaceful protest</b> <span class='chip-zh'>和平抗议</span></span><span class='chip'><b>peaceful coexistence</b> <span class='chip-zh'>和平共处</span></span><span class='chip'><b>peaceful sleep</b> <span class='chip-zh'>安稳的睡眠</span></span><span class='chip'><b>peaceful atmosphere</b> <span class='chip-zh'>宁静的氛围</span></span><span class='chip'><b>peaceful resolution</b> <span class='chip-zh'>和平解决</span></span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>The park is a <mark class='target'>peaceful</mark> place to read a book.</span><br><span class='zh'>这个公园是个读书的安静地方。</span></li><li><span class='en'>After the war, the country finally became <mark class='target'>peaceful</mark>.</span><br><span class='zh'>战后，这个国家终于恢复了和平。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>quiet</b>（安静的）— quiet 只强调声音小，peaceful 强调没有冲突、令人安心。</li><li><b>calm</b>（冷静的）— calm 多指情绪或天气平静，peaceful 更侧重环境或社会无动荡。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>peaceful</div><div class='concept-nodes'><span class='concept-node family'>peace</span><span class='concept-node family'>peacefully</span><span class='concept-node family'>peacefulness</span><span class='concept-node family'>peacemaker</span><span class='concept-node family'>peaceable</span><span class='concept-node colloc'>peaceful protest</span><span class='concept-node colloc'>peaceful coexistence</span><span class='concept-node colloc'>peaceful sleep</span><span class='concept-node colloc'>peaceful atmosphere</span><span class='concept-node colloc'>peaceful resolution</span><span class='concept-node synonym'>quiet</span><span class='concept-node synonym'>calm</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 peaceful 填回句子：</p><p class='out-sentence'>The park is a ______ place to read a book.</p><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='out2' value='peaceful'> peaceful</label><label class='opt ' data-correct='0'><input type='radio' name='out2' value='republic'> republic</label><label class='opt ' data-correct='0'><input type='radio' name='out2' value='discrimination'> discrimination</label><label class='opt ' data-correct='0'><input type='radio' name='out2' value='fascination'> fascination</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>peaceful</b> UK /ˈpi:sfl/ US /pisfəl/</p><p class='fb-line'>📝 完整句：The park is a peaceful place to read a book.</p><p class='fb-line'>🀄 译文：这个公园是个读书的安静地方。</p></div></div></section><section class='q wcard new' data-block='words' data-card='3' data-word='republic'><div class='wcard-top'><span class='wtag new'>新词</span><span class='wnum'>03 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>共和国，共和政体</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-prefix'>re</span><span class='morph-part morph-root'>public</span></p><p class='hero-phon'><span class='hero-pos'>n</span>/rɪ&#x27;pʌblɪk/ <audio controls preload='none' src='audio/republic_en.mp3'><source src='audio/republic_en.m4a'></audio></p><p class='hero-meaning'>共和国，共和政体</p></div><div class='hero-img'><img class='anchor-img' src='../../data/images/republic.png' alt='republic 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>源自拉丁语 &#x27;res publica&#x27;，字面意思是 &#x27;公共事务&#x27;（res = 事物，publica = 公共的）。古罗马人用这个词指代国家事务，后来演变为指代一种由人民代表治理的政体。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>词根法：re-（反复/强调）+ public（公众）→ 强调公众的事务 → 共和国</li><li>场景联想法：想象一个圆形会议桌，代表们围坐讨论公共事务，而不是一个人独裁</li><li>对比记忆法：对比 monarchy（君主制）和 republic（共和制），君主制是国王说了算，共和制是人民说了算</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>通常大写首字母（the Republic）指特定国家，如 the People&#x27;s Republic of China；小写时泛指政体。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>China is a republic country.</s></div><div class='err-right'>✅ China is a republic.</div><div class='err-note'>republic 本身就是名词，不需要加 country。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>The republic was ruled by a king.</s></div><div class='err-right'>✅ The republic was ruled by elected officials.</div><div class='err-note'>共和国没有国王，这是概念矛盾。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>完形填空：常与 monarchy, democracy, dictatorship 等政体词一起出现，需辨析含义。</li><li>写作：可用于论述政治体制、历史事件，如 &#x27;The establishment of the republic marked a turning point in history.&#x27;</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>republican</b> adj/n 共和的；共和党人</span><span class='chip'><b>republicanism</b> n 共和主义</span><span class='chip'><b>public</b> adj/n 公共的；公众</span><span class='chip'><b>publicity</b> n 宣传，公开</span><span class='chip'><b>publish</b> v 出版，发表</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'><b>the Republic of Korea</b> <span class='chip-zh'>大韩民国</span></span><span class='chip'><b>a federal republic</b> <span class='chip-zh'>联邦共和国</span></span><span class='chip'><b>republic government</b> <span class='chip-zh'>共和政府</span></span><span class='chip'><b>found a republic</b> <span class='chip-zh'>建立共和国</span></span><span class='chip'><b>republic vs. monarchy</b> <span class='chip-zh'>共和制 vs 君主制</span></span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>The French <mark class='target'>Republic</mark> was established after the revolution.</span><br><span class='zh'>法兰西共和国是在革命后建立的。</span></li><li><span class='en'>Many countries today are <mark class='target'>republics</mark>, not monarchies.</span><br><span class='zh'>如今许多国家是共和国，而非君主国。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>democracy</b>（民主）— republic 强调政体由选举产生代表治理，democracy 强调人民直接或间接行使权力；两者常重叠，但 republic 更侧重制度形式。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>republic</div><div class='concept-nodes'><span class='concept-node family'>republican</span><span class='concept-node family'>republicanism</span><span class='concept-node family'>public</span><span class='concept-node family'>publicity</span><span class='concept-node family'>publish</span><span class='concept-node colloc'>the Republic of Korea</span><span class='concept-node colloc'>a federal republic</span><span class='concept-node colloc'>republic government</span><span class='concept-node colloc'>found a republic</span><span class='concept-node colloc'>republic vs. monarchy</span><span class='concept-node synonym'>democracy</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 republic 填回句子：</p><p class='out-sentence'>The French ______ was established after the revolution.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out3' value='discrimination'> discrimination</label><label class='opt ' data-correct='0'><input type='radio' name='out3' value='fascination'> fascination</label><label class='opt ' data-correct='0'><input type='radio' name='out3' value='peaceful'> peaceful</label><label class='opt ' data-correct='1'><input type='radio' name='out3' value='republic'> republic</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>republic</b> /rɪ&#x27;pʌblɪk/</p><p class='fb-line'>📝 完整句：The French Republic was established after the revolution.</p><p class='fb-line'>🀄 译文：法兰西共和国是在革命后建立的。</p></div></div></section><section class='q wcard new' data-block='words' data-card='4' data-word='fascination'><div class='wcard-top'><span class='wtag new'>新词</span><span class='wnum'>04 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>强烈的吸引力；入迷的状态</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-root'>fascinat</span><span class='morph-part morph-suffix'>ion</span></p><p class='hero-phon'><span class='hero-pos'>n</span>UK /,fæsɪ&#x27;neɪʃ(ə)n/ US /,fæsɪ&#x27;neʃən/ <audio controls preload='none' src='audio/fascination_en.mp3'><source src='audio/fascination_en.m4a'></audio></p><p class='hero-meaning'>强烈的吸引力；入迷的状态</p></div><div class='hero-img'><img class='anchor-img' src='../../data/images/fascination.png' alt='fascination 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>来自拉丁语 fascinare，意为“用魔法迷惑、施咒”，源自 fascinum（一种用于施咒的男性生殖器形象）。古罗马人相信 fascinum 能抵御邪眼，后来引申为“令人着迷的力量”。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>词根法：fascin（施咒）+ ation（名词后缀）→ 被施了咒一样 → 着迷</li><li>场景联想法：想象一个魔术师对观众施了“fascination”魔法，所有人都目不转睛地盯着他，完全入迷。</li><li>对比记忆法：fascination 比 interest 程度更深，是“强烈吸引”，类似 crush 和 love 的区别。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>常与介词 for/with 搭配，表示对某事物的着迷；也可单独使用表示“魅力”。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>I have a fascination to science.</s></div><div class='err-right'>✅ I have a fascination for science.</div><div class='err-note'>fascination 后接介词 for 或 with，不接 to。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>The movie was full of fascination.</s></div><div class='err-right'>✅ The movie was fascinating.</div><div class='err-note'>fascination 是名词，表示“魅力”或“入迷”；形容事物“令人着迷”要用 fascinating。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>完形填空：常考 fascination 与介词 for/with 的搭配，以及同义词辨析（如 attraction, charm）。</li><li>写作：可用 fascination 替换 interest，提升表达层次，如“The subject holds a lasting fascination for me.”</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>fascinate</b> v 使着迷</span><span class='chip'><b>fascinating</b> adj 迷人的</span><span class='chip'><b>fascinated</b> adj 入迷的</span><span class='chip'><b>fascinator</b> n 迷人的人或物</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'><b>have a fascination for</b> <span class='chip-zh'>对……着迷</span></span><span class='chip'><b>hold a fascination</b> <span class='chip-zh'>具有吸引力</span></span><span class='chip'><b>with fascination</b> <span class='chip-zh'>着迷地</span></span><span class='chip'><b>fascination with</b> <span class='chip-zh'>对……的迷恋</span></span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>The old town has a certain <mark class='target'>fascination</mark> that draws tourists back year after year.</span><br><span class='zh'>这座古镇有一种独特的魅力，让游客年复一年地回来。</span></li><li><span class='en'>She watched the documentary with growing <mark class='target'>fascination</mark>, unable to look away.</span><br><span class='zh'>她带着越来越浓的兴趣看那部纪录片，无法移开视线。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>attraction</b>（吸引力）— attraction 更强调物理或客观的吸引，如旅游景点；fascination 强调主观的、强烈的入迷。</li><li><b>charm</b>（魅力）— charm 通常指令人愉悦的、可爱的魅力；fascination 则带有一种神秘或难以抗拒的魔力。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>fascination</div><div class='concept-nodes'><span class='concept-node family'>fascinate</span><span class='concept-node family'>fascinating</span><span class='concept-node family'>fascinated</span><span class='concept-node family'>fascinator</span><span class='concept-node colloc'>have a fascination for</span><span class='concept-node colloc'>hold a fascination</span><span class='concept-node colloc'>with fascination</span><span class='concept-node colloc'>fascination with</span><span class='concept-node synonym'>attraction</span><span class='concept-node synonym'>charm</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 fascination 填回句子：</p><p class='out-sentence'>The old town has a certain ______ that draws tourists back year after year.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out4' value='peaceful'> peaceful</label><label class='opt ' data-correct='1'><input type='radio' name='out4' value='fascination'> fascination</label><label class='opt ' data-correct='0'><input type='radio' name='out4' value='republic'> republic</label><label class='opt ' data-correct='0'><input type='radio' name='out4' value='discrimination'> discrimination</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>fascination</b> UK /,fæsɪ&#x27;neɪʃ(ə)n/ US /,fæsɪ&#x27;neʃən/</p><p class='fb-line'>📝 完整句：The old town has a certain fascination that draws tourists back year after year.</p><p class='fb-line'>🀄 译文：这座古镇有一种独特的魅力，让游客年复一年地回来。</p></div></div></section><section class='q wcard new' data-block='words' data-card='5' data-word='awareness'><div class='wcard-top'><span class='wtag new'>新词</span><span class='wnum'>05 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>意识；知晓；察觉</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-root'>aware</span><span class='morph-part morph-suffix'>ness</span></p><p class='hero-phon'><span class='hero-pos'>n</span>UK /əˈweənəs/ US /ə&#x27;wɛrnəs/ <audio controls preload='none' src='audio/awareness_en.mp3'><source src='audio/awareness_en.m4a'></audio></p><p class='hero-meaning'>意识；知晓；察觉</p></div><div class='hero-img'><img class='anchor-img' src='../../data/images/awareness.png' alt='awareness 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>来自古英语 &#x27;gewær&#x27;（警惕的、知晓的），加上后缀 -ness（表示状态或性质）。词根 &#x27;war&#x27; 与德语 &#x27;wahr&#x27;（真的）同源，本义是“对真实情况的警觉”。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>词根法：aware（知道）+ ness（状态）= 知道的状态 → 意识。</li><li>场景法：想象你走在路上，突然闻到烟味，立刻意识到有火灾——这种“突然知道”就是 awareness。</li><li>对比法：awareness（意识）vs. ignorance（无知），一个是有知，一个是无知，对比记。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>常与 raise, increase, promote 搭配，表示“提高意识”；后接 of 引出具体内容。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>I have awareness to the problem.</s></div><div class='err-right'>✅ I have awareness of the problem.</div><div class='err-note'>awareness 后接 of，不是 to。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>The awareness of students is low.</s></div><div class='err-right'>✅ Students&#x27; awareness is low.</div><div class='err-note'>通常用所有格或 of 结构，但避免冗余。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>完形填空：常考 awareness 与 of 的搭配，以及 raise/increase 等动词。</li><li>写作：可用 raise public awareness 作为高级表达，替换 make people know。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>aware</b> adj 意识到的</span><span class='chip'><b>unaware</b> adj 未意识到的</span><span class='chip'><b>awareness</b> n 意识</span><span class='chip'><b>unawareness</b> n 无意识</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'><b>raise awareness</b> <span class='chip-zh'>提高意识</span></span><span class='chip'><b>public awareness</b> <span class='chip-zh'>公众意识</span></span><span class='chip'><b>awareness of</b> <span class='chip-zh'>对……的意识</span></span><span class='chip'><b>increase awareness</b> <span class='chip-zh'>增强意识</span></span><span class='chip'><b>brand awareness</b> <span class='chip-zh'>品牌知名度</span></span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>The campaign aims to raise public <mark class='target'>awareness</mark> about climate change.</span><br><span class='zh'>这项运动旨在提高公众对气候变化的认识。</span></li><li><span class='en'>There is a growing <mark class='target'>awareness</mark> of the need for mental health support.</span><br><span class='zh'>人们对心理健康支持的需求意识日益增强。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>consciousness</b>（意识；知觉）— awareness 强调对某事的知晓或察觉，而 consciousness 更侧重生理上的清醒状态或哲学上的意识。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>awareness</div><div class='concept-nodes'><span class='concept-node family'>aware</span><span class='concept-node family'>unaware</span><span class='concept-node family'>awareness</span><span class='concept-node family'>unawareness</span><span class='concept-node colloc'>raise awareness</span><span class='concept-node colloc'>public awareness</span><span class='concept-node colloc'>awareness of</span><span class='concept-node colloc'>increase awareness</span><span class='concept-node colloc'>brand awareness</span><span class='concept-node synonym'>consciousness</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 awareness 填回句子：</p><p class='out-sentence'>The campaign aims to raise public ______ about climate change.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out5' value='discrimination'> discrimination</label><label class='opt ' data-correct='0'><input type='radio' name='out5' value='republic'> republic</label><label class='opt ' data-correct='1'><input type='radio' name='out5' value='awareness'> awareness</label><label class='opt ' data-correct='0'><input type='radio' name='out5' value='peaceful'> peaceful</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>awareness</b> UK /əˈweənəs/ US /ə&#x27;wɛrnəs/</p><p class='fb-line'>📝 完整句：The campaign aims to raise public awareness about climate change.</p><p class='fb-line'>🀄 译文：这项运动旨在提高公众对气候变化的认识。</p></div></div></section><section class='q wcard new' data-block='words' data-card='6' data-word='coordination'><div class='wcard-top'><span class='wtag new'>新词</span><span class='wnum'>06 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>协调；配合；协作</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-prefix'>co</span><span class='morph-part morph-root'>ordin</span><span class='morph-part morph-suffix'>ation</span></p><p class='hero-phon'><span class='hero-pos'>n</span>UK /kəuˌɔːdɪ&#x27;neɪʃn/ US /ko,ɔrdɪ&#x27;neʃən/ <audio controls preload='none' src='audio/coordination_en.mp3'><source src='audio/coordination_en.m4a'></audio></p><p class='hero-meaning'>协调；配合；协作</p></div><div class='hero-img'><img class='anchor-img' src='../../data/images/coordination.png' alt='coordination 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>源自拉丁语 coordinatio，由 com-（一起）+ ordinatio（安排、排列）组成。ordinatio 又来自 ordo（顺序、等级）。所以这个词的核心意思是“把事物按照顺序安排在一起”，引申为协调、配合。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>词根法：co-（一起）+ ordin（顺序）+ -ation（名词后缀）→ 把东西按顺序放到一起 → 协调</li><li>场景联想法：想象一个交响乐团，指挥（conductor）负责让所有乐器（instruments）一起（co-）按照乐谱（order）演奏，这就是 coordination。</li><li>对比记忆法：coordination（协调） vs. cooperation（合作）。合作是一起干活，协调是让干活的人步调一致。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>常用作不可数名词，强调多方之间的有效配合，如 team coordination（团队协调）。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>The coordination between the two hands is important for playing piano.</s></div><div class='err-right'>✅ Coordination between the two hands is important for playing piano.</div><div class='err-note'>coordination 作为抽象名词，通常不加冠词 the。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>We need a good coordination.</s></div><div class='err-right'>✅ We need good coordination.</div><div class='err-note'>coordination 是不可数名词，不能说 a coordination。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>完形填空：常考 coordination 与 cooperation 的辨析，注意上下文强调的是“配合”还是“合作”。</li><li>写作：在描述团队合作、项目管理时，使用 coordination 比 cooperation 更精准，体现语言能力。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>coordinate</b> v. 协调</span><span class='chip'><b>coordinator</b> n. 协调员</span><span class='chip'><b>coordinated</b> adj. 协调的</span><span class='chip'><b>uncoordinated</b> adj. 不协调的</span><span class='chip'><b>coordination</b> n. 协调</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'><b>hand-eye coordination</b> <span class='chip-zh'>手眼协调</span></span><span class='chip'><b>coordination committee</b> <span class='chip-zh'>协调委员会</span></span><span class='chip'><b>coordination meeting</b> <span class='chip-zh'>协调会议</span></span><span class='chip'><b>lack of coordination</b> <span class='chip-zh'>缺乏协调</span></span><span class='chip'><b>coordination skills</b> <span class='chip-zh'>协调能力</span></span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>Good <mark class='target'>coordination</mark> between the marketing and sales teams is essential for the product launch.</span><br><span class='zh'>市场部和销售部之间的良好协调对于产品发布至关重要。</span></li><li><span class='en'>The project failed due to a lack of <mark class='target'>coordination</mark> among the different departments.</span><br><span class='zh'>该项目因各部门之间缺乏协调而失败。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>cooperation</b>（合作）— coordination 强调动作的同步与配合，cooperation 强调意愿上的共同协作。例如，两个部门可以 cooperation（合作）但缺乏 coordination（协调）导致混乱。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>coordination</div><div class='concept-nodes'><span class='concept-node family'>coordinate</span><span class='concept-node family'>coordinator</span><span class='concept-node family'>coordinated</span><span class='concept-node family'>uncoordinated</span><span class='concept-node family'>coordination</span><span class='concept-node colloc'>hand-eye coordination</span><span class='concept-node colloc'>coordination committee</span><span class='concept-node colloc'>coordination meeting</span><span class='concept-node colloc'>lack of coordination</span><span class='concept-node colloc'>coordination skills</span><span class='concept-node synonym'>cooperation</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 coordination 填回句子：</p><p class='out-sentence'>Good ______ between the marketing and sales teams is essential for the product launch.</p><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='out6' value='coordination'> coordination</label><label class='opt ' data-correct='0'><input type='radio' name='out6' value='republic'> republic</label><label class='opt ' data-correct='0'><input type='radio' name='out6' value='peaceful'> peaceful</label><label class='opt ' data-correct='0'><input type='radio' name='out6' value='discrimination'> discrimination</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>coordination</b> UK /kəuˌɔːdɪ&#x27;neɪʃn/ US /ko,ɔrdɪ&#x27;neʃən/</p><p class='fb-line'>📝 完整句：Good coordination between the marketing and sales teams is essential for the product launch.</p><p class='fb-line'>🀄 译文：市场部和销售部之间的良好协调对于产品发布至关重要。</p></div></div></section><section class='q wcard new' data-block='words' data-card='7' data-word='backward'><div class='wcard-top'><span class='wtag new'>新词</span><span class='wnum'>07 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>向后；倒退的；落后的</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-root'>back</span><span class='morph-part morph-suffix'>ward</span></p><p class='hero-phon'><span class='hero-pos'>adv./adj.</span>UK /bækwəd/ US /bækwɚd/ <audio controls preload='none' src='audio/backward_en.mp3'><source src='audio/backward_en.m4a'></audio></p><p class='hero-meaning'>向后；倒退的；落后的</p></div><div class='hero-img'><img class='anchor-img' src='../../data/images/backward.png' alt='backward 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>来自中古英语，由 back（背部、后面）和 -ward（表示方向的后缀）组合而成。古英语中 bac 指背部，-weard 表示朝向，合起来就是“朝向背部”即“向后”。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>词根法：back（背）+ ward（方向）= 朝向背的方向 → 向后</li><li>场景联想法：想象你走路时突然有人喊你，你身体没转，只是头向后（backward）扭了一下，记住这个扭头的动作。</li><li>对比记忆法：forward（向前）vs backward（向后），两个词都含 -ward，一个朝前一个朝后，成对记。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>作副词时通常放在动词后，如 move backward；作形容词时放在名词前，如 backward step。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>He walked backwardsly.</s></div><div class='err-right'>✅ He walked backward.</div><div class='err-note'>backward 本身已是副词，不需要再加 -ly。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>This is a backwards country.</s></div><div class='err-right'>✅ This is a backward country.</div><div class='err-note'>作形容词时只能用 backward，不能用 backwards。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>完形填空：常考 backward 与 backwards 的辨析，注意形容词与副词的区别。</li><li>阅读理解：在描述经济发展或社会进步时，backward 常作为“落后的”出现，与 advanced 对比。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>backwards</b> adv. 向后地</span><span class='chip'><b>backwardness</b> n. 落后；倒退</span><span class='chip'><b>forward</b> adv./adj. 向前；前进的</span><span class='chip'><b>back</b> n./v./adv. 背部；后退；向后</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'><b>backward glance</b> <span class='chip-zh'>向后一瞥</span></span><span class='chip'><b>backward step</b> <span class='chip-zh'>后退一步</span></span><span class='chip'><b>backward region</b> <span class='chip-zh'>落后地区</span></span><span class='chip'><b>backward and forward</b> <span class='chip-zh'>来回地</span></span><span class='chip'><b>fall backward</b> <span class='chip-zh'>向后倒</span></span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>He took a step <mark class='target'>backward</mark> when he saw the snake.</span><br><span class='zh'>他看到蛇时向后退了一步。</span></li><li><span class='en'>The country&#x27;s economy is still <mark class='target'>backward</mark> compared to its neighbors.</span><br><span class='zh'>与邻国相比，该国的经济仍然落后。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>backwards</b>（向后地（副词））— backward 和 backwards 都可用作副词，但 backward 还可作形容词，而 backwards 只能作副词。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>backward</div><div class='concept-nodes'><span class='concept-node family'>backwards</span><span class='concept-node family'>backwardness</span><span class='concept-node family'>forward</span><span class='concept-node family'>back</span><span class='concept-node colloc'>backward glance</span><span class='concept-node colloc'>backward step</span><span class='concept-node colloc'>backward region</span><span class='concept-node colloc'>backward and forward</span><span class='concept-node colloc'>fall backward</span><span class='concept-node synonym'>backwards</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 backward 填回句子：</p><p class='out-sentence'>He took a step ______ when he saw the snake.</p><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='out7' value='backward'> backward</label><label class='opt ' data-correct='0'><input type='radio' name='out7' value='peaceful'> peaceful</label><label class='opt ' data-correct='0'><input type='radio' name='out7' value='discrimination'> discrimination</label><label class='opt ' data-correct='0'><input type='radio' name='out7' value='republic'> republic</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>backward</b> UK /bækwəd/ US /bækwɚd/</p><p class='fb-line'>📝 完整句：He took a step backward when he saw the snake.</p><p class='fb-line'>🀄 译文：他看到蛇时向后退了一步。</p></div></div></section><section class='q wcard new' data-block='words' data-card='8' data-word='charter'><div class='wcard-top'><span class='wtag new'>新词</span><span class='wnum'>08 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>宪章；特许状；包租</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-root'>charter</span></p><p class='hero-phon'><span class='hero-pos'>n.</span>UK /tʃɑːtə/ US /tʃɑrtɚ/ <audio controls preload='none' src='audio/charter_en.mp3'><source src='audio/charter_en.m4a'></audio></p><p class='hero-meaning'>宪章；特许状；包租</p></div><div class='hero-img'><img class='anchor-img' src='../../data/images/charter.png' alt='charter 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>来自古法语 chartre，源自拉丁语 chartula，意为“小纸片”，是 charta（纸）的指小形式。最初指官方文件或契约，后来引申为“特许状”和“宪章”。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>词根法：charter 与 chart（图表）同源，想象一张“纸”上写着国家的“宪章”。</li><li>场景联想法：想象一艘船（charter 也有“包租”义）挂着“特许状”才能出海，这张纸就是 charter。</li><li>对比记忆法：charter（宪章）与 constitution（宪法）对比，charter 更侧重“特许”或“章程”，常用于公司或组织。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>作名词时，常指官方授予权利的文件；作动词时，意为“包租（船、飞机等）”。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>The company&#x27;s charter was violated.</s></div><div class='err-right'>✅ The company&#x27;s charter was violated.</div><div class='err-note'>charter 本身可数，这里用法正确，但常见错误是混淆 charter 与 contract（合同），charter 更强调官方授权。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>CET-4 阅读中可能考察 charter 作为“宪章”或“包租”的语境理解。</li><li>高考完形中可能设置 charter 与 rent（租用）的辨析，charter 特指包租交通工具。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>chartered</b> adj. 特许的；包租的</span><span class='chip'><b>charterer</b> n. 租船人；包租者</span><span class='chip'><b>unchartered</b> adj. 未经特许的；无执照的</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'><b>the UN Charter</b> <span class='chip-zh'>联合国宪章</span></span><span class='chip'><b>a charter school</b> <span class='chip-zh'>特许学校</span></span><span class='chip'><b>charter a boat</b> <span class='chip-zh'>包租一艘船</span></span><span class='chip'><b>royal charter</b> <span class='chip-zh'>皇家特许状</span></span><span class='chip'><b>charter flight</b> <span class='chip-zh'>包机航班</span></span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>The United Nations <mark class='target'>Charter</mark> was signed in 1945.</span><br><span class='zh'>联合国宪章于1945年签署。</span></li><li><span class='en'>They <mark class='target'>chartered</mark> a private jet to fly to the meeting.</span><br><span class='zh'>他们包租了一架私人飞机去参加会议。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>constitution</b>（宪法）— constitution 指国家根本大法，charter 指特定组织或机构的章程或特许状，范围更窄。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>charter</div><div class='concept-nodes'><span class='concept-node family'>chartered</span><span class='concept-node family'>charterer</span><span class='concept-node family'>unchartered</span><span class='concept-node colloc'>the UN Charter</span><span class='concept-node colloc'>a charter school</span><span class='concept-node colloc'>charter a boat</span><span class='concept-node colloc'>royal charter</span><span class='concept-node colloc'>charter flight</span><span class='concept-node synonym'>constitution</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 charter 填回句子：</p><p class='out-sentence'>The United Nations ______ was signed in 1945.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out8' value='peaceful'> peaceful</label><label class='opt ' data-correct='0'><input type='radio' name='out8' value='discrimination'> discrimination</label><label class='opt ' data-correct='1'><input type='radio' name='out8' value='charter'> charter</label><label class='opt ' data-correct='0'><input type='radio' name='out8' value='republic'> republic</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>charter</b> UK /tʃɑːtə/ US /tʃɑrtɚ/</p><p class='fb-line'>📝 完整句：The United Nations Charter was signed in 1945.</p><p class='fb-line'>🀄 译文：联合国宪章于1945年签署。</p></div></div></section><section class='q wcard review' data-block='words' data-card='9' data-word='bacteria'><div class='wcard-top'><span class='wtag review'>复习</span><span class='wnum'>09 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>细菌（单数 bacterium）</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-root'>bacteria</span></p><p class='hero-phon'><span class='hero-pos'>n.</span>UK /bæk&#x27;tɪərɪə/ US /bæk&#x27;tɪrɪə/ <audio controls preload='none' src='audio/bacteria_en.mp3'><source src='audio/bacteria_en.m4a'></audio></p><p class='hero-meaning'>细菌（单数 bacterium）</p></div><div class='hero-img'><img class='anchor-img' src='../../data/images/bacteria.png' alt='bacteria 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>源自希腊语 &#x27;bakterion&#x27;，意为 &#x27;小棍子&#x27;，因为最早在显微镜下观察到的细菌呈杆状。后来通过拉丁语进入英语，复数形式沿用至今。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>词根法：bacter- 来自希腊语 &#x27;小棍子&#x27;，想象细菌像一根根小棍子，在显微镜下排列。</li><li>场景联想法：厨房里切菜板上的细菌，用 &#x27;bacteria&#x27; 这个词时，脑海里浮现出密密麻麻的小点。</li><li>对比记忆法：bacteria（细菌）vs virus（病毒），细菌是单细胞生物，病毒更小且需要宿主。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>bacteria 是复数形式，单数形式为 bacterium，在正式写作中注意主谓一致。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>The bacteria is harmful.</s></div><div class='err-right'>✅ The bacteria are harmful.</div><div class='err-note'>bacteria 是复数，谓语动词用复数形式；单数用 bacterium。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>There are many bacterias in the water.</s></div><div class='err-right'>✅ There are many bacteria in the water.</div><div class='err-note'>bacteria 本身已是复数形式，不需要再加 -s。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>完形填空：常考 bacteria 的复数形式及主谓一致，如 &#x27;The bacteria in the soil ___ (help/helps) plants grow.&#x27; 答案用 help。</li><li>阅读理解：在科普文章中，bacteria 常与 &#x27;harmful&#x27;、&#x27;beneficial&#x27; 等形容词搭配，注意区分单复数。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>bacterium</b> n. 细菌（单数）</span><span class='chip'><b>bacterial</b> adj. 细菌的</span><span class='chip'><b>bacteriology</b> n. 细菌学</span><span class='chip'><b>antibacterial</b> adj. 抗菌的</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'><b>harmful bacteria</b> <span class='chip-zh'>有害细菌</span></span><span class='chip'><b>beneficial bacteria</b> <span class='chip-zh'>有益细菌</span></span><span class='chip'><b>bacteria growth</b> <span class='chip-zh'>细菌生长</span></span><span class='chip'><b>kill bacteria</b> <span class='chip-zh'>杀死细菌</span></span><span class='chip'><b>bacteria culture</b> <span class='chip-zh'>细菌培养</span></span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>The <mark class='target'>bacteria</mark> in the yogurt are beneficial for your digestive system.</span><br><span class='zh'>酸奶中的细菌对你的消化系统有益。</span></li><li><span class='en'>Wash your hands thoroughly to remove harmful <mark class='target'>bacteria</mark> from the kitchen counter.</span><br><span class='zh'>彻底洗手以清除厨房台面上的有害细菌。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>virus</b>（病毒）— bacteria 是单细胞生物，可独立生存；virus 更小，必须寄生在活细胞内才能繁殖。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>bacteria</div><div class='concept-nodes'><span class='concept-node family'>bacterium</span><span class='concept-node family'>bacterial</span><span class='concept-node family'>bacteriology</span><span class='concept-node family'>antibacterial</span><span class='concept-node colloc'>harmful bacteria</span><span class='concept-node colloc'>beneficial bacteria</span><span class='concept-node colloc'>bacteria growth</span><span class='concept-node colloc'>kill bacteria</span><span class='concept-node colloc'>bacteria culture</span><span class='concept-node synonym'>virus</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 bacteria 填回句子：</p><p class='out-sentence'>The ______ in the yogurt are beneficial for your digestive system.</p><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='out9' value='bacteria'> bacteria</label><label class='opt ' data-correct='0'><input type='radio' name='out9' value='republic'> republic</label><label class='opt ' data-correct='0'><input type='radio' name='out9' value='peaceful'> peaceful</label><label class='opt ' data-correct='0'><input type='radio' name='out9' value='discrimination'> discrimination</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>bacteria</b> UK /bæk&#x27;tɪərɪə/ US /bæk&#x27;tɪrɪə/</p><p class='fb-line'>📝 完整句：The bacteria in the yogurt are beneficial for your digestive system.</p><p class='fb-line'>🀄 译文：酸奶中的细菌对你的消化系统有益。</p></div></div></section><section class='q wcard review' data-block='words' data-card='10' data-word='epidemic'><div class='wcard-top'><span class='wtag review'>复习</span><span class='wnum'>10 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>流行病；流行性的</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-root'>epidemic</span></p><p class='hero-phon'><span class='hero-pos'>n./adj.</span>UK /ˌepɪ&#x27;demɪk/ US /,ɛpɪ&#x27;dɛmɪk/ <audio controls preload='none' src='audio/epidemic_en.mp3'><source src='audio/epidemic_en.m4a'></audio></p><p class='hero-meaning'>流行病；流行性的</p></div><div class='hero-img'><img class='anchor-img' src='../../data/images/epidemic.png' alt='epidemic 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>源自希腊语 &#x27;epidēmia&#x27;，意为 &#x27;在人民中&#x27;，由 &#x27;epi-&#x27;（在……之间）和 &#x27;dēmos&#x27;（人民）组成。最初指疾病在人群中广泛传播，后引申为任何事物的流行。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>词根法：epi-（在……之间）+ dem（人民）+ -ic（形容词后缀）→ 在人民之间传播的 → 流行病</li><li>场景联想法：想象一个巨大的披萨（epi-听起来像&#x27;披萨&#x27;）在人群中（dem）传递，每个人咬一口，结果大家都生病了 → 流行病</li><li>对比记忆法：对比 endemic（地方性的，en-在里面 + dem + -ic）和 pandemic（全球性的，pan-全部 + dem + -ic），epidemic 是介于两者之间的流行</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>作名词时指疾病的广泛传播，作形容词时修饰疾病或现象，常与 of 连用。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>The epidemic is very popular.</s></div><div class='err-right'>✅ The epidemic is widespread.</div><div class='err-note'>epidemic 指疾病流行，不能用 popular（受欢迎的）描述。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>He caught an epidemic.</s></div><div class='err-right'>✅ He caught a disease during the epidemic.</div><div class='err-note'>epidemic 是疾病流行现象，不是具体疾病，不能说&#x27;得了流行病&#x27;。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>完形填空：常考 epidemic 与 pandemic、endemic 的辨析，注意上下文范围提示词（如 global 提示 pandemic）。</li><li>阅读理解：epidemic 常出现在健康类文章中，需理解其比喻用法（如 &#x27;an epidemic of violence&#x27; 暴力泛滥）。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>epidemiology</b> n. 流行病学</span><span class='chip'><b>epidemiological</b> adj. 流行病学的</span><span class='chip'><b>epidemiologist</b> n. 流行病学家</span><span class='chip'><b>endemic</b> adj./n. 地方性的；地方病</span><span class='chip'><b>pandemic</b> adj./n. 全球性的；大流行病</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'><b>epidemic outbreak</b> <span class='chip-zh'>流行病爆发</span></span><span class='chip'><b>epidemic prevention</b> <span class='chip-zh'>流行病预防</span></span><span class='chip'><b>epidemic of flu</b> <span class='chip-zh'>流感流行</span></span><span class='chip'><b>epidemic proportions</b> <span class='chip-zh'>流行规模</span></span><span class='chip'><b>epidemic disease</b> <span class='chip-zh'>流行病</span></span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>The government implemented strict measures to control the <mark class='target'>epidemic</mark>.</span><br><span class='zh'>政府实施了严格措施来控制这场流行病。</span></li><li><span class='en'>There is an <mark class='target'>epidemic</mark> of obesity in many developed countries.</span><br><span class='zh'>许多发达国家正流行肥胖症。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>pandemic</b>（大流行病）— pandemic 指全球性大流行，范围比 epidemic 更广；epidemic 指局部或地区性流行。</li><li><b>endemic</b>（地方性的）— endemic 指某地长期存在的疾病，而 epidemic 是突然爆发的流行。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>epidemic</div><div class='concept-nodes'><span class='concept-node family'>epidemiology</span><span class='concept-node family'>epidemiological</span><span class='concept-node family'>epidemiologist</span><span class='concept-node family'>endemic</span><span class='concept-node family'>pandemic</span><span class='concept-node colloc'>epidemic outbreak</span><span class='concept-node colloc'>epidemic prevention</span><span class='concept-node colloc'>epidemic of flu</span><span class='concept-node colloc'>epidemic proportions</span><span class='concept-node colloc'>epidemic disease</span><span class='concept-node synonym'>pandemic</span><span class='concept-node synonym'>endemic</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 epidemic 填回句子：</p><p class='out-sentence'>The government implemented strict measures to control the ______.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out10' value='republic'> republic</label><label class='opt ' data-correct='0'><input type='radio' name='out10' value='discrimination'> discrimination</label><label class='opt ' data-correct='0'><input type='radio' name='out10' value='peaceful'> peaceful</label><label class='opt ' data-correct='1'><input type='radio' name='out10' value='epidemic'> epidemic</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>epidemic</b> UK /ˌepɪ&#x27;demɪk/ US /,ɛpɪ&#x27;dɛmɪk/</p><p class='fb-line'>📝 完整句：The government implemented strict measures to control the epidemic.</p><p class='fb-line'>🀄 译文：政府实施了严格措施来控制这场流行病。</p></div></div></section><section class='q wcard review' data-block='words' data-card='11' data-word='mental'><div class='wcard-top'><span class='wtag review'>复习</span><span class='wnum'>11 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>心理的；精神的；脑力的</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-root'>ment</span><span class='morph-part morph-suffix'>al</span></p><p class='hero-phon'><span class='hero-pos'>adj.</span>/ˈmentl/ <audio controls preload='none' src='audio/mental_en.mp3'><source src='audio/mental_en.m4a'></audio></p><p class='hero-meaning'>心理的；精神的；脑力的</p></div><div class='hero-img'><img class='anchor-img' src='../../data/images/mental.png' alt='mental 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>来自拉丁语 &#x27;mentalis&#x27;，意为&#x27;心灵的，智力的&#x27;，源自 &#x27;mens&#x27;（心灵，思想）。这个词在14世纪进入英语，最初指&#x27;与心灵有关的&#x27;，后来扩展到&#x27;精神上的&#x27;和&#x27;脑力的&#x27;。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>词根法：ment（心灵）+ al（形容词后缀）= 心灵的 → 心理的、精神的</li><li>场景法：想象一个运动员在比赛前做心理准备（mental preparation），深呼吸，集中注意力，这就是 mental 的状态。</li><li>对比法：mental（心理的）vs. physical（身体的），两者常一起出现，如 mental and physical health。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>常与 health、illness、state 等词搭配，描述与心理或智力相关的状态。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>He has a mental problem.</s></div><div class='err-right'>✅ He has a mental health problem.</div><div class='err-note'>直接说 mental problem 可能显得不礼貌，更常用 mental health problem 或 mental illness。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>I need to do some mental exercises for my brain.</s></div><div class='err-right'>✅ I need to do some mental exercises to keep my brain active.</div><div class='err-note'>mental exercises 本身没问题，但更自然的表达是说明目的。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>阅读理解中常出现 mental health 相关话题，注意区分 mental 和 physical。</li><li>完形填空可能考查 mental 与 psychological 的辨析，或与 mind 相关的搭配。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>mentally</b> adv. 精神上；心理上</span><span class='chip'><b>mentality</b> n. 心态；智力</span><span class='chip'><b>mentalist</b> n. 心灵主义者；猜心者</span><span class='chip'><b>mentalism</b> n. 心灵主义</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'><b>mental health</b> <span class='chip-zh'>心理健康</span></span><span class='chip'><b>mental illness</b> <span class='chip-zh'>精神疾病</span></span><span class='chip'><b>mental state</b> <span class='chip-zh'>精神状态</span></span><span class='chip'><b>mental arithmetic</b> <span class='chip-zh'>心算</span></span><span class='chip'><b>mental block</b> <span class='chip-zh'>心理障碍</span></span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>Regular exercise can improve both your physical and <mark class='target'>mental</mark> well-being.</span><br><span class='zh'>定期锻炼能改善你的身体和心理健康。</span></li><li><span class='en'>She has a strong <mark class='target'>mental</mark> attitude and never gives up easily.</span><br><span class='zh'>她有坚强的精神态度，从不轻易放弃。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>psychological</b>（心理学的；心理的）— mental 更侧重&#x27;心智的、精神的&#x27;，而 psychological 强调&#x27;心理学上的&#x27;，如 psychological experiment（心理学实验）。</li><li><b>spiritual</b>（精神的；心灵的）— mental 指智力或心理活动，spiritual 指宗教或灵魂层面的精神，如 spiritual leader（精神领袖）。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>mental</div><div class='concept-nodes'><span class='concept-node family'>mentally</span><span class='concept-node family'>mentality</span><span class='concept-node family'>mentalist</span><span class='concept-node family'>mentalism</span><span class='concept-node colloc'>mental health</span><span class='concept-node colloc'>mental illness</span><span class='concept-node colloc'>mental state</span><span class='concept-node colloc'>mental arithmetic</span><span class='concept-node colloc'>mental block</span><span class='concept-node synonym'>psychological</span><span class='concept-node synonym'>spiritual</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 mental 填回句子：</p><p class='out-sentence'>Regular exercise can improve both your physical and ______ well-being.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out11' value='republic'> republic</label><label class='opt ' data-correct='1'><input type='radio' name='out11' value='mental'> mental</label><label class='opt ' data-correct='0'><input type='radio' name='out11' value='discrimination'> discrimination</label><label class='opt ' data-correct='0'><input type='radio' name='out11' value='peaceful'> peaceful</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>mental</b> /ˈmentl/</p><p class='fb-line'>📝 完整句：Regular exercise can improve both your physical and mental well-being.</p><p class='fb-line'>🀄 译文：定期锻炼能改善你的身体和心理健康。</p></div></div></section><section class='q wcard review' data-block='words' data-card='12' data-word='disease'><div class='wcard-top'><span class='wtag review'>复习</span><span class='wnum'>12 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>疾病</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-prefix'>dis</span><span class='morph-part morph-root'>ease</span></p><p class='hero-phon'><span class='hero-pos'>n.</span>UK /dɪ&#x27;ziːz/ US /dɪ&#x27;ziz/ <audio controls preload='none' src='audio/disease_en.mp3'><source src='audio/disease_en.m4a'></audio></p><p class='hero-meaning'>疾病</p></div><div class='hero-img'><img class='anchor-img' src='../../data/images/disease.png' alt='disease 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>来自古法语 desaise，由 des-（表示“不、相反”）+ aise（舒适、安逸）组成，字面意思是“不舒适”。14世纪进入英语，最初指任何引起不适的状态，后来特指身体上的疾病。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>词根法：dis-（不）+ ease（舒适）→ 身体不舒适 → 疾病</li><li>场景联想法：想象你感冒了，浑身酸痛，躺在床上，老师问你“怎么了？”你说“I have a disease.” 这个场景就把“不舒适”和“疾病”绑定了。</li><li>对比记忆法：disease（疾病）vs. ease（舒适）→ 加个 dis 就变不舒适，记住这个反义关系。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>可数名词，通常指具体的疾病种类，如 heart disease（心脏病）；泛指疾病时常用单数加冠词或复数。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>I have a disease of cold.</s></div><div class='err-right'>✅ I have a cold.</div><div class='err-note'>cold 本身就是疾病名称，不需要说 disease of cold。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>The disease is very serious, so you should take a medicine.</s></div><div class='err-right'>✅ The disease is very serious, so you should take medicine.</div><div class='err-note'>medicine 不可数，不加 a。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>完形填空：常考 disease 与 illness、sickness 的辨析，注意搭配 prevent disease / suffer from disease。</li><li>阅读理解：在科普文章中，disease 常作为主题词出现，注意其定义和分类。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>diseased</b> adj. 患病的</span><span class='chip'><b>disease-causing</b> adj. 致病的</span><span class='chip'><b>disease-free</b> adj. 无病的</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'><b>heart disease</b> <span class='chip-zh'>心脏病</span></span><span class='chip'><b>infectious disease</b> <span class='chip-zh'>传染病</span></span><span class='chip'><b>cause a disease</b> <span class='chip-zh'>引起疾病</span></span><span class='chip'><b>suffer from a disease</b> <span class='chip-zh'>患某种疾病</span></span><span class='chip'><b>prevent disease</b> <span class='chip-zh'>预防疾病</span></span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>The doctor said the <mark class='target'>disease</mark> is caused by a virus.</span><br><span class='zh'>医生说这种疾病是由病毒引起的。</span></li><li><span class='en'>Regular exercise can help prevent many <mark class='target'>diseases</mark>.</span><br><span class='zh'>定期锻炼有助于预防许多疾病。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>illness</b>（疾病（更侧重生病状态））— disease 强调具体的病种，illness 强调生病的不适状态。例如：He has a heart disease. 他患有心脏病。He is suffering from a long illness. 他长期患病。</li><li><b>sickness</b>（疾病（尤指呕吐、恶心））— sickness 常指短期的不适，如晕车、恶心；disease 更正式，指慢性或严重疾病。例如：motion sickness 晕动病，而 heart disease 心脏病。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>disease</div><div class='concept-nodes'><span class='concept-node family'>diseased</span><span class='concept-node family'>disease-causing</span><span class='concept-node family'>disease-free</span><span class='concept-node colloc'>heart disease</span><span class='concept-node colloc'>infectious disease</span><span class='concept-node colloc'>cause a disease</span><span class='concept-node colloc'>suffer from a disease</span><span class='concept-node colloc'>prevent disease</span><span class='concept-node synonym'>illness</span><span class='concept-node synonym'>sickness</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 disease 填回句子：</p><p class='out-sentence'>The doctor said the ______ is caused by a virus.</p><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='out12' value='disease'> disease</label><label class='opt ' data-correct='0'><input type='radio' name='out12' value='peaceful'> peaceful</label><label class='opt ' data-correct='0'><input type='radio' name='out12' value='republic'> republic</label><label class='opt ' data-correct='0'><input type='radio' name='out12' value='discrimination'> discrimination</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>disease</b> UK /dɪ&#x27;ziːz/ US /dɪ&#x27;ziz/</p><p class='fb-line'>📝 完整句：The doctor said the disease is caused by a virus.</p><p class='fb-line'>🀄 译文：医生说这种疾病是由病毒引起的。</p></div></div></section><section class='q wf-card' data-block='word_forms' data-card='1' data-answer='discrimination'><div class='qhead'><span class='qn'>&#36716;&#183;01</span><b>&#35789;&#24615;&#36716;&#21270;</b> &#183; <span class='wf-word'>discrimination</span></div><p class='prompt'>选词填空，注意词性转化：</p><div class='wf-stem'>Many countries have laws to prevent _____ in housing.</div><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='wf1' value='discriminate'> discriminate</label><label class='opt ' data-correct='1'><input type='radio' name='wf1' value='discrimination'> discrimination</label><label class='opt ' data-correct='0'><input type='radio' name='wf1' value='discriminatory'> discriminatory</label><label class='opt ' data-correct='0'><input type='radio' name='wf1' value='discriminating'> discriminating</label></div><div class='feedback hidden' data-answer='discrimination'><p class='fb-line'>&#128204; <b>&#31572;&#26696;&#65306;</b>discrimination &#8212; 歧视；区别对待</p><p class='fb-line'>&#128221; <b>完整句：</b>Many countries have laws to prevent discrimination in housing.</p><div class='think-path'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#128300; 解题思路</p><p class='think-step'>题目中给出的词 <b>discrimination</b> 已经符合句子的词性要求，不需要额外的词形变化。直接填入原形即可。</p></div>词形不变，保持原形<p class='fb-line'>&#127919; <b>考点：</b><li class='opt-explain'><b>discriminate</b>：歧视；区别<span class='opt-reason'>需要名词形式（-tion）</span></li><li class='opt-explain'><b>discrimination</b>：歧视；区别对待<span class='opt-reason'> — 答案</span> <span class="tag-correct">&#10003;</span></li><li class='opt-explain'><b>discriminatory</b>：<span class='opt-reason'>需要名词形式（-tion）</span></li><li class='opt-explain'><b>discriminating</b>：<span class='opt-reason'>这是现在分词形式，此处需要名词/形容词</span></li><br>&#128218; <b>题目来源：</b>CET-4 / 考研英语 词性转化专项练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><div class='distractors'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#9888; 干扰项分析</p><p class='distractor-item'><b>discriminate</b>（歧视；区别）：需要名词形式（-tion）</p><p class='distractor-item'><b>discriminatory</b>（）：需要名词形式（-tion）</p><p class='distractor-item'><b>discriminating</b>（）：这是现在分词形式，此处需要名词/形容词</p></div></ul><p class='fb-line'>&#128161; <b>解析：</b>prevent 后接名词，discrimination 是名词形式，表示“歧视”。</p></div></section><section class='q wf-card' data-block='word_forms' data-card='2' data-answer='peaceful'><div class='qhead'><span class='qn'>&#36716;&#183;02</span><b>&#35789;&#24615;&#36716;&#21270;</b> &#183; <span class='wf-word'>peaceful</span></div><p class='prompt'>选词填空，注意词性转化：</p><div class='wf-stem'>The two countries signed a _____ agreement.</div><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='wf2' value='peaceful'> peaceful</label><label class='opt ' data-correct='0'><input type='radio' name='wf2' value='peace'> peace</label><label class='opt ' data-correct='0'><input type='radio' name='wf2' value='peacefully'> peacefully</label><label class='opt ' data-correct='0'><input type='radio' name='wf2' value='peacemaker'> peacemaker</label></div><div class='feedback hidden' data-answer='peaceful'><p class='fb-line'>&#128204; <b>&#31572;&#26696;&#65306;</b>peaceful &#8212; 平静的，和平的</p><p class='fb-line'>&#128221; <b>完整句：</b>The two countries signed a peaceful agreement.</p><div class='think-path'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#128300; 解题思路</p><p class='think-step'>题目中给出的词 <b>peaceful</b> 已经符合句子的词性要求，不需要额外的词形变化。直接填入原形即可。</p></div>词形不变，保持原形<p class='fb-line'>&#127919; <b>考点：</b><li class='opt-explain'><b>peaceful</b>：平静的，和平的<span class='opt-reason'> — 答案</span> <span class="tag-correct">&#10003;</span></li><li class='opt-explain'><b>peace</b>：和平；和睦；平静<span class='opt-reason'>需要形容词形式（-ful）</span></li><li class='opt-explain'><b>peacefully</b>：<span class='opt-reason'>需要形容词形式（-ful）</span></li><li class='opt-explain'><b>peacemaker</b>：<span class='opt-reason'>需要形容词形式（-ful）</span></li><br>&#128218; <b>题目来源：</b>CET-4 / 考研英语 词性转化专项练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><div class='distractors'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#9888; 干扰项分析</p><p class='distractor-item'><b>peace</b>（和平；和睦；平静）：需要形容词形式（-ful）</p><p class='distractor-item'><b>peacefully</b>（）：需要形容词形式（-ful）</p><p class='distractor-item'><b>peacemaker</b>（）：需要形容词形式（-ful）</p></div></ul><p class='fb-line'>&#128161; <b>解析：</b>修饰 agreement 需要用形容词 peaceful，表示“和平的协议”。</p></div></section><section class='q wf-card' data-block='word_forms' data-card='3' data-answer='republican'><div class='qhead'><span class='qn'>&#36716;&#183;03</span><b>&#35789;&#24615;&#36716;&#21270;</b> &#183; <span class='wf-word'>republic</span></div><p class='prompt'>选词填空，注意词性转化：</p><div class='wf-stem'>The new constitution established a _____ form of government.</div><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='wf3' value='republic'> republic</label><label class='opt ' data-correct='1'><input type='radio' name='wf3' value='republican'> republican</label><label class='opt ' data-correct='0'><input type='radio' name='wf3' value='republicanism'> republicanism</label><label class='opt ' data-correct='0'><input type='radio' name='wf3' value='public'> public</label></div><div class='feedback hidden' data-answer='republican'><p class='fb-line'>&#128204; <b>&#31572;&#26696;&#65306;</b>republican &#8212; 共和政体的；共和党的</p><p class='fb-line'>&#128221; <b>完整句：</b>The new constitution established a republican form of government.</p><div class='think-path'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#128300; 解题思路</p><p class='think-step'>① 确定句子空缺处需要什么词性（主语/谓语/宾语/定语/状语）。</p><p class='think-step'>② 原词 <b>republic</b>（共和国，共和政体）需要转化为 <b>republican</b> 形式。词性转化</p><p class='think-step'>③ 将 <b>republican</b> 代入原句，检查语法和语义是否通顺。</p></div>词性转化<p class='fb-line'>&#127919; <b>考点：</b><li class='opt-explain'><b>republic</b>：共和国，共和政体<span class='opt-reason'>这是原形，需要派生形式</span></li><li class='opt-explain'><b>republican</b>：共和政体的；共和党的<span class='opt-reason'> — 答案</span> <span class="tag-correct">&#10003;</span></li><li class='opt-explain'><b>republicanism</b>：<span class='opt-reason'>词性/形式不匹配</span></li><li class='opt-explain'><b>public</b>：公众的<span class='opt-reason'>词性/形式不匹配</span></li><br>&#128218; <b>题目来源：</b>CET-4 / 考研英语 词性转化专项练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><div class='distractors'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#9888; 干扰项分析</p><p class='distractor-item'><b>republic</b>（共和国，共和政体）：这是原形，需要派生形式</p><p class='distractor-item'><b>republicanism</b>（）：词性/形式不匹配</p><p class='distractor-item'><b>public</b>（公众的）：词性/形式不匹配</p></div></ul><p class='fb-line'>&#128161; <b>解析：</b>republic 是名词，republican 是形容词，修饰 form of government；republicanism 是抽象名词，public 意思不同。</p></div></section><section class='q wf-card' data-block='word_forms' data-card='4' data-answer='fascinating'><div class='qhead'><span class='qn'>&#36716;&#183;04</span><b>&#35789;&#24615;&#36716;&#21270;</b> &#183; <span class='wf-word'>fascination</span></div><p class='prompt'>选词填空，注意词性转化：</p><div class='wf-stem'>The documentary was so ______ that I watched it twice.</div><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='wf4' value='fascinated'> fascinated</label><label class='opt ' data-correct='1'><input type='radio' name='wf4' value='fascinating'> fascinating</label><label class='opt ' data-correct='0'><input type='radio' name='wf4' value='fascination'> fascination</label><label class='opt ' data-correct='0'><input type='radio' name='wf4' value='fascinate'> fascinate</label></div><div class='feedback hidden' data-answer='fascinating'><p class='fb-line'>&#128204; <b>&#31572;&#26696;&#65306;</b>fascinating &#8212; 迷人的， 有极大吸引力的</p><p class='fb-line'>&#128221; <b>完整句：</b>The documentary was so fascinating that I watched it twice.</p><div class='think-path'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#128300; 解题思路</p><p class='think-step'>① 确定句子空缺处需要什么词性（主语/谓语/宾语/定语/状语）。</p><p class='think-step'>② 原词 <b>fascination</b>（强烈的吸引力；入迷的状态）需要转化为 <b>fascinating</b> 形式。词性转化</p><p class='think-step'>③ 将 <b>fascinating</b> 代入原句，检查语法和语义是否通顺。</p></div>词性转化<p class='fb-line'>&#127919; <b>考点：</b><li class='opt-explain'><b>fascinated</b>：<span class='opt-reason'>这是过去式/过去分词，此处需要其他词性</span></li><li class='opt-explain'><b>fascinating</b>：迷人的， 有极大吸引力的<span class='opt-reason'> — 答案</span> <span class="tag-correct">&#10003;</span></li><li class='opt-explain'><b>fascination</b>：强烈的吸引力；入迷的状态<span class='opt-reason'>这是原形，需要派生形式</span></li><li class='opt-explain'><b>fascinate</b>：强烈地吸引，迷住<span class='opt-reason'>词性/形式不匹配</span></li><br>&#128218; <b>题目来源：</b>CET-4 / 考研英语 词性转化专项练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><div class='distractors'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#9888; 干扰项分析</p><p class='distractor-item'><b>fascinated</b>（）：这是过去式/过去分词，此处需要其他词性</p><p class='distractor-item'><b>fascination</b>（强烈的吸引力；入迷的状态）：这是原形，需要派生形式</p><p class='distractor-item'><b>fascinate</b>（强烈地吸引，迷住）：词性/形式不匹配</p></div></ul><p class='fb-line'>&#128161; <b>解析：</b>这里需要形容词修饰 documentary，表示“令人着迷的”，所以用 fascinating。fascinated 表示“感到着迷的”，主语通常是人。</p></div></section><section class='q wf-card' data-block='word_forms' data-card='5' data-answer='aware'><div class='qhead'><span class='qn'>&#36716;&#183;05</span><b>&#35789;&#24615;&#36716;&#21270;</b> &#183; <span class='wf-word'>awareness</span></div><p class='prompt'>选词填空，注意词性转化：</p><div class='wf-stem'>Many people are not _____ of the dangers of smoking.</div><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='wf5' value='aware'> aware</label><label class='opt ' data-correct='0'><input type='radio' name='wf5' value='awareness'> awareness</label><label class='opt ' data-correct='0'><input type='radio' name='wf5' value='unaware'> unaware</label><label class='opt ' data-correct='0'><input type='radio' name='wf5' value='awarenesses'> awarenesses</label></div><div class='feedback hidden' data-answer='aware'><p class='fb-line'>&#128204; <b>&#31572;&#26696;&#65306;</b>aware &#8212; 意识到的；知道的</p><p class='fb-line'>&#128221; <b>完整句：</b>Many people are not aware of the dangers of smoking.</p><div class='think-path'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#128300; 解题思路</p><p class='think-step'>① 确定句子空缺处需要什么词性（主语/谓语/宾语/定语/状语）。</p><p class='think-step'>② 原词 <b>awareness</b>（意识；知晓；察觉）需要转化为 <b>aware</b> 形式。词性转化</p><p class='think-step'>③ 将 <b>aware</b> 代入原句，检查语法和语义是否通顺。</p></div>词性转化<p class='fb-line'>&#127919; <b>考点：</b><li class='opt-explain'><b>aware</b>：意识到的；知道的<span class='opt-reason'> — 答案</span> <span class="tag-correct">&#10003;</span></li><li class='opt-explain'><b>awareness</b>：意识；知晓；察觉<span class='opt-reason'>这是原形，需要派生形式</span></li><li class='opt-explain'><b>unaware</b>：<span class='opt-reason'>词性/形式不匹配</span></li><li class='opt-explain'><b>awarenesses</b>：<span class='opt-reason'>这是复数形式，此处需要单数/其他形式</span></li><br>&#128218; <b>题目来源：</b>CET-4 / 考研英语 词性转化专项练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><div class='distractors'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#9888; 干扰项分析</p><p class='distractor-item'><b>awareness</b>（意识；知晓；察觉）：这是原形，需要派生形式</p><p class='distractor-item'><b>unaware</b>（）：词性/形式不匹配</p><p class='distractor-item'><b>awarenesses</b>（）：这是复数形式，此处需要单数/其他形式</p></div></ul><p class='fb-line'>&#128161; <b>解析：</b>be aware of 是固定搭配，aware 是形容词。</p></div></section><section class='q wf-card' data-block='word_forms' data-card='6' data-answer='coordinator'><div class='qhead'><span class='qn'>&#36716;&#183;06</span><b>&#35789;&#24615;&#36716;&#21270;</b> &#183; <span class='wf-word'>coordination</span></div><p class='prompt'>选词填空，注意词性转化：</p><div class='wf-stem'>She was appointed as the project _____ to ensure smooth communication between teams.</div><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='wf6' value='coordination'> coordination</label><label class='opt ' data-correct='1'><input type='radio' name='wf6' value='coordinator'> coordinator</label><label class='opt ' data-correct='0'><input type='radio' name='wf6' value='coordinate'> coordinate</label><label class='opt ' data-correct='0'><input type='radio' name='wf6' value='coordinated'> coordinated</label></div><div class='feedback hidden' data-answer='coordinator'><p class='fb-line'>&#128204; <b>&#31572;&#26696;&#65306;</b>coordinator &#8212; </p><p class='fb-line'>&#128221; <b>完整句：</b>She was appointed as the project coordinator to ensure smooth communication between teams.</p><div class='think-path'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#128300; 解题思路</p><p class='think-step'>① 确定句子空缺处需要什么词性（主语/谓语/宾语/定语/状语）。</p><p class='think-step'>② 原词 <b>coordination</b>（协调；配合；协作）需要转化为 <b>coordinator</b> 形式。词性转化</p><p class='think-step'>③ 将 <b>coordinator</b> 代入原句，检查语法和语义是否通顺。</p></div>词性转化<p class='fb-line'>&#127919; <b>考点：</b><li class='opt-explain'><b>coordination</b>：协调；配合；协作<span class='opt-reason'>这是原形，需要派生形式</span></li><li class='opt-explain'><b>coordinator</b>：<span class='opt-reason'> — 答案</span> <span class="tag-correct">&#10003;</span></li><li class='opt-explain'><b>coordinate</b>：使协调，调节<span class='opt-reason'>词性/形式不匹配</span></li><li class='opt-explain'><b>coordinated</b>：<span class='opt-reason'>这是过去式/过去分词，此处需要其他词性</span></li><br>&#128218; <b>题目来源：</b>CET-4 / 考研英语 词性转化专项练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><div class='distractors'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#9888; 干扰项分析</p><p class='distractor-item'><b>coordination</b>（协调；配合；协作）：这是原形，需要派生形式</p><p class='distractor-item'><b>coordinate</b>（使协调，调节）：词性/形式不匹配</p><p class='distractor-item'><b>coordinated</b>（）：这是过去式/过去分词，此处需要其他词性</p></div></ul><p class='fb-line'>&#128161; <b>解析：</b>coordinator 是名词，意为“协调员”；coordination 是抽象名词“协调”；coordinate 是动词；coordinated 是形容词。</p></div></section><section class='q wf-card' data-block='word_forms' data-card='7' data-answer='backwardness'><div class='qhead'><span class='qn'>&#36716;&#183;07</span><b>&#35789;&#24615;&#36716;&#21270;</b> &#183; <span class='wf-word'>backward</span></div><p class='prompt'>选词填空，注意词性转化：</p><div class='wf-stem'>The region&#x27;s economic _____ is a major concern for the government.</div><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='wf7' value='backward'> backward</label><label class='opt ' data-correct='0'><input type='radio' name='wf7' value='backwards'> backwards</label><label class='opt ' data-correct='1'><input type='radio' name='wf7' value='backwardness'> backwardness</label><label class='opt ' data-correct='0'><input type='radio' name='wf7' value='back'> back</label></div><div class='feedback hidden' data-answer='backwardness'><p class='fb-line'>&#128204; <b>&#31572;&#26696;&#65306;</b>backwardness &#8212; </p><p class='fb-line'>&#128221; <b>完整句：</b>The region&amp;#x27;s economic backwardness is a major concern for the government.</p><div class='think-path'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#128300; 解题思路</p><p class='think-step'>① 确定句子空缺处需要什么词性（主语/谓语/宾语/定语/状语）。</p><p class='think-step'>② 原词 <b>backward</b>（向后；倒退的；落后的）需要转化为 <b>backwardness</b> 形式。形容词 -&gt; 名词（-ness 后缀）</p><p class='think-step'>③ 将 <b>backwardness</b> 代入原句，检查语法和语义是否通顺。</p></div>形容词 -&gt; 名词（-ness 后缀）<p class='fb-line'>&#127919; <b>考点：</b><li class='opt-explain'><b>backward</b>：向后；倒退的；落后的<span class='opt-reason'>这是原形，需要派生形式</span></li><li class='opt-explain'><b>backwards</b>：<span class='opt-reason'>需要名词形式（-ness）</span></li><li class='opt-explain'><b>backwardness</b>：<span class='opt-reason'> — 答案</span> <span class="tag-correct">&#10003;</span></li><li class='opt-explain'><b>back</b>：背后；回原处<span class='opt-reason'>需要名词形式（-ness）</span></li><br>&#128218; <b>题目来源：</b>CET-4 / 考研英语 词性转化专项练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><div class='distractors'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#9888; 干扰项分析</p><p class='distractor-item'><b>backward</b>（向后；倒退的；落后的）：这是原形，需要派生形式</p><p class='distractor-item'><b>backwards</b>（）：需要名词形式（-ness）</p><p class='distractor-item'><b>back</b>（背后；回原处）：需要名词形式（-ness）</p></div></ul><p class='fb-line'>&#128161; <b>解析：</b>这里需要名词形式，backwardness 表示“落后”，而 backward 是形容词/副词，backwards 是副词，back 是名词/动词/副词。</p></div></section><section class='q wf-card' data-block='word_forms' data-card='8' data-answer='charter'><div class='qhead'><span class='qn'>&#36716;&#183;08</span><b>&#35789;&#24615;&#36716;&#21270;</b> &#183; <span class='wf-word'>charter</span></div><p class='prompt'>选词填空，注意词性转化：</p><div class='wf-stem'>The company operates under a government-issued _____.</div><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='wf8' value='charter'> charter</label><label class='opt ' data-correct='0'><input type='radio' name='wf8' value='chartered'> chartered</label><label class='opt ' data-correct='0'><input type='radio' name='wf8' value='charterer'> charterer</label><label class='opt ' data-correct='0'><input type='radio' name='wf8' value='unchartered'> unchartered</label></div><div class='feedback hidden' data-answer='charter'><p class='fb-line'>&#128204; <b>&#31572;&#26696;&#65306;</b>charter &#8212; 宪章；特许状；包租</p><p class='fb-line'>&#128221; <b>完整句：</b>The company operates under a government-issued charter.</p><div class='think-path'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#128300; 解题思路</p><p class='think-step'>题目中给出的词 <b>charter</b> 已经符合句子的词性要求，不需要额外的词形变化。直接填入原形即可。</p></div>词形不变，保持原形<p class='fb-line'>&#127919; <b>考点：</b><li class='opt-explain'><b>charter</b>：宪章；特许状；包租<span class='opt-reason'> — 答案</span> <span class="tag-correct">&#10003;</span></li><li class='opt-explain'><b>chartered</b>：<span class='opt-reason'>这是过去式/过去分词，此处需要其他词性</span></li><li class='opt-explain'><b>charterer</b>：<span class='opt-reason'>词性/形式不匹配</span></li><li class='opt-explain'><b>unchartered</b>：<span class='opt-reason'>这是过去式/过去分词，此处需要其他词性</span></li><br>&#128218; <b>题目来源：</b>CET-4 / 考研英语 词性转化专项练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><div class='distractors'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#9888; 干扰项分析</p><p class='distractor-item'><b>chartered</b>（）：这是过去式/过去分词，此处需要其他词性</p><p class='distractor-item'><b>charterer</b>（）：词性/形式不匹配</p><p class='distractor-item'><b>unchartered</b>（）：这是过去式/过去分词，此处需要其他词性</p></div></ul><p class='fb-line'>&#128161; <b>解析：</b>这里需要名词形式，charter 意为“特许状”；chartered 是形容词，charterer 是“租船人”，unchartered 是“未经特许的”。</p></div></section><section class='q wf-card' data-block='word_forms' data-card='9' data-answer='bacterial'><div class='qhead'><span class='qn'>&#36716;&#183;09</span><b>&#35789;&#24615;&#36716;&#21270;</b> &#183; <span class='wf-word'>bacteria</span></div><p class='prompt'>选词填空，注意词性转化：</p><div class='wf-stem'>The lab technician studied the _____ growth under the microscope.</div><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='wf9' value='bacteria'> bacteria</label><label class='opt ' data-correct='1'><input type='radio' name='wf9' value='bacterial'> bacterial</label><label class='opt ' data-correct='0'><input type='radio' name='wf9' value='bacterium'> bacterium</label><label class='opt ' data-correct='0'><input type='radio' name='wf9' value='bacteriology'> bacteriology</label></div><div class='feedback hidden' data-answer='bacterial'><p class='fb-line'>&#128204; <b>&#31572;&#26696;&#65306;</b>bacterial &#8212; </p><p class='fb-line'>&#127992; <b>题干翻译：</b>实验室技术员在显微镜下研究_____的生长。</p><p class='fb-line'>&#128214; <b>完整句翻译：</b>实验室技术员在显微镜下研究bacterial的生长。</p><p class='fb-line'>&#128221; <b>完整句：</b>The lab technician studied the bacterial growth under the microscope.</p><div class='think-path'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#128300; 解题思路</p><p class='think-step'>① 确定句子空缺处需要什么词性（主语/谓语/宾语/定语/状语）。</p><p class='think-step'>② 原词 <b>bacteria</b>（细菌（单数 bacterium））需要转化为 <b>bacterial</b> 形式。名词 -&gt; 形容词（-al 后缀）</p><p class='think-step'>③ 将 <b>bacterial</b> 代入原句，检查语法和语义是否通顺。</p></div>名词 -&gt; 形容词（-al 后缀）<p class='fb-line'>&#127919; <b>考点：</b><li class='opt-explain'><b>bacteria</b>：细菌（单数 bacterium）<span class='opt-reason'>这是原形，需要派生形式</span></li><li class='opt-explain'><b>bacterial</b>：<span class='opt-reason'> — 答案</span> <span class="tag-correct">&#10003;</span></li><li class='opt-explain'><b>bacterium</b>：<span class='opt-reason'>需要形容词形式（-al）</span></li><li class='opt-explain'><b>bacteriology</b>：<span class='opt-reason'>需要形容词形式（-al）</span></li><br>&#128218; <b>题目来源：</b>CET-4 / 考研英语 词性转化专项练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><div class='distractors'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#9888; 干扰项分析</p><p class='distractor-item'><b>bacteria</b>（细菌（单数 bacterium））：这是原形，需要派生形式</p><p class='distractor-item'><b>bacterium</b>（）：需要形容词形式（-al）</p><p class='distractor-item'><b>bacteriology</b>（）：需要形容词形式（-al）</p></div></ul><p class='fb-line'>&#128161; <b>解析：</b>bacterial 是形容词，修饰名词 growth；bacteria 是名词复数，bacterium 是单数，bacteriology 是学科名词。</p></div></section><section class='q wf-card' data-block='word_forms' data-card='10' data-answer='epidemic'><div class='qhead'><span class='qn'>&#36716;&#183;10</span><b>&#35789;&#24615;&#36716;&#21270;</b> &#183; <span class='wf-word'>epidemic</span></div><p class='prompt'>选词填空，注意词性转化：</p><div class='wf-stem'>The _____ of the disease was traced to contaminated water.</div><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='wf10' value='epidemic'> epidemic</label><label class='opt ' data-correct='0'><input type='radio' name='wf10' value='epidemiology'> epidemiology</label><label class='opt ' data-correct='0'><input type='radio' name='wf10' value='epidemiological'> epidemiological</label><label class='opt ' data-correct='0'><input type='radio' name='wf10' value='endemic'> endemic</label></div><div class='feedback hidden' data-answer='epidemic'><p class='fb-line'>&#128204; <b>&#31572;&#26696;&#65306;</b>epidemic &#8212; 流行病；流行性的</p><p class='fb-line'>&#127992; <b>题干翻译：</b>这种疾病的_____被追溯到受污染的水源。</p><p class='fb-line'>&#128214; <b>完整句翻译：</b>这种疾病的epidemic被追溯到受污染的水源。</p><p class='fb-line'>&#128221; <b>完整句：</b>The epidemic of the disease was traced to contaminated water.</p><div class='think-path'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#128300; 解题思路</p><p class='think-step'>题目中给出的词 <b>epidemic</b> 已经符合句子的词性要求，不需要额外的词形变化。直接填入原形即可。</p></div>词形不变，保持原形<p class='fb-line'>&#127919; <b>考点：</b><li class='opt-explain'><b>epidemic</b>：流行病；流行性的<span class='opt-reason'> — 答案</span> <span class="tag-correct">&#10003;</span></li><li class='opt-explain'><b>epidemiology</b>：<span class='opt-reason'>词性/形式不匹配</span></li><li class='opt-explain'><b>epidemiological</b>：<span class='opt-reason'>词性/形式不匹配</span></li><li class='opt-explain'><b>endemic</b>：<span class='opt-reason'>词性/形式不匹配</span></li><br>&#128218; <b>题目来源：</b>CET-4 / 考研英语 词性转化专项练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><div class='distractors'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#9888; 干扰项分析</p><p class='distractor-item'><b>epidemiology</b>（）：词性/形式不匹配</p><p class='distractor-item'><b>epidemiological</b>（）：词性/形式不匹配</p><p class='distractor-item'><b>endemic</b>（）：词性/形式不匹配</p></div></ul><p class='fb-line'>&#128161; <b>解析：</b>epidemic 是名词，意为&#x27;流行病&#x27;；epidemiology 是&#x27;流行病学&#x27;，epidemiological 是形容词，endemic 是&#x27;地方性的&#x27;，不符合句意。</p></div></section><section class='q wf-card' data-block='word_forms' data-card='11' data-answer='mentally'><div class='qhead'><span class='qn'>&#36716;&#183;11</span><b>&#35789;&#24615;&#36716;&#21270;</b> &#183; <span class='wf-word'>mental</span></div><p class='prompt'>选词填空，注意词性转化：</p><div class='wf-stem'>She is ______ strong and can handle the pressure.</div><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='wf11' value='mental'> mental</label><label class='opt ' data-correct='1'><input type='radio' name='wf11' value='mentally'> mentally</label><label class='opt ' data-correct='0'><input type='radio' name='wf11' value='mentality'> mentality</label><label class='opt ' data-correct='0'><input type='radio' name='wf11' value='mentalist'> mentalist</label></div><div class='feedback hidden' data-answer='mentally'><p class='fb-line'>&#128204; <b>&#31572;&#26696;&#65306;</b>mentally &#8212; </p><p class='fb-line'>&#127992; <b>题干翻译：</b>她在_____上很坚强，能够应对压力。</p><p class='fb-line'>&#128214; <b>完整句翻译：</b>她在mentally上很坚强，能够应对压力。</p><p class='fb-line'>&#128221; <b>完整句：</b>She is mentally strong and can handle the pressure.</p><div class='think-path'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#128300; 解题思路</p><p class='think-step'>① 确定句子空缺处需要什么词性（主语/谓语/宾语/定语/状语）。</p><p class='think-step'>② 原词 <b>mental</b>（心理的；精神的；脑力的）需要转化为 <b>mentally</b> 形式。形容词 -&gt; 副词（-ly 后缀）</p><p class='think-step'>③ 将 <b>mentally</b> 代入原句，检查语法和语义是否通顺。</p></div>形容词 -&gt; 副词（-ly 后缀）<p class='fb-line'>&#127919; <b>考点：</b><li class='opt-explain'><b>mental</b>：心理的；精神的；脑力的<span class='opt-reason'>这是原形，需要派生形式</span></li><li class='opt-explain'><b>mentally</b>：<span class='opt-reason'> — 答案</span> <span class="tag-correct">&#10003;</span></li><li class='opt-explain'><b>mentality</b>：<span class='opt-reason'>需要副词形式（-ly）</span></li><li class='opt-explain'><b>mentalist</b>：<span class='opt-reason'>需要副词形式（-ly）</span></li><br>&#128218; <b>题目来源：</b>CET-4 / 考研英语 词性转化专项练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><div class='distractors'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#9888; 干扰项分析</p><p class='distractor-item'><b>mental</b>（心理的；精神的；脑力的）：这是原形，需要派生形式</p><p class='distractor-item'><b>mentality</b>（）：需要副词形式（-ly）</p><p class='distractor-item'><b>mentalist</b>（）：需要副词形式（-ly）</p></div></ul><p class='fb-line'>&#128161; <b>解析：</b>这里需要副词修饰形容词 strong，所以用 mentally。</p></div></section><section class='q wf-card' data-block='word_forms' data-card='12' data-answer='disease'><div class='qhead'><span class='qn'>&#36716;&#183;12</span><b>&#35789;&#24615;&#36716;&#21270;</b> &#183; <span class='wf-word'>disease</span></div><p class='prompt'>选词填空，注意词性转化：</p><div class='wf-stem'>The patient is suffering from a rare _____ that affects the nervous system.</div><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='wf12' value='disease'> disease</label><label class='opt ' data-correct='0'><input type='radio' name='wf12' value='diseased'> diseased</label><label class='opt ' data-correct='0'><input type='radio' name='wf12' value='disease-causing'> disease-causing</label><label class='opt ' data-correct='0'><input type='radio' name='wf12' value='disease-free'> disease-free</label></div><div class='feedback hidden' data-answer='disease'><p class='fb-line'>&#128204; <b>&#31572;&#26696;&#65306;</b>disease &#8212; 疾病</p><p class='fb-line'>&#127992; <b>题干翻译：</b>这位病人患有一种影响神经系统的罕见_____。</p><p class='fb-line'>&#128214; <b>完整句翻译：</b>这位病人患有一种影响神经系统的罕见disease。</p><p class='fb-line'>&#128221; <b>完整句：</b>The patient is suffering from a rare disease that affects the nervous system.</p><div class='think-path'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#128300; 解题思路</p><p class='think-step'>题目中给出的词 <b>disease</b> 已经符合句子的词性要求，不需要额外的词形变化。直接填入原形即可。</p></div>词形不变，保持原形<p class='fb-line'>&#127919; <b>考点：</b><li class='opt-explain'><b>disease</b>：疾病<span class='opt-reason'> — 答案</span> <span class="tag-correct">&#10003;</span></li><li class='opt-explain'><b>diseased</b>：<span class='opt-reason'>这是过去式/过去分词，此处需要其他词性</span></li><li class='opt-explain'><b>disease-causing</b>：<span class='opt-reason'>这是现在分词形式，此处需要名词/形容词</span></li><li class='opt-explain'><b>disease-free</b>：<span class='opt-reason'>词性/形式不匹配</span></li><br>&#128218; <b>题目来源：</b>CET-4 / 考研英语 词性转化专项练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><div class='distractors'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#9888; 干扰项分析</p><p class='distractor-item'><b>diseased</b>（）：这是过去式/过去分词，此处需要其他词性</p><p class='distractor-item'><b>disease-causing</b>（）：这是现在分词形式，此处需要名词/形容词</p><p class='distractor-item'><b>disease-free</b>（）：词性/形式不匹配</p></div></ul><p class='fb-line'>&#128161; <b>解析：</b>这里需要一个名词，disease 是名词，diseased 是形容词，disease-causing 和 disease-free 是复合形容词。</p></div></section><section class='q al-card' data-block='article_logic' data-card='0' data-answer='charter'><div class='qhead'><span class='qn'>逻·0</span><b>文章逻辑 · 第 1 段</b></div><p class='prompt'>Read the paragraph and choose the correct word to fill in the blank:</p><div class='para-sentence'>The republic&#x27;s new <span class='para-blank'>______</span> aims to end discrimination. It promotes peaceful coexistence and raises awareness about social issues.</div><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='al0' value='charter'> charter</label><label class='opt ' data-correct='0'><input type='radio' name='al0' value='discrimination'> discrimination</label><label class='opt ' data-correct='0'><input type='radio' name='al0' value='peaceful'> peaceful</label><label class='opt ' data-correct='0'><input type='radio' name='al0' value='republic'> republic</label></div><div class='feedback hidden' data-answer='charter'><p class='fb-line'>&#128204; <b>答案：</b>charter — 宪章；特许状；包租</p><p class='fb-line'>&#127992; <b>段落翻译（中文）：</b>新<span class='tag-correct' style='font-size:12px;padding:2px 6px;'>charter</span>旨在消除<span class='tag-correct' style='font-size:12px;padding:2px 6px;'>discrimination</span>，促进<span class='tag-correct' style='font-size:12px;padding:2px 6px;'>peaceful</span>共存并提高<span class='tag-correct' style='font-size:12px;padding:2px 6px;'>awareness</span>。</p><p class='fb-line'>&#128221; <b>完整句：</b>新charter旨在消除discrimination，促进peaceful共存并提高awareness。</p><p class='fb-line'>&#127919; <b>考点：</b>段落主旨理解 + 上下文逻辑推断<br>&#128218; <b>题目来源：</b>小韩英语角 · 读后理解练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><li><b>charter</b>：宪章；特许状；包租 <span class="tag-correct">✓</span></li><li><b>discrimination</b>：歧视；区别对待</li><li><b>peaceful</b>：平静的，和平的</li><li><b>republic</b>：共和国，共和政体</li></ul></div></section><section class='q al-card' data-block='article_logic' data-card='1' data-answer='fascination'><div class='qhead'><span class='qn'>逻·1</span><b>文章逻辑 · 第 2 段</b></div><p class='prompt'>Read the paragraph and choose the correct word to fill in the blank:</p><div class='para-sentence'>Many people have a <span class='para-blank'>______</span> with history. They study how backward policies led to epidemics and diseases.</div><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='al1' value='fascination'> fascination</label><label class='opt ' data-correct='0'><input type='radio' name='al1' value='backward'> backward</label><label class='opt ' data-correct='0'><input type='radio' name='al1' value='epidemic'> epidemic</label><label class='opt ' data-correct='0'><input type='radio' name='al1' value='disease'> disease</label></div><div class='feedback hidden' data-answer='fascination'><p class='fb-line'>&#128204; <b>答案：</b>fascination — 强烈的吸引力；入迷的状态</p><p class='fb-line'>&#127992; <b>段落翻译（中文）：</b>人们对历史有<span class='tag-correct' style='font-size:12px;padding:2px 6px;'>fascination</span>，研究<span class='tag-correct' style='font-size:12px;padding:2px 6px;'>backward</span>政策如何导致流行病和疾病。</p><p class='fb-line'>&#128221; <b>完整句：</b>人们对历史有fascination，研究backward政策如何导致流行病和疾病。</p><p class='fb-line'>&#127919; <b>考点：</b>段落主旨理解 + 上下文逻辑推断<br>&#128218; <b>题目来源：</b>小韩英语角 · 读后理解练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><li><b>fascination</b>：强烈的吸引力；入迷的状态 <span class="tag-correct">✓</span></li><li><b>backward</b>：向后；倒退的；落后的</li><li><b>epidemic</b>：流行病；流行性的</li><li><b>disease</b>：疾病</li></ul></div></section><section class='q al-card' data-block='article_logic' data-card='2' data-answer='coordination'><div class='qhead'><span class='qn'>逻·2</span><b>文章逻辑 · 第 3 段</b></div><p class='prompt'>Read the paragraph and choose the correct word to fill in the blank:</p><div class='para-sentence'><span class='para-blank'>______</span> between communities is key. Mental health awareness is also important. Bacteria can cause disease, but social diseases like discrimination are more harmful.</div><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='al2' value='coordination'> coordination</label><label class='opt ' data-correct='0'><input type='radio' name='al2' value='mental'> mental</label><label class='opt ' data-correct='0'><input type='radio' name='al2' value='bacteria'> bacteria</label><label class='opt ' data-correct='0'><input type='radio' name='al2' value='disease'> disease</label></div><div class='feedback hidden' data-answer='coordination'><p class='fb-line'>&#128204; <b>答案：</b>coordination — 协调；配合；协作</p><p class='fb-line'>&#127992; <b>段落翻译（中文）：</b><span class='tag-correct' style='font-size:12px;padding:2px 6px;'>coordination</span>和<span class='tag-correct' style='font-size:12px;padding:2px 6px;'>mental</span>意识很重要，细菌引起疾病，但歧视更害人。</p><p class='fb-line'>&#128221; <b>完整句：</b>coordination和mental意识很重要，细菌引起疾病，但歧视更害人。</p><p class='fb-line'>&#127919; <b>考点：</b>段落主旨理解 + 上下文逻辑推断<br>&#128218; <b>题目来源：</b>小韩英语角 · 读后理解练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><li><b>coordination</b>：协调；配合；协作 <span class="tag-correct">✓</span></li><li><b>mental</b>：心理的；精神的；脑力的</li><li><b>bacteria</b>：细菌（单数 bacterium）</li><li><b>disease</b>：疾病</li></ul></div></section><section class='q al-card' data-block='article_logic' data-card='3' data-answer='peaceful'><div class='qhead'><span class='qn'>逻·3</span><b>文章逻辑 · 第 4 段</b></div><p class='prompt'>Read the paragraph and choose the correct word to fill in the blank:</p><div class='para-sentence'>The charter&#x27;s success depends on everyone&#x27;s effort. A <span class='para-blank'>______</span> society requires constant work.</div><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='al3' value='peaceful'> peaceful</label><label class='opt ' data-correct='0'><input type='radio' name='al3' value='discrimination'> discrimination</label><label class='opt ' data-correct='0'><input type='radio' name='al3' value='republic'> republic</label><label class='opt ' data-correct='0'><input type='radio' name='al3' value='awareness'> awareness</label></div><div class='feedback hidden' data-answer='peaceful'><p class='fb-line'>&#128204; <b>答案：</b>peaceful — 平静的，和平的</p><p class='fb-line'>&#127992; <b>段落翻译（中文）：</b>宪章的成功需要每个人的努力，<span class='tag-correct' style='font-size:12px;padding:2px 6px;'>peaceful</span>社会需要持续建设。</p><p class='fb-line'>&#128221; <b>完整句：</b>宪章的成功需要每个人的努力，peaceful社会需要持续建设。</p><p class='fb-line'>&#127919; <b>考点：</b>段落主旨理解 + 上下文逻辑推断<br>&#128218; <b>题目来源：</b>小韩英语角 · 读后理解练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><li><b>peaceful</b>：平静的，和平的 <span class="tag-correct">✓</span></li><li><b>discrimination</b>：歧视；区别对待</li><li><b>republic</b>：共和国，共和政体</li><li><b>awareness</b>：意识；知晓；察觉</li></ul></div></section><section class='q reading-card' data-block='reading' data-card='1'><div class='qhead'><b>③ 语境阅读</b> <span class='hint-inline'>&#x1F50D; 点击任意词 = 查词义（<span style='color:#E85D3A;font-weight:700;'>新词</span> / <span style='color:#8B5CF6;font-weight:700;'>复习</span> / <span style='color:#6B7280;border-bottom:1px dashed #6B7280;'>其他</span>）</span></div><p class='story-title'>社会与政治：从歧视到和平的旅程</p><audio controls preload='none' src='audio/story.mp3'><source src='audio/story.m4a'></audio><div class='story-body'><p class='story-paragraph'>The <span class='dict-word dict-new' data-word='republic'>republic</span>&#x27;s new <span class='dict-word dict-new' data-word='charter'>charter</span> aims to end <span class='dict-word dict-new' data-word='discrimination'>discrimination</span>. It promotes <span class='dict-word dict-new' data-word='peaceful'>peaceful</span> coexistence and raises <span class='dict-word dict-new' data-word='awareness'>awareness</span> about social issues.</p><p class='story-paragraph'>Many people have a <span class='dict-word dict-new' data-word='fascination'>fascination</span> with history. They study how <span class='dict-word dict-new' data-word='backward'>backward</span> policies led to <span class='dict-word dict-review' data-word='epidemic'>epidemic</span>s and <span class='dict-word dict-review' data-word='disease'>disease</span>s.</p><p class='story-paragraph'><span class='dict-word dict-new' data-word='coordination'>Coordination</span> between communities is key. <span class='dict-word dict-review' data-word='mental'>Mental</span> health <span class='dict-word dict-new' data-word='awareness'>awareness</span> is also important. <span class='dict-word dict-review' data-word='bacteria'>Bacteria</span> can cause <span class='dict-word dict-review' data-word='disease'>disease</span>, but social <span class='dict-word dict-review' data-word='disease'>disease</span>s like <span class='dict-word dict-new' data-word='discrimination'>discrimination</span> are more harmful.</p><p class='story-paragraph'>The <span class='dict-word dict-new' data-word='charter'>charter</span>&#x27;s success depends on everyone&#x27;s effort. A <span class='dict-word dict-new' data-word='peaceful'>peaceful</span> society requires constant work.</p></div><details><summary>中文梗概</summary><p>一个共和国的新宪章旨在消除歧视，促进和平共处。人们对历史着迷，研究落后政策如何导致流行病和疾病。社区间的协调至关重要，心理健康意识也很重要。细菌能引起疾病，但歧视这样的社会病更害人。宪章的成功需要每个人的努力，和平社会需要持续建设。</p></details><p class='muted'>读完整篇 → 进入 ④ 输出挑战。</p></section><section class='q cloze' data-block='output' data-card='1' data-answer='discrimination'><div class='qhead'><span class='qn'>完·1</span><b>完形填空</b></div><p class='sentence'>The republic&#x27;s new charter aims to end ______.</p><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='clo1' value='discrimination'> discrimination</label><label class='opt ' data-correct='0'><input type='radio' name='clo1' value='peaceful'> peaceful</label><label class='opt ' data-correct='0'><input type='radio' name='clo1' value='republic'> republic</label><label class='opt ' data-correct='0'><input type='radio' name='clo1' value='fascination'> fascination</label></div><div class='feedback hidden' data-answer='discrimination'><p class='fb-line'>📌 <b>答案：</b>discrimination — 歧视；区别对待</p><p class='fb-line'>📝 <b>完整句子：</b>The republic&#x27;s new charter aims to end ______.</p><p class='fb-line'>💡 <b>考点：</b>动词end后接名词作宾语，意为‘歧视’，符合句意‘结束歧视’。其他选项词性或语义不符。</p><p class='fb-line'>🔎 <b>选项辨析：</b></p><ul class='explain'><li><b>discrimination</b>：歧视；区别对待 <span class="tag-correct">✓</span></li><li><b>peaceful</b>：平静的，和平的</li><li><b>republic</b>：共和国，共和政体</li><li><b>fascination</b>：强烈的吸引力；入迷的状态</li></ul></div></section><section class='q cloze' data-block='output' data-card='2' data-answer='fascination'><div class='qhead'><span class='qn'>完·2</span><b>完形填空</b></div><p class='sentence'>Many people have a ______ with history.</p><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='clo2' value='fascination'> fascination</label><label class='opt ' data-correct='0'><input type='radio' name='clo2' value='backward'> backward</label><label class='opt ' data-correct='0'><input type='radio' name='clo2' value='awareness'> awareness</label><label class='opt ' data-correct='0'><input type='radio' name='clo2' value='coordination'> coordination</label></div><div class='feedback hidden' data-answer='fascination'><p class='fb-line'>📌 <b>答案：</b>fascination — 强烈的吸引力；入迷的状态</p><p class='fb-line'>📝 <b>完整句子：</b>Many people have a ______ with history.</p><p class='fb-line'>💡 <b>考点：</b>have a fascination with是固定搭配，意为‘对…着迷’。其他选项不能与have a…with搭配。</p><p class='fb-line'>🔎 <b>选项辨析：</b></p><ul class='explain'><li><b>fascination</b>：强烈的吸引力；入迷的状态 <span class="tag-correct">✓</span></li><li><b>backward</b>：向后；倒退的；落后的</li><li><b>awareness</b>：意识；知晓；察觉</li><li><b>coordination</b>：协调；配合；协作</li></ul></div></section><section class='q cloze' data-block='output' data-card='3' data-answer='Coordination'><div class='qhead'><span class='qn'>完·3</span><b>完形填空</b></div><p class='sentence'>______ between communities is key.</p><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='clo3' value='Coordination'> Coordination</label><label class='opt ' data-correct='0'><input type='radio' name='clo3' value='Discrimination'> Discrimination</label><label class='opt ' data-correct='0'><input type='radio' name='clo3' value='Bacteria'> Bacteria</label><label class='opt ' data-correct='0'><input type='radio' name='clo3' value='Epidemic'> Epidemic</label></div><div class='feedback hidden' data-answer='Coordination'><p class='fb-line'>📌 <b>答案：</b>Coordination — </p><p class='fb-line'>📝 <b>完整句子：</b>______ between communities is key.</p><p class='fb-line'>💡 <b>考点：</b>名词作主语，意为‘协调’，符合句意‘社区间的协调是关键’。其他选项语义不符。</p><p class='fb-line'>🔎 <b>选项辨析：</b></p><ul class='explain'><li><b>Coordination</b>： <span class="tag-correct">✓</span></li><li><b>Discrimination</b>：</li><li><b>Bacteria</b>：</li><li><b>Epidemic</b>：</li></ul></div></section><section class='q cloze' data-block='output' data-card='4' data-answer='disease'><div class='qhead'><span class='qn'>完·4</span><b>完形填空</b></div><p class='sentence'>Bacteria can cause ______, but social diseases like discrimination are more harmful.</p><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='clo4' value='disease'> disease</label><label class='opt ' data-correct='0'><input type='radio' name='clo4' value='mental'> mental</label><label class='opt ' data-correct='0'><input type='radio' name='clo4' value='backward'> backward</label><label class='opt ' data-correct='0'><input type='radio' name='clo4' value='charter'> charter</label></div><div class='feedback hidden' data-answer='disease'><p class='fb-line'>📌 <b>答案：</b>disease — 疾病</p><p class='fb-line'>📝 <b>完整句子：</b>Bacteria can cause ______, but social diseases like discrimination are more harmful.</p><p class='fb-line'>💡 <b>考点：</b>cause后接名词，意为‘疾病’，与bacteria搭配合理。其他选项不符合语境。</p><p class='fb-line'>🔎 <b>选项辨析：</b></p><ul class='explain'><li><b>disease</b>：疾病 <span class="tag-correct">✓</span></li><li><b>mental</b>：心理的；精神的；脑力的</li><li><b>backward</b>：向后；倒退的；落后的</li><li><b>charter</b>：宪章；特许状；包租</li></ul></div></section><section class='q cloze' data-block='output' data-card='5' data-answer='charter'><div class='qhead'><span class='qn'>完·5</span><b>完形填空</b></div><p class='sentence'>The ______&#x27;s success depends on everyone&#x27;s effort.</p><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='clo5' value='charter'> charter</label><label class='opt ' data-correct='0'><input type='radio' name='clo5' value='republic'> republic</label><label class='opt ' data-correct='0'><input type='radio' name='clo5' value='awareness'> awareness</label><label class='opt ' data-correct='0'><input type='radio' name='clo5' value='coordination'> coordination</label></div><div class='feedback hidden' data-answer='charter'><p class='fb-line'>📌 <b>答案：</b>charter — 宪章；特许状；包租</p><p class='fb-line'>📝 <b>完整句子：</b>The ______&#x27;s success depends on everyone&#x27;s effort.</p><p class='fb-line'>💡 <b>考点：</b>名词所有格，意为‘宪章’，指前文提到的文件。其他选项语义不符。</p><p class='fb-line'>🔎 <b>选项辨析：</b></p><ul class='explain'><li><b>charter</b>：宪章；特许状；包租 <span class="tag-correct">✓</span></li><li><b>republic</b>：共和国，共和政体</li><li><b>awareness</b>：意识；知晓；察觉</li><li><b>coordination</b>：协调；配合；协作</li></ul></div></section><section class='q writing' data-block='output' data-card='6'><div class='qhead'><b>自由写作</b></div><p class='prompt'>用这三个词写2-3句：republic、awareness、coordination</p><textarea rows='4' placeholder='写 2-3 句…'></textarea><button type='button' data-act='check-writing'>检查（LLM 一句反馈）</button><div class='writing-msg'></div></section><section class='q report-card' data-block='report' data-card='1'><div class='report-hero'>🎉</div><h2 class='report-title'>今日学习报告</h2><p class='report-sub'>先思考 → 再输入 → 再输出，完成度记录在这里。</p><div class='report-stats' id='report-stats'></div><div class='report-weak' id='report-weak'></div><p class='report-tip' id='report-tip'></p></section>
+</div>
+<div class="card-nav">
+  <button class="nav-prev" data-nav="prev">← 上一张</button>
+  <span class="nav-pos" id="nav-pos">1 / 1</span>
+  <button class="nav-next" data-nav="next">下一张 →</button>
+</div>
+<div class="footer">小韩陪你学英语 · 先思考 → 再输入 → 再输出</div>
+<div class="study-done hidden" id="study-done">🎉 今日学习完成</div>
+
+<!-- 点读词典弹窗 -->
+<div class="dict-modal" id="dict-modal"><div class="dict-box-wrap">
+  <button class="dict-close" id="dict-close">×</button>
+  <div class="dict-box" id="dict-box"></div>
+</div></div>
+
+<script>
+(function(){
+  var DICT = {"discrimination": {"ph": "/dɪˌskrɪmɪˈneɪʃn/", "zh": "歧视；区别对待", "au": "discrimination_en"}, "peaceful": {"ph": "UK /ˈpi:sfl/ US /pisfəl/", "zh": "平静的，和平的", "au": "peaceful_en"}, "republic": {"ph": "/rɪ'pʌblɪk/", "zh": "共和国，共和政体", "au": "republic_en"}, "fascination": {"ph": "UK /,fæsɪ'neɪʃ(ə)n/ US /,fæsɪ'neʃən/", "zh": "强烈的吸引力；入迷的状态", "au": "fascination_en"}, "awareness": {"ph": "UK /əˈweənəs/ US /ə'wɛrnəs/", "zh": "意识；知晓；察觉", "au": "awareness_en"}, "coordination": {"ph": "UK /kəuˌɔːdɪ'neɪʃn/ US /ko,ɔrdɪ'neʃən/", "zh": "协调；配合；协作", "au": "coordination_en"}, "backward": {"ph": "UK /bækwəd/ US /bækwɚd/", "zh": "向后；倒退的；落后的", "au": "backward_en"}, "charter": {"ph": "UK /tʃɑːtə/ US /tʃɑrtɚ/", "zh": "宪章；特许状；包租", "au": "charter_en"}, "bacteria": {"ph": "UK /bæk'tɪərɪə/ US /bæk'tɪrɪə/", "zh": "细菌（单数 bacterium）", "au": "bacteria_en"}, "epidemic": {"ph": "UK /ˌepɪ'demɪk/ US /,ɛpɪ'dɛmɪk/", "zh": "流行病；流行性的", "au": "epidemic_en"}, "mental": {"ph": "/ˈmentl/", "zh": "心理的；精神的；脑力的", "au": "mental_en"}, "disease": {"ph": "UK /dɪ'ziːz/ US /dɪ'ziz/", "zh": "疾病", "au": "disease_en"}};
+  var DAY = 120;
+  var stage = document.getElementById('stage');
+  var cards = Array.prototype.slice.call(stage.querySelectorAll('.q'));
+  var bar = document.getElementById('bar');
+  var counter = document.getElementById('counter');
+  var blocksEl = document.getElementById('blocks');
+  var BLOCK_NAMES = { 'intro': '开始', 'words': '一词一卡',
+                      'word_forms': '词性转化', 'article_logic': '文章逻辑',
+                      'reading': '阅读', 'output': '输出', 'report': '报告' };
+  var groups = {};
+  cards.forEach(function(c){
+    var b = c.getAttribute('data-block');
+    (groups[b] = groups[b] || []).push(c);
+  });
+  var firstCardOfBlock = {};
+  Object.keys(groups).forEach(function(b){
+    firstCardOfBlock[b] = groups[b][0];
+    var btn = document.createElement('button');
+    btn.textContent = BLOCK_NAMES[b] || b;
+    btn.setAttribute('data-block', b);
+    btn.addEventListener('click', function(){ showCard(firstCardOfBlock[b]); });
+    blocksEl.appendChild(btn);
+  });
+  var curIdx = 0;
+  function showCard(c){
+    cards.forEach(function(x){ x.classList.remove('active'); });
+    c.classList.add('active');
+    curIdx = cards.indexOf(c);
+    bar.style.width = (100 * (curIdx + 1) / cards.length) + '%';
+    counter.textContent = (curIdx + 1) + ' / ' + cards.length;
+    Array.prototype.forEach.call(blocksEl.children, function(b){
+      b.classList.toggle('on', b.getAttribute('data-block') === c.getAttribute('data-block'));
+    });
+    document.getElementById('nav-pos').textContent = (curIdx + 1) + ' / ' + cards.length;
+    document.querySelectorAll('.card-nav button').forEach(function(b){
+      var dir = b.getAttribute('data-nav');
+      b.disabled = (dir === 'prev' && curIdx === 0) || (dir === 'next' && curIdx === cards.length - 1);
+    });
+    window.scrollTo(0, 0);
+  }
+  function navNext(){ if (curIdx < cards.length - 1) showCard(cards[curIdx + 1]); }
+  function navPrev(){ if (curIdx > 0) showCard(cards[curIdx - 1]); }
+  document.body.addEventListener('click', function(e){
+    var t = e.target.closest('[data-nav]');
+    if (!t) return;
+    if (t.getAttribute('data-nav') === 'next') navNext(); else navPrev();
+  });
+
+  // 词卡：评分 → 揭晓输入 + 展开输出（含进度计数 / 离线兜底 / 自动完成）
+  var ratings = {};  // word -> quality（会话内）
+  var wcards = Array.prototype.slice.call(document.querySelectorAll('.wcard'));
+  var ratedSet = {};  // word -> true（含 localStorage 恢复）
+  var LS_RATINGS = 'xiaohan_ratings_' + DAY;
+  var LS_PENDING = 'xiaohan_pending_' + DAY;
+  function lsGet(k){ try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch(e){ return null; } }
+  function lsSet(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+  var savedRatings = lsGet(LS_RATINGS) || {};
+  Object.keys(savedRatings).forEach(function(w){
+    if (savedRatings[w]) ratedSet[w] = true;
+  });
+  function ratedCount(){
+    var n = 0;
+    wcards.forEach(function(c){
+      if (ratedSet[c.getAttribute('data-word')]) n++;
+    });
+    return n;
+  }
+  function refreshRateChip(){
+    var chip = document.getElementById('rate-chip');
+    if (!chip) return;
+    var n = ratedCount(), total = wcards.length;
+    chip.textContent = '词卡 ' + n + '/' + total;
+    chip.classList.toggle('done', n === total);
+    if (n === total) chip.textContent += ' · 学完';
+  }
+  function showStudyDone(offlineOnly){
+    var el = document.getElementById('study-done');
+    if (!el) return;
+    el.textContent = offlineOnly
+      ? '🎉 今日词卡已全部评分（离线已存，联网后自动同步）'
+      : '🎉 今日学习完成！';
+    el.classList.remove('hidden');
+  }
+  // 同步端点列表：依次尝试，任一成功即视为已同步。
+  // 1) 同源相对路径（经本地服务页 http://127.0.0.1:8090/ 打开时）
+  // 2) 本地服务绝对地址（从桌面 file:// 直接打开学习单时，跨源 CORS 推送）
+  var SYNC_ENDPOINTS = ['/api/review', 'http://127.0.0.1:8090/api/review'];
+  function postSync(path, body){
+    var payload = {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(body)
+    };
+    var chain = Promise.resolve(false);
+    SYNC_ENDPOINTS.forEach(function(base){
+      var url = (base.indexOf('http') === 0 ? base : '');
+      chain = chain.then(function(ok){
+        if (ok) return true;
+        return fetch(url + path, payload).then(function(resp){ return resp.ok; }, function(){ return false; });
+      });
+    });
+    return chain;
+  }
+  function sendReview(word, q){
+    return postSync('/api/review', {word: word, quality: q, channel: 'study', day_num: DAY});
+  }
+  function flushPending(){
+    var pend = lsGet(LS_PENDING) || [];
+    if (!pend.length) return Promise.resolve();
+    var next = [];
+    pend.forEach(function(p){ next.push({word: p.word, q: p.q}); });
+    var queue = next.slice();
+    return queue.reduce(function(acc, item){
+      return acc.then(function(){ return sendReview(item.word, item.q); }).then(function(ok){
+        if (!ok) return;
+        var rest = [];
+        pend.forEach(function(p){
+          if (!(p.word === item.word && p.q === item.q)) rest.push(p);
+        });
+        pend = rest;
+        lsSet(LS_PENDING, pend);
+      });
+    }, Promise.resolve());
+  }
+  function maybeComplete(){
+    flushPending().then(function(){
+      return postSync('/api/study-complete', {day_num: DAY});
+    }).then(function(ok){
+      if (ok) showStudyDone(false); else showStudyDone(true);
+    }).catch(function(){ showStudyDone(true); });
+  }
+  function rateWord(card, q){
+    var word = card.getAttribute('data-word');
+    ratings[word] = q;
+    ratedSet[word] = true;
+    var s = lsGet(LS_RATINGS) || {};
+    s[word] = q;
+    lsSet(LS_RATINGS, s);
+    refreshRateChip();
+    sendReview(word, q).then(function(ok){
+      if (!ok) {
+        var pend = lsGet(LS_PENDING) || [];
+        pend.push({word: word, q: q});
+        lsSet(LS_PENDING, pend);
+      }
+      if (ratedCount() >= wcards.length) maybeComplete();
+    });
+  }
+  document.querySelectorAll('.wcard .rate').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var q = parseInt(btn.getAttribute('data-q'), 10);
+      var card = btn.closest('.wcard');
+      card.querySelectorAll('.rate').forEach(function(b){ b.classList.remove('sel'); });
+      btn.classList.add('sel');
+      card.querySelector('.phase-input').classList.remove('hidden');
+      card.querySelector('.phase-output').classList.remove('hidden');
+      var labels = {1: '忘了', 3: '模糊', 4: '想起', 5: '熟练'};
+      card.querySelector('.rate-msg').textContent = '已记录「' + (labels[q] || q) + '」—— 答案和讲解展开啦';
+      rateWord(card, q);
+    });
+  });
+  refreshRateChip();
+  // 打开页面即自动补推历史遗留评分（避免漏同步）
+  flushPending();
+
+  // 词卡输出小练习：选完立刻反馈
+  document.querySelectorAll('.wcard .opts input').forEach(function(r){
+    r.addEventListener('change', function(){
+      var card = r.closest('.wcard');
+      var word = card.getAttribute('data-word');
+      var ok = r.value === word;
+      card.querySelectorAll('label.opt').forEach(function(l){
+        l.classList.remove('right', 'wrong', 'soft');
+        if (l.getAttribute('data-correct') === '1') l.classList.add('right');
+        else if (l.querySelector('input').checked) l.classList.add('wrong');
+        else l.classList.add('soft');
+      });
+      var fb = card.querySelector('.out-fb');
+      if (fb) fb.classList.remove('hidden');
+    });
+  });
+
+  // 阅读点读词典 — 点击任意词访问小字典
+  function showDict(word, info) {
+    var audioHtml = info.au ? "<audio controls autoplay preload='auto' src='audio/" + info.au + ".mp3'></audio>" : '';
+    var defHtml = '';
+    if (info.def) {
+      defHtml = "<div class='d-def'>" + info.def + "</div>";
+    }
+    document.getElementById('dict-box').innerHTML =
+      "<div class='d-en'>" + word + "</div>" +
+      "<div class='d-ph'>" + (info.ph || '') + "</div>" +
+      "<div class='d-zh'>" + (info.zh || '') + "</div>" + defHtml +
+      audioHtml;
+    document.getElementById('dict-modal').classList.add('show');
+  }
+
+  // 已知词（当日目标词）的点击
+  document.querySelectorAll('.dict-word').forEach(function(sw){
+    sw.addEventListener('click', function(e){
+      e.stopPropagation();
+      var w = sw.getAttribute('data-word');
+      var info = DICT[w] || {};
+      showDict(w, info);
+    });
+  });
+
+  // 任意词点击查询 — 通过在线词典 API
+  document.querySelectorAll('.story-paragraph, .story-body').forEach(function(el){
+    el.addEventListener('click', function(e){
+      // 如果已经是 .dict-word 的点击，不要重复处理
+      if (e.target.closest('.dict-word')) return;
+      // 如果点击的是普通文本节点，获取选中的词
+      var sel = window.getSelection();
+      if (!sel || !sel.toString().trim()) {
+        // 没有选中文字，尝试获取点击位置的词
+        var t = e.target;
+        if (t.nodeType === 3) { // Text node
+          var text = t.textContent;
+          var range = document.createRange();
+          range.selectNodeContents(t);
+          var pos = e.offsetX;
+          // 简单处理：获取点击位置附近的词
+          var words = text.match(/\w+/g) || [];
+          if (words.length > 0) {
+            var word = words[Math.floor(words.length / 2)];
+            lookupWord(word);
+          }
+          return;
+        }
+        return;
+      }
+      var word = sel.toString().trim().toLowerCase();
+      if (word && word.length > 0 && word.length < 30) {
+        lookupWord(word);
+      }
+      sel.removeAllRanges();
+    });
+  });
+
+  function lookupWord(word) {
+    // 先查本地词典
+    var info = DICT[word];
+    if (info) {
+      showDict(word, info);
+      return;
+    }
+    // 再尝试在线 API
+    var apiUrl = 'https://api.dictionaryapi.dev/api/v2/entries/en/' + encodeURIComponent(word);
+    fetch(apiUrl)
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        if (Array.isArray(data) && data.length > 0) {
+          var entry = data[0];
+          var ph = entry.phonetic || (entry.phonetics && entry.phonetics[0] ? entry.phonetics[0].text : '') || '';
+          var meanings = entry.meanings || [];
+          var defs = [];
+          meanings.forEach(function(m){
+            (m.definitions || []).slice(0, 2).forEach(function(d){
+              defs.push('<span class="d-pos">' + (m.partOfSpeech || '') + '</span> ' + (d.definition || ''));
+            });
+          });
+          var defHtml = defs.join('<br>');
+          // 网络翻译（简单处理）
+          var zh = '';
+          if (meanings.length > 0 && meanings[0].definitions && meanings[0].definitions[0]) {
+            var syn = meanings[0].synonyms || [];
+            if (syn.length > 0) zh = '同义词：' + syn.slice(0, 3).join(', ');
+          }
+          showDict(word, {ph: ph, zh: zh, def: defHtml, au: ''});
+        } else {
+          showDict(word, {ph: '', zh: '未找到该词的定义', def: '', au: ''});
+        }
+      })
+      .catch(function(){
+        showDict(word, {ph: '', zh: '网络查询失败', def: '', au: ''});
+      });
+  }
+  document.getElementById('dict-close').addEventListener('click', function(){
+    document.getElementById('dict-modal').classList.remove('show');
+  });
+  document.getElementById('dict-modal').addEventListener('click', function(e){
+    if (e.target === this) this.classList.remove('show');
+  });
+
+  // 完形 / 预热共用反馈
+  function revealFeedback(card, isCorrect){
+    card.querySelectorAll('label.opt').forEach(function(l){
+      var input = l.querySelector('input');
+      l.classList.remove('right', 'wrong', 'soft');
+      if (l.getAttribute('data-correct') === '1') l.classList.add('right');
+      else if (input && input.checked) l.classList.add('wrong');
+      else l.classList.add('soft');
+    });
+    var fb = card.querySelector('.feedback');
+    if (fb) {
+      fb.classList.remove('hidden');
+      fb.classList.toggle('wrong', !isCorrect);
+    }
+  }
+  cards.forEach(function(card){
+    if (card.classList.contains('wcard')) return;
+    card.querySelectorAll('input[type=radio]').forEach(function(r){
+      r.addEventListener('change', function(){
+        var ans = card.getAttribute('data-answer');
+        revealFeedback(card, r.value === ans);
+      });
+    });
+  });
+
+  // 写作反馈
+  document.querySelectorAll('[data-act="check-writing"]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var card = btn.closest('.q');
+      var ta = card.querySelector('textarea');
+      var sentence = (ta.value || '').trim();
+      if (!sentence) { card.querySelector('.writing-msg').textContent = '请先写一句'; return; }
+      var prompt = card.querySelector('.prompt').textContent;
+      var m = prompt.match(/用.{0,20}?(\w+)[、，](\w+)[、，](\w+)/);
+      var word = m ? m[1] : 'word';
+      btn.disabled = true; btn.textContent = '反馈中…';
+      fetch('/api/check', {
+        method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({word: word, sentence: sentence})
+      }).then(function(r){ return r.json(); }).then(function(d){
+        var msg = card.querySelector('.writing-msg');
+        if (d.error) { msg.textContent = d.error; return; }
+        msg.textContent = (d.ok ? '✓ ' : '⚠ ') + d.feedback;
+      }).catch(function(e){
+        card.querySelector('.writing-msg').textContent = '反馈失败：' + e;
+      }).finally(function(){ btn.disabled = false; btn.textContent = '检查（LLM 一句反馈）'; });
+    });
+  });
+
+  // 键盘
+  document.addEventListener('keydown', function(e){
+    if (e.target && (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT')) return;
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); navNext(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); navPrev(); }
+    else if (['1','2','3','4'].indexOf(e.key) >= 0) {
+      var cur = cards[curIdx];
+      if (!cur || !cur.classList.contains('wcard')) return;
+      var map = {'1': 1, '2': 3, '3': 4, '4': 5};
+      var q = map[e.key];
+      var btn = cur.querySelector('.rate[data-q="' + q + '"]');
+      if (btn) btn.click();
+    }
+  });
+
+  // 学习报告：会话内汇总
+  function renderReport(){
+    var stats = {'1': 0, '3': 0, '4': 0, '5': 0};
+    var weak = [];
+    Object.keys(ratings).forEach(function(w){
+      stats[ratings[w]]++;
+      if (ratings[w] <= 3) weak.push(w);
+    });
+    var labels = {1: '忘了', 3: '模糊', 4: '想起', 5: '熟练'};
+    var cols = ['1','3','4','5'].map(function(q){
+      return "<div class='stat'><b>" + stats[q] + "</b><span>" + labels[q] + "</span></div>";
+    }).join('');
+    document.getElementById('report-stats').innerHTML = cols;
+    var weakEl = document.getElementById('report-weak');
+    if (weak.length) {
+      weakEl.innerHTML = "⚠️ 明天优先复习：<b>" + weak.join('、') + "</b><br>" +
+        "睡前再听一遍故事音频，回忆这些词出现的语境。";
+    } else {
+      weakEl.innerHTML = "🌟 今天没有弱项！每个词都记牢了，太棒了。";
+    }
+  }
+  var reportCard = document.querySelector('.report-card');
+  if (reportCard) {
+    // 进入报告卡时渲染（在 showCard 里通过 MutationObserver 太复杂，直接监听点击）
+    var obs = new MutationObserver(function(){
+      if (reportCard.classList.contains('active')) renderReport();
+    });
+    obs.observe(reportCard, {attributes: true, attributeFilter: ['class']});
+  }
+
+  if (cards.length > 0) showCard(cards[0]);
+})();
+</script>
+</body>
+</html>

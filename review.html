@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>复习 · 小韩英语角</title>
+<style>
+
+  :root {
+    --bg: #F7F5F2; --card: #ffffff; --ink: #1A1A2E; --muted: #8B8FA3;
+    --line: #E8E4DE; --accent: #E85D3A; --accent-light: #FFF0EA;
+    --navy: #1B2A4A; --ok: #2E9E6B; --bad: #E74C3C;
+    --radius: 24px; --radius-sm: 14px;
+    --shadow: 0 1px 4px rgba(27,42,74,0.04), 0 2px 12px rgba(27,42,74,0.06);
+    --shadow-lg: 0 4px 12px rgba(27,42,74,0.06), 0 8px 32px rgba(27,42,74,0.10);
+    --font: "PingFang SC", "Microsoft YaHei", -apple-system, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); background: var(--bg); color: var(--ink);
+         -webkit-font-smoothing: antialiased; padding-bottom: 60px; }
+  a { color: var(--accent); text-decoration: none; }
+
+  .topnav { position: sticky; top: 0; z-index: 30;
+    background: linear-gradient(135deg, #1B2A4A 0%, #243B5E 100%);
+    color: #fff; padding: 12px 20px; box-shadow: var(--shadow-lg); }
+  .topnav-in { max-width: 1040px; margin: 0 auto; display: flex;
+    align-items: center; gap: 18px; flex-wrap: wrap; }
+  .topnav .brand { color: #fff; font-weight: 800; font-size: 17px; }
+  .topnav .brand em { font-style: normal; font-weight: 400; font-size: 13px;
+    opacity: .75; margin-left: 6px; }
+  .topnav .navlinks { display: flex; gap: 14px; flex: 1; }
+  .topnav .navlinks a { color: rgba(255,255,255,.82); font-size: 14px; padding: 4px 2px;
+    border-bottom: 2px solid transparent; }
+  .topnav .navlinks a:hover { color: #fff; border-bottom-color: var(--accent); }
+  .topnav-date { font-size: 13px; opacity: .7; }
+
+  .hero { background: linear-gradient(135deg, #1B2A4A 0%, #2C4470 60%, #3A5687 100%);
+    color: #fff; padding: 30px 20px 34px; }
+  .hero-main { max-width: 1040px; margin: 0 auto; }
+  .hero h1 { font-size: 22px; font-weight: 800; letter-spacing: .5px; }
+  .hero h1 b { color: #FFB49A; }
+  .hero-progress { display: flex; align-items: center; gap: 12px; margin: 18px 0 14px; }
+  .hero-bar { flex: 1; height: 14px; background: rgba(255,255,255,.15);
+    border-radius: 8px; overflow: hidden; }
+  .hero-bar span { display: block; height: 100%;
+    background: linear-gradient(90deg, #FF8A65, #FFB49A); border-radius: 8px;
+    transition: width .6s; }
+  .hero-pct { font-weight: 800; font-size: 16px; min-width: 52px; }
+  .hero-chips { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+  .chip { background: rgba(255,255,255,.10); border: 1px solid rgba(255,255,255,.14);
+    border-radius: 14px; padding: 8px 16px; min-width: 92px; }
+  .chip b { display: block; font-size: 22px; font-weight: 800; color: #FFC4AC; }
+  .chip span { font-size: 12px; opacity: .8; }
+  .hero-meta { font-size: 13px; opacity: .9; line-height: 1.7; }
+  .hero-meta b { color: #FFC4AC; }
+
+  main { max-width: 1040px; margin: 0 auto; padding: 24px 20px 0;
+    display: flex; flex-direction: column; gap: 22px; }
+  .card { background: var(--card); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow); }
+  .card-head { display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+  .card-head h2 { font-size: 18px; font-weight: 800; }
+  .card-head-r { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .hint { font-size: 12px; color: var(--muted); }
+  .sub-h { font-size: 14px; font-weight: 700; margin: 18px 0 10px; }
+
+  .notice { border-radius: var(--radius-sm); padding: 12px 16px; font-size: 14px;
+    margin-bottom: 14px; line-height: 1.7; }
+  .notice.ok { background: #ECFDF5; border: 1px solid #A7F3D0; color: #065F46; }
+  .notice.warn { background: #FFF7ED; border: 1px solid #FED7AA; color: #9A3412; }
+  .notice code { background: rgba(0,0,0,.06); padding: 1px 6px; border-radius: 6px; }
+
+  .day-info { display: flex; align-items: center; gap: 10px; font-size: 14px;
+    color: var(--muted); flex-wrap: wrap; }
+  .day-num { font-weight: 800; color: var(--accent); font-size: 16px; }
+  .day-badge { font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px; }
+  .badge-todo { background: #FFF7ED; color: #C2410C; border: 1px solid #FED7AA; }
+  .badge-done { background: #ECFDF5; color: #047857; border: 1px solid #A7F3D0; }
+  .badge-absent { background: #F3F4F6; color: #6B7280; border: 1px solid #E5E7EB; }
+
+  .day-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    margin-bottom: 16px; }
+  .btn { border: none; border-radius: 12px; padding: 10px 18px; font-size: 14px;
+    font-weight: 700; cursor: pointer; font-family: var(--font); }
+  .btn:disabled { opacity: .6; cursor: wait; }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: #D94F2E; }
+  .btn-ghost { background: #F3F4F6; color: #374151; }
+  .btn-ghost:hover { background: #E5E7EB; }
+  .rating-progress { display: flex; align-items: center; gap: 10px;
+    flex-wrap: wrap; }
+  .rp-label { font-size: 13px; color: #374151; white-space: nowrap; }
+  .rp-label b { color: var(--accent); }
+  .rp-track { width: 140px; height: 8px; border-radius: 999px;
+    background: #E5E7EB; overflow: hidden; }
+  .rp-fill { height: 100%; background: linear-gradient(90deg, #E85D3A, #F0A07A);
+    border-radius: 999px; transition: width .3s ease; }
+  .rp-done { font-size: 12px; color: var(--ok, #2E9E6B); font-weight: 700; }
+
+  .study-wrap { border: 1px solid var(--line); border-radius: var(--radius-sm);
+    overflow: hidden; background: #FBF9F6; }
+  .study-frame { width: 100%; height: 1200px; border: 0; display: block; }
+
+  .week-row { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px;
+    margin-bottom: 18px; }
+  .week-cell { background: var(--bg); border: 1px solid var(--line);
+    border-radius: var(--radius-sm); padding: 10px 6px; text-align: center; }
+  .week-cell.today { border-color: var(--accent); background: var(--accent-light); }
+  .week-cell .week-dow { display: block; font-size: 12px; font-weight: 700; }
+  .week-cell .week-date { display: block; font-size: 11px; color: var(--muted);
+    margin: 2px 0 6px; }
+  .week-cell b { font-size: 20px; color: var(--accent); }
+
+  .due-item { display: flex; align-items: flex-start; gap: 14px;
+    border: 1px solid var(--line); border-radius: var(--radius-sm);
+    padding: 12px 14px; margin-bottom: 10px; background: var(--bg); }
+  .due-item.rated { opacity: .55; }
+  .due-info { flex: 1; min-width: 0; }
+  .due-info b { font-size: 16px; }
+  .phon { font-size: 12px; color: var(--muted); margin-left: 8px; }
+  .due-info audio { height: 30px; margin: 6px 0 2px; width: 240px; max-width: 100%; }
+  .due-meaning { font-size: 13px; color: #374151; margin-top: 4px; }
+  .due-ex { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .overdue-badge { font-size: 11px; background: #FEF2F2; color: var(--bad);
+    border: 1px solid #FECACA; padding: 2px 8px; border-radius: 999px; margin-left: 8px; }
+  .rating { display: flex; gap: 8px; flex-wrap: wrap; }
+  .rating button { border: 1px solid var(--line); background: #fff; border-radius: 10px;
+    padding: 8px 12px; font-size: 13px; cursor: pointer; font-family: var(--font); }
+  .rating button:hover { border-color: var(--accent); color: var(--accent); }
+  .rated-tag { font-size: 12px; color: var(--ok); font-weight: 700; }
+  .rated-tag.bad { color: var(--bad); }
+  .empty-hint { color: var(--muted); font-size: 13px; padding: 8px 0; }
+
+  /* 测验 */
+  #quiz-box { min-height: 220px; }
+  .quiz-bar { display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    margin: 0 0 16px; font-size: 13px; color: var(--muted); }
+  .quiz-bar label { display: inline-flex; align-items: center; gap: 6px; }
+  .quiz-bar select { border: 1px solid var(--line); border-radius: 10px;
+    padding: 7px 10px; font-size: 14px; background: #fff; color: var(--ink);
+    outline: none; cursor: pointer; font-family: var(--font); }
+  .quiz-bar select:focus { border-color: var(--accent); }
+  .quiz-bar .btn { margin-left: auto; }
+  .quiz-top { display: flex; gap: 16px; font-size: 13px; color: var(--muted);
+    margin-bottom: 14px; align-items: center; }
+  .quiz-score b, .quiz-streak b { color: var(--accent); font-size: 16px; }
+  .quiz-q { border: 1px solid var(--line); border-radius: var(--radius-sm);
+    padding: 18px; background: var(--bg); }
+  .quiz-tag { font-size: 12px; background: var(--navy); color: #fff;
+    padding: 3px 10px; border-radius: 999px; }
+  .quiz-prompt { font-size: 20px; font-weight: 800; margin: 14px 0 16px;
+    line-height: 1.5; }
+  .quiz-prompt .phon { font-weight: 400; font-size: 14px; color: var(--muted);
+    margin-left: 10px; }
+  .quiz-speak { display: inline-flex; align-items: center; justify-content: center;
+    width: 30px; height: 30px; margin-left: 10px; border: 1px solid var(--line);
+    background: #fff; border-radius: 50%; font-size: 15px; cursor: pointer;
+    vertical-align: middle; transition: border-color .15s, transform .1s; }
+  .quiz-speak:hover { border-color: var(--accent); transform: scale(1.08); }
+  .quiz-opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px; }
+  .q-opt { border: 1px solid var(--line); background: #fff; border-radius: 12px;
+    padding: 12px; font-size: 15px; cursor: pointer; font-family: var(--font);
+    text-align: left; }
+  .q-opt:hover { border-color: var(--accent); }
+  .q-opt:disabled { cursor: default; }
+  .q-opt.right { background: #ECFDF5; border-color: var(--ok); color: #047857; }
+  .q-opt.wrong { background: #FEF2F2; border-color: var(--bad); color: var(--bad); }
+  .quiz-fb { margin-top: 14px; }
+  .quiz-fb-inner { border-radius: 12px; padding: 12px 14px; font-size: 14px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    flex-wrap: wrap; }
+  .quiz-fb-inner.ok { background: #ECFDF5; color: #065F46; }
+  .quiz-fb-inner.bad { background: #FEF2F2; color: #991B1B; }
+  .q-next { margin-left: auto; }
+  .quiz-done { text-align: center; padding: 26px 10px; }
+  .quiz-score-big { font-size: 44px; font-weight: 800; color: var(--accent); }
+  .quiz-done p { margin: 8px 0 14px; color: var(--muted); font-size: 14px; }
+  .quiz-wrong { background: var(--bg); border: 1px solid var(--line);
+    border-radius: var(--radius-sm); padding: 14px; margin: 10px auto 16px;
+    max-width: 620px; text-align: left; font-size: 13px; }
+  .tag-wrong { display: inline-block; background: #FEF2F2; color: var(--bad);
+    border: 1px solid #FECACA; border-radius: 999px; padding: 3px 10px;
+    margin: 3px 4px 0 0; font-size: 12px; }
+  .quiz-stats { margin-top: 14px; font-size: 13px; color: var(--muted); }
+  .quiz-stats b { color: var(--ink); }
+
+  /* 热力图 */
+  .heat-wrap { display: grid; grid-template-columns: repeat(13, 1fr);
+    grid-auto-rows: 18px; gap: 4px; }
+  .cell { border-radius: 5px; background: #F1EFEA; }
+  .cell.done { background: #34D399; }
+  .cell.todo { background: #FBBF24; }
+  .cell.absent { background: #D1D5DB; }
+  .cell.today { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .heat-wrap a.cell { display: block; cursor: pointer; }
+  .heat-wrap a.cell:hover { outline: 2px solid var(--accent); outline-offset: 1px;
+    transform: scale(1.15); }
+  .heat-legend { display: flex; gap: 16px; margin-top: 12px; font-size: 12px;
+    color: var(--muted); flex-wrap: wrap; }
+  .heat-legend i { display: inline-block; width: 12px; height: 12px;
+    border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+  .lg.done { background: #34D399; } .lg.todo { background: #FBBF24; }
+  .lg.absent { background: #D1D5DB; } .lg.empty { background: #F1EFEA; }
+  .day-pick { display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+    font-size: 13px; color: var(--muted); flex-wrap: wrap; }
+  .day-pick select { padding: 6px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--bg); color: var(--ink);
+    font-size: 13px; max-width: 380px; }
+  .recent { list-style: none; }
+  .recent li { padding: 7px 0; border-bottom: 1px dashed var(--line);
+    font-size: 14px; }
+  .recent li b { color: var(--accent); }
+  .recent a.recent-link { color: inherit; text-decoration: none; }
+  .recent a.recent-link:hover { color: var(--accent); }
+  .recent li:last-child { border-bottom: 0; }
+
+  .quick-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px; }
+  .quick-link { border: 1px solid var(--line); border-radius: var(--radius-sm);
+    padding: 16px; font-size: 14px; font-weight: 700; color: var(--ink);
+    background: var(--bg); transition: all .15s; }
+  .quick-link:hover { border-color: var(--accent); color: var(--accent);
+    transform: translateY(-2px); }
+
+  footer { text-align: center; color: var(--muted); font-size: 12px;
+    margin-top: 30px; padding: 0 20px; }
+
+  @media (max-width: 720px) {
+    .week-row { grid-template-columns: repeat(4, 1fr); }
+    .heat-wrap { grid-template-columns: repeat(10, 1fr); }
+  }
+
+  /* 导航高亮 */
+  .topnav .navlinks a.active { color: #fff; border-bottom-color: var(--accent);
+    font-weight: 700; }
+
+  /* 指挥中心：模块入口卡片 */
+  .module-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 14px; }
+  .module-card { display: flex; flex-direction: column; gap: 4px;
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 18px 16px; box-shadow: var(--shadow);
+    color: var(--ink); text-decoration: none; transition: all .15s; }
+  .module-card:hover { border-color: var(--accent); color: var(--accent);
+    transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+  .mc-icon { font-size: 22px; }
+  .mc-title { font-size: 16px; font-weight: 800; margin-top: 4px; }
+  .mc-sub { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .mc-sub b { color: var(--ink); }
+  .mc-badge { margin-top: 6px; font-size: 12px; font-weight: 700;
+    color: var(--accent); }
+
+  @media (max-width: 720px) {
+    .module-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+}
+
+  /* 单词解说弹窗 */
+  .we-modal { position: fixed; inset: 0; z-index: 100; display: flex;
+    align-items: center; justify-content: center; }
+  .we-overlay { position: absolute; inset: 0; background: rgba(27,42,74,0.4);
+    backdrop-filter: blur(6px); }
+  .we-box { position: relative; width: min(92vw, 720px); max-height: 85vh;
+    background: #fff; border-radius: 24px; box-shadow: 0 8px 32px rgba(27,42,74,0.12);
+    display: flex; flex-direction: column; overflow: hidden;
+    animation: cardIn 0.2s ease; }
+  .we-header { display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 24px; border-bottom: 1px solid var(--line);
+    background: linear-gradient(135deg, #1B2A4A 0%, #243B5E 100%); color: #fff;
+    flex-shrink: 0; }
+  .we-header h3 { font-size: 17px; font-weight: 800; }
+  .we-close { background: none; border: none; color: rgba(255,255,255,0.7);
+    font-size: 28px; cursor: pointer; line-height: 1; padding: 0 4px; }
+  .we-close:hover { color: #fff; }
+  .we-body { flex: 1; overflow-y: auto; padding: 16px 20px 20px; }
+  .we-word { border: 1px solid var(--line); border-radius: 16px;
+    margin-bottom: 14px; overflow: hidden; }
+  .we-word-head { display: flex; align-items: center; gap: 10px;
+    padding: 14px 16px; background: var(--bg); cursor: pointer;
+    transition: background 0.15s; }
+  .we-word-head:hover { background: #EDE8E0; }
+  .we-word-head .we-en { font-size: 18px; font-weight: 800; color: var(--navy); }
+  .we-word-head .we-ph { font-size: 13px; color: var(--muted); }
+  .we-word-head .we-zh { font-size: 15px; color: var(--accent); font-weight: 600;
+    margin-left: auto; }
+  .we-word-head .we-toggle { font-size: 14px; color: var(--muted); margin-left: 8px; }
+  .we-word-body { display: none; padding: 0 16px 16px; border-top: 1px solid var(--line); }
+  .we-word-body.open { display: block; }
+  .we-sec { margin: 12px 0; padding: 12px 14px; border-radius: 12px;
+    font-size: 14px; line-height: 1.7; }
+  .we-sec-title { font-weight: 700; font-size: 13px; margin-bottom: 6px; }
+  .we-sec.etym { background: #F0F9F2; border: 1px solid #C8E0D0; }
+  .we-sec.etym .we-sec-title { color: #1B8C3A; }
+  .we-sec.memory { background: #F5F3FF; border: 1px solid #DCD4F5; }
+  .we-sec.memory .we-sec-title { color: #6C5CE7; }
+  .we-sec.usage { background: #F0F7FC; border: 1px solid #C8DCE8; }
+  .we-sec.usage .we-sec-title { color: #2D7FC1; }
+  .we-sec.error { background: #FEF2F2; border: 1px solid #F0C8C8; }
+  .we-sec.error .we-sec-title { color: #E74C3C; }
+  .we-sec.exam { background: #F8F4FF; border: 1px solid #DCC4E8; }
+  .we-sec.exam .we-sec-title { color: #8B5CF6; }
+  .we-sec.family { background: #ECFDF5; border: 1px solid #A8D5BA; }
+  .we-sec.family .we-sec-title { color: #10B981; }
+  .we-sec.colloc { background: #EFF6FF; border: 1px solid #B8D4E8; }
+  .we-sec.colloc .we-sec-title { color: #3B82F6; }
+  .we-sec.examples { background: #F9F4FF; border: 1px solid #DCD4EC; }
+  .we-sec.examples .we-sec-title { color: #7C3AED; }
+  .we-sec.confuse { background: #FFFBEB; border: 1px solid #F0D4B8; }
+  .we-sec.confuse .we-sec-title { color: #F59E0B; }
+  .we-chip { display: inline-block; background: #fff; border: 1px solid var(--line);
+    border-radius: 999px; padding: 4px 12px; font-size: 13px; margin: 3px 4px 0 0; }
+  .we-chip b { color: var(--navy); }
+  .we-chip .chip-zh { color: var(--muted); font-weight: 400; margin-left: 4px; }
+  .we-err { margin: 6px 0; font-size: 13px; }
+  .we-err .wrong { color: #C0392B; text-decoration: line-through; }
+  .we-err .right { color: #1A8A5A; font-weight: 600; }
+  .we-err .note { color: #888; font-size: 12px; margin-top: 2px; }
+  .we-empty { color: var(--muted); font-size: 14px; padding: 20px; text-align: center; }
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(16px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+</style>
+</head>
+<body>
+<header class="topnav">
+  <div class="topnav-in">
+    <a class="brand" href="index.html">小韩英语角 <em>复习</em></a>
+    <nav class="navlinks"><a href='index.html'>指挥中心</a><a href='today.html'>今日任务</a><a href='review.html' class='active'>复习</a><a href='quiz.html'>测验</a><a href='records.html'>记录</a></nav>
+    <div class="topnav-date">2026-08-31</div>
+  </div>
+</header>
+
+
+<main>
+  <section class="card" id="review">
+    <div class="card-head">
+      <h2>复习调度</h2>
+      <span class="hint">逐词评分即打卡 · 1 忘了 / 3 模糊 / 5 熟练</span>
+    </div>
+    <div class="week-row"><div class='week-cell today' title='2026-08-31 · 到期 12 词'><span class='week-dow'>今天</span><span class='week-date'>8/31</span><b>12</b></div><div class='week-cell' title='2026-09-01 · 到期 0 词'><span class='week-dow'>二</span><span class='week-date'>9/1</span><b>0</b></div><div class='week-cell' title='2026-09-02 · 到期 0 词'><span class='week-dow'>三</span><span class='week-date'>9/2</span><b>0</b></div><div class='week-cell' title='2026-09-03 · 到期 1 词'><span class='week-dow'>四</span><span class='week-date'>9/3</span><b>1</b></div><div class='week-cell' title='2026-09-04 · 到期 0 词'><span class='week-dow'>五</span><span class='week-date'>9/4</span><b>0</b></div><div class='week-cell' title='2026-09-05 · 到期 0 词'><span class='week-dow'>六</span><span class='week-date'>9/5</span><b>0</b></div><div class='week-cell' title='2026-09-06 · 到期 0 词'><span class='week-dow'>日</span><span class='week-date'>9/6</span><b>0</b></div></div>
+    <div id="due-list"><p class='empty-hint'>今日到期复习词已全部消化 🎉</p></div>
+  </section>
+</main>
+
+
+<footer>小韩英语角 v2 · 先思考 → 再输入 → 再输出 · 每天 8 新词 + 4 复习</footer>
+
+<script>
+
+(function(){
+  var SERVER = false;
+
+  // ---- 旧锚点链接兼容：/#today 等跳转到独立页 ----
+  var hashTarget = {
+    '#today': SERVER ? '/today' : 'today.html',
+    '#review': SERVER ? '/review' : 'review.html',
+    '#quiz': SERVER ? '/quiz' : 'quiz.html',
+    '#records': SERVER ? '/records' : 'records.html'
+  }[location.hash];
+  if (hashTarget) { location.replace(hashTarget); return; }
+
+  // ---- 学习卡 iframe 高度自适应 ----
+  function fitFrames(){
+    document.querySelectorAll('iframe.study-frame').forEach(function(f){
+      try {
+        var h = f.contentDocument.documentElement.scrollHeight;
+        f.style.height = Math.min(h + 40, 16000) + 'px';
+      } catch(e){}
+    });
+  }
+  document.querySelectorAll('iframe.study-frame').forEach(function(f){
+    f.addEventListener('load', fitFrames);
+  });
+  window.addEventListener('resize', fitFrames);
+
+  // ---- 完成 / 缺勤 ----
+  document.querySelectorAll('[data-act]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var act = btn.getAttribute('data-act');
+      var day = parseInt(btn.getAttribute('data-day'), 10);
+      var url = act === 'complete' ? '/api/study-complete' : '/api/absent';
+      var payload = {day_num: day};
+      if (act === 'absent') {
+        var reason = window.prompt('缺勤原因（可留空）：', '当天没有学习');
+        if (reason === null) return;
+        payload.reason = reason || '当天没有学习';
+      }
+      btn.disabled = true; btn.textContent = '提交中…';
+      fetch(url, {method:'POST', headers:{'Content-Type':'application/json'},
+                  body: JSON.stringify(payload)})
+        .then(function(r){ return r.json(); })
+        .then(function(d){
+          if (d.ok) { location.reload(); }
+          else { alert('失败：' + (d.error || 'unknown')); btn.disabled = false; btn.textContent = act === 'complete' ? '✓ 完成今日学习' : '今天没学 · 标记缺勤'; }
+        })
+        .catch(function(){
+          alert('无法连接服务，标记失败（静态快照下请使用 xiaohan serve）');
+          btn.disabled = false; btn.textContent = act === 'complete' ? '✓ 完成今日学习' : '今天没学 · 标记缺勤';
+        });
+    });
+  });
+
+  // ---- 复习打卡 ----
+  document.querySelectorAll('.due-item button[data-q]').forEach(function(b){
+    b.addEventListener('click', function(){
+      var item = b.closest('.due-item');
+      var word = item.getAttribute('data-word');
+      var q = parseInt(b.getAttribute('data-q'), 10);
+      item.classList.add('rating-busy');
+      fetch('/api/review', {method:'POST', headers:{'Content-Type':'application/json'},
+                            body: JSON.stringify({word: word, quality: q, channel: 'home'})})
+        .then(function(r){ return r.json(); })
+        .then(function(d){
+          item.classList.remove('rating-busy');
+          if (d.ok) {
+            item.classList.add('rated');
+            item.querySelector('.rating').innerHTML = '<span class="rated-tag">✓ 已打卡 · ' + (d.new_state || '') + ' · 下次 ' + (d.due_date || '') + '</span>';
+          } else {
+            item.querySelector('.rating').innerHTML = '<span class="rated-tag bad">打卡失败：' + (d.error || '') + '</span>';
+          }
+        })
+        .catch(function(){
+          item.classList.remove('rating-busy');
+          item.querySelector('.rating').innerHTML = '<span class="rated-tag bad">静态快照无法打卡</span>';
+        });
+    });
+  });
+
+  // ---- 单词测验 ----
+  var QUIZ_BANK = [];
+  var qbox = document.getElementById('quiz-box');
+  var qCountSel = document.getElementById('quiz-count');
+  var qDirSel = document.getElementById('quiz-dir');
+  // ---- 记录：选择日期回学 ----
+  var dayPick = document.getElementById('day-pick');
+  if (dayPick) {
+    dayPick.addEventListener('change', function(){
+      if (dayPick.value) { location.href = dayPick.value; }
+    });
+  }
+
+  var quizStart = document.getElementById('quiz-start');
+
+  function shuffleArr(arr){
+    for (var i = arr.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+    }
+    return arr;
+  }
+
+  var quizBank = QUIZ_BANK.slice();   // 全部已学词（也是选项干扰词来源）
+  var quizPool = quizBank.slice();    // 待选池：本轮抽走的词移出，答错的词放回
+  var lastRound = [];                 // 上一轮题词：补池时先绕过，避免下一组整组重播
+  var roundWrong = [];                // 本轮答错的词（下一组放回池中，可再次出现）
+  var lastAudio = null;               // 复用同一个 Audio 对象
+
+  function speak(src){
+    if (!src) return;
+    try {
+      if (lastAudio) { try { lastAudio.pause(); } catch(e){} }
+      lastAudio = new Audio(src);
+      var p = lastAudio.play();
+      if (p && p.catch) p.catch(function(){});
+    } catch(e){}
+  }
+
+  function startQuiz(){
+    if (!qbox) return;
+    if (!quizBank || quizBank.length === 0) {
+      qbox.innerHTML = '<p class="empty-hint">已学词不足，先完成几天学习再来测验。</p>';
+      return;
+    }
+    // 上一轮答错的词放回待选池 → 下一组可再次出现（放回词库对象，而非字符串）
+    for (var wi = 0; wi < roundWrong.length; wi++) {
+      var bw = null;
+      for (var bi = 0; bi < quizBank.length; bi++) {
+        if (quizBank[bi].word === roundWrong[wi]) { bw = quizBank[bi]; break; }
+      }
+      if (bw && quizPool.indexOf(bw) === -1) quizPool.push(bw);
+    }
+    roundWrong = [];
+    var N = parseInt(qCountSel ? qCountSel.value : '10', 10) || 10;
+    // 待选池不足时从全库补足：先绕过上一轮刚测过的词，避免下一组整组重播
+    if (quizPool.length < N) {
+      var exclude = {};
+      for (var li = 0; li < lastRound.length; li++) exclude[lastRound[li].word] = true;
+      var cand = quizBank.filter(function(w){
+        return quizPool.indexOf(w) === -1 && !exclude[w.word];
+      });
+      shuffleArr(cand);
+      var need = N - quizPool.length;
+      var add = cand.slice(0, need);
+      if (add.length < need) {  // 已学词本身少于题量时，不得已才复用上一轮
+        var rest = quizBank.filter(function(w){ return quizPool.indexOf(w) === -1; });
+        shuffleArr(rest);
+        add = add.concat(rest.slice(0, need - add.length));
+      }
+      quizPool = quizPool.concat(add);
+    }
+    shuffleArr(quizPool);
+    var round = quizPool.splice(0, Math.min(N, quizPool.length));
+    lastRound = round;
+    var i = 0, score = 0, streak = 0, best = 0;
+    var results = [];
+
+    // 从全量词库挑 3 个干扰选项（避免与正确词/已选值重复）
+    function pickOptions(w, zh2en){
+      var srcs = quizBank.slice();
+      var dists = [], used = {};
+      while (dists.length < 3 && srcs.length) {
+        var idx = Math.floor(Math.random() * srcs.length);
+        var c = srcs.splice(idx, 1)[0];
+        var val = zh2en ? c.word : c.zh;
+        if (c.word === w.word) continue;
+        if (!zh2en && c.zh === w.zh) continue;
+        if (used[val]) continue;
+        used[val] = true;
+        dists.push(c);
+      }
+      return dists;
+    }
+    function buildQuestion(w){
+      var dir = qDirSel ? qDirSel.value : 'random';
+      var zh2en = dir === 'zh2en' ? true : (dir === 'en2zh' ? false : Math.random() < 0.5);
+      var dists = pickOptions(w, zh2en);
+      var opts = dists.map(function(d){ return zh2en ? d.word : d.zh; });
+      var ans = zh2en ? w.word : w.zh;
+      opts.push(ans);
+      shuffleArr(opts);
+      return {word: w.word, phonetic: w.phonetic, zh: w.zh,
+              type: zh2en ? 'zh2en' : 'en2zh', answer: ans, options: opts,
+              audio: w.audio || ''};
+    }
+    function qhead(){
+      return '<div class="quiz-top"><span class="quiz-pos">' + (i+1) + ' / ' + round.length + '</span>' +
+        '<span class="quiz-score">得分 <b>' + score + '</b></span>' +
+        '<span class="quiz-streak">连击 <b>' + streak + '</b></span></div>';
+    }
+    function show(){
+      var q = buildQuestion(round[i]);
+      var zh2en = q.type === 'zh2en';
+      var prompt = zh2en ? q.zh : q.word;
+      var ph = zh2en ? '' : '<span class="phon">' + q.phonetic + '</span>';
+      var spk = q.audio
+        ? '<button type="button" class="quiz-speak" data-src="' + q.audio.replace(/"/g,'&quot;') + '" title="播放读音">🔊</button>'
+        : '';
+      var opts = q.options.map(function(o){
+        return '<button type="button" class="q-opt" data-v="' + o.replace(/"/g,'&quot;') + '">' + o + '</button>';
+      }).join('');
+      qbox.innerHTML = qhead() +
+        '<div class="quiz-q"><span class="quiz-tag">' + (zh2en ? '中选英' : '英选中') + '</span>' +
+        '<div class="quiz-prompt">' + prompt + ph + spk + '</div>' +
+        '<div class="quiz-opts">' + opts + '</div>' +
+        '<div class="quiz-fb"></div></div>';
+      qbox.querySelectorAll('.q-opt').forEach(function(b){
+        b.addEventListener('click', function(){ answer(q, b); });
+      });
+      qbox.querySelectorAll('.quiz-speak').forEach(function(b){
+        b.addEventListener('click', function(){ speak(b.getAttribute('data-src')); });
+      });
+      // 英选中：题目出现即自动读单词
+      if (!zh2en && q.audio) speak(q.audio);
+    }
+    function answer(q, btn){
+      var zh2en = q.type === 'zh2en';
+      var correct = btn.getAttribute('data-v') === q.answer;
+      var fb = qbox.querySelector('.quiz-fb');
+      var opts = qbox.querySelectorAll('.q-opt');
+      opts.forEach(function(b){
+        b.disabled = true;
+        if (b.getAttribute('data-v') === q.answer) b.classList.add('right');
+        else if (b === btn) b.classList.add('wrong');
+      });
+      results.push({word: q.word, direction: q.type, correct: correct});
+      if (correct) { score += 1; streak += 1; best = Math.max(best, streak); }
+      else { streak = 0; roundWrong.push(q.word); }
+      var label = '答案：<b>' + q.answer + '</b>' + (correct ? '（对啦）' : '（记错了，下一组会再遇到它）');
+      fb.innerHTML = '<div class="quiz-fb-inner ' + (correct ? 'ok' : 'bad') + '">' + label +
+        '<button class="btn btn-primary q-next">下一题 →</button></div>';
+      qbox.querySelector('.q-next').addEventListener('click', next);
+      // 中选英：答完后自动读正确单词
+      if (zh2en && q.audio) speak(q.audio);
+    }
+    function next(){
+      i += 1;
+      if (i >= round.length) { done(); return; }
+      show();
+    }
+    function done(){
+      var wrong = roundWrong.slice();
+      var wrongHtml = wrong.length
+        ? '<div class="quiz-wrong">错词（已排入明日复习）：' + wrong.map(function(w){
+            return '<span class="tag-wrong">' + w + '</span>';
+          }).join('') + '</div>'
+        : '';
+      var note = SERVER ? '' : '<p class="empty-hint">静态快照：错词复习在 xiaohan serve 下才会真正入队。</p>';
+      qbox.innerHTML =
+        '<div class="quiz-done"><div class="quiz-score-big">' + score + ' / ' + round.length + '</div>' +
+        '<p>正确率 ' + Math.round(100*score/round.length) + '% · 最佳连击 ' + best + ' 题</p>' +
+        wrongHtml + note +
+        '<button class="btn btn-primary q-again">再测一组</button></div>';
+      qbox.querySelector('.q-again').addEventListener('click', startQuiz);
+      if (SERVER && results.length) {
+        fetch('/api/quiz-submit', {method:'POST', headers:{'Content-Type':'application/json'},
+                                   body: JSON.stringify({results: results})})
+          .then(function(r){ return r.json(); })
+          .then(function(){})
+          .catch(function(){});
+      }
+    }
+    show();
+  }
+
+  if (quizStart) quizStart.addEventListener('click', startQuiz);
+  startQuiz();
+})();
+
+// ---- 单词解说弹窗 ----
+var WORD_DATA = [];
+try {
+  var wdEl = document.getElementById('word-data');
+  if (wdEl) WORD_DATA = JSON.parse(wdEl.textContent || '[]');
+} catch(e){}
+
+function openWordsExplain() {
+  var modal = document.getElementById('we-modal');
+  if (!modal) return;
+  var body = document.getElementById('we-body');
+  if (!body) return;
+  if (!WORD_DATA.length) {
+    body.innerHTML = '<p class="we-empty">暂无今日单词数据。</p>';
+    modal.style.display = 'flex';
+    return;
+  }
+  var html = '';
+  WORD_DATA.forEach(function(w, i){
+    var secs = '';
+    if (w.etymology) secs += '<div class="we-sec etym"><div class="we-sec-title">📖 词根拆解</div>' + escHtml(w.etymology) + '</div>';
+    if (w.memory_tips && w.memory_tips.length) secs += '<div class="we-sec memory"><div class="we-sec-title">🧠 记忆法</div><ul style="margin:0 0 0 16px;padding:0">' + w.memory_tips.map(function(t){ return '<li>' + escHtml(t) + '</li>'; }).join('') + '</ul></div>';
+    if (w.usage_note) secs += '<div class="we-sec usage"><div class="we-sec-title">💡 用法</div>' + escHtml(w.usage_note) + '</div>';
+    if (w.common_errors && w.common_errors.length) {
+      var errs = w.common_errors.map(function(e){
+        return '<div class="we-err"><div class="wrong">❌ <s>' + escHtml(e.wrong || '') + '</s></div><div class="right">✅ ' + escHtml(e.correct || '') + '</div>' + (e.note ? '<div class="note">' + escHtml(e.note) + '</div>' : '') + '</div>';
+      }).join('');
+      secs += '<div class="we-sec error"><div class="we-sec-title">⚠️ 易错点</div>' + errs + '</div>';
+    }
+    if (w.exam_points && w.exam_points.length) secs += '<div class="we-sec exam"><div class="we-sec-title">🎯 考点</div><ul style="margin:0 0 0 16px;padding:0">' + w.exam_points.map(function(p){ return '<li>' + escHtml(p) + '</li>'; }).join('') + '</ul></div>';
+    if (w.word_family && w.word_family.length) {
+      var chips = w.word_family.map(function(f){
+        return '<span class="we-chip"><b>' + escHtml(f.word || '') + '</b> ' + escHtml(f.pos || '') + ' <span class="chip-zh">' + escHtml(f.zh || '') + '</span></span>';
+      }).join('');
+      secs += '<div class="we-sec family"><div class="we-sec-title">🌳 词族</div>' + chips + '</div>';
+    }
+    if (w.collocations && w.collocations.length) {
+      var chips = w.collocations.map(function(c){
+        if (typeof c === 'object' && c.en) return '<span class="we-chip"><b>' + escHtml(c.en) + '</b> <span class="chip-zh">' + escHtml(c.zh || '') + '</span></span>';
+        return '<span class="we-chip">' + escHtml(c) + '</span>';
+      }).join('');
+      secs += '<div class="we-sec colloc"><div class="we-sec-title">🔗 常见搭配</div>' + chips + '</div>';
+    }
+    if (w.examples && w.examples.length) {
+      var exs = w.examples.map(function(e){
+        return '<li style="margin:6px 0;line-height:1.7"><b>' + escHtml(e.en || '') + '</b><br><span style="color:var(--muted);font-size:13px">' + escHtml(e.zh || '') + '</span></li>';
+      }).join('');
+      secs += '<div class="we-sec examples"><div class="we-sec-title">✏️ 真实例句</div><ul style="margin:0 0 0 16px;padding:0">' + exs + '</ul></div>';
+    }
+    if (w.confusions && w.confusions.length) {
+      var confs = w.confusions.map(function(c){
+        return '<li style="margin:4px 0;line-height:1.6"><b>' + escHtml(c.word || '') + '</b>（' + escHtml(c.zh || '') + '）— ' + escHtml(c.note || '') + '</li>';
+      }).join('');
+      secs += '<div class="we-sec confuse"><div class="we-sec-title">🔍 近义辨析</div><ul style="margin:0 0 0 16px;padding:0">' + confs + '</ul></div>';
+    }
+    if (!secs) secs = '<p style="color:var(--muted);font-size:13px">暂无详细解说。</p>';
+    html += '<div class="we-word">' +
+      '<div class="we-word-head" onclick="toggleWord(this)" data-idx="' + i + '">' +
+      '<span class="we-en">' + escHtml(w.word) + '</span>' +
+      '<span class="we-ph">' + escHtml(w.phonetic || '') + '</span>' +
+      '<span class="we-zh">' + escHtml(w.meaning) + '</span>' +
+      '<span class="we-toggle">▼</span></div>' +
+      '<div class="we-word-body">' + secs + '</div>' +
+      '</div>';
+  });
+  body.innerHTML = html;
+  modal.style.display = 'flex';
+}
+
+function closeWordsExplain() {
+  document.getElementById('we-modal').style.display = 'none';
+}
+
+function toggleWord(head) {
+  var body = head.nextElementSibling;
+  var toggle = head.querySelector('.we-toggle');
+  if (body.classList.contains('open')) {
+    body.classList.remove('open');
+    toggle.textContent = '▼';
+  } else {
+    body.classList.add('open');
+    toggle.textContent = '▲';
+  }
+}
+
+function escHtml(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+</script>
+</body>
+</html>

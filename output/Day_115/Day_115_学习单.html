@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day_115 学习单 · 小韩英语角</title>
+<style>
+  :root {
+    --bg: #F7F5F2;
+    --card: #ffffff;
+    --ink: #1A1A2E;
+    --muted: #8B8FA3;
+    --line: #E8E4DE;
+    --accent: #E85D3A;
+    --accent-light: #FFF0EA;
+    --navy: #1B2A4A;
+    --ok: #2E9E6B;
+    --bad: #E74C3C;
+    --soft: #F5F2ED;
+    --radius: 24px;
+    --radius-sm: 14px;
+    --radius-xs: 10px;
+    --shadow: 0 1px 4px rgba(27,42,74,0.04), 0 2px 12px rgba(27,42,74,0.06);
+    --shadow-lg: 0 4px 12px rgba(27,42,74,0.06), 0 8px 32px rgba(27,42,74,0.10);
+    --shadow-xl: 0 8px 24px rgba(27,42,74,0.10), 0 16px 48px rgba(27,42,74,0.12);
+    --font: "PingFang SC", "Microsoft YaHei", -apple-system, sans-serif;
+    --c-etym: #1B8C3A;
+    --c-memory: #6C5CE7;
+    --c-usage: #2D7FC1;
+    --c-error: #E74C3C;
+    --c-exam: #8B5CF6;
+    --c-family: #10B981;
+    --c-colloc: #3B82F6;
+    --c-example: #7C3AED;
+    --c-confuse: #F59E0B;
+    --bg-etym: #F0F9F2;
+    --bg-memory: #F5F3FF;
+    --bg-usage: #F0F7FC;
+    --bg-error: #FEF2F2;
+    --bg-exam: #F8F4FF;
+    --bg-family: #ECFDF5;
+    --bg-colloc: #EFF6FF;
+    --bg-example: #F9F4FF;
+    --bg-confuse: #FFFBEB;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font); background: var(--bg);
+    color: var(--ink); padding-bottom: 100px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .topbar {
+    position: sticky; top: 0; z-index: 20;
+    background: linear-gradient(135deg, #1B2A4A 0%, #243B5E 100%);
+    color: #fff; padding: 12px 18px;
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  }
+  .topbar .brand {
+    font-weight: 700; font-size: 16px;
+    background: linear-gradient(90deg, #FFD9A0, #F0B37A);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; letter-spacing: 0.5px;
+  }
+  .topbar .progress {
+    flex: 1; min-width: 80px; height: 6px;
+    background: rgba(255,255,255,0.15); border-radius: 4px; overflow: hidden;
+  }
+  .topbar .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #E85D3A, #F0B37A);
+    width: 0%; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .topbar .counter {
+    font-size: 14px; color: rgba(255,255,255,0.6);
+    font-variant-numeric: tabular-nums; min-width: 50px; text-align: right;
+  }
+  .topbar .rate-chip {
+    font-size: 12px; padding: 4px 10px;
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.16);
+    border-radius: 999px; color: #FFE2C9; white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  .topbar .rate-chip.done {
+    background: var(--ok); border-color: var(--ok);
+    color: #fff; font-weight: 700;
+  }
+  .study-done {
+    position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%);
+    background: var(--ok); color: #fff; font-weight: 700;
+    padding: 12px 24px; border-radius: 999px;
+    box-shadow: 0 6px 24px rgba(46,158,107,0.35); z-index: 50;
+    animation: cardIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .topbar .blocks { display: flex; gap: 4px; }
+  .topbar .blocks button {
+    font-size: 13px; padding: 4px 10px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.6); border-radius: 8px;
+    cursor: pointer; transition: all 0.2s; font-weight: 500;
+  }
+  .topbar .blocks button:hover { background: rgba(255,255,255,0.12); color: #fff; }
+  .topbar .blocks button.on {
+    background: #E85D3A; color: #fff; border-color: #E85D3A;
+  }
+  .meta {
+    text-align: center; padding: 10px 12px 4px;
+    color: var(--muted); font-size: 14px; letter-spacing: 0.3px;
+  }
+  .stage { max-width: 700px; margin: 0 auto; padding: 8px 14px 20px; min-height: 65vh; }
+  .q {
+    display: none; background: var(--card); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 32px 28px 36px;
+    min-height: 380px; position: relative;
+    overflow: hidden; border: 1px solid rgba(232,228,222,0.6);
+  }
+  .q.active {
+    display: block;
+    animation: cardIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(20px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .hidden { display: none !important; }
+  .qhead {
+    font-size: 16px; margin-bottom: 16px; color: var(--muted);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .qn { font-weight: 700; color: var(--accent); margin-right: 4px; }
+  .intro-card { text-align: center; padding-top: 40px; }
+  .intro-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #E85D3A, #F0A07A);
+    color: #fff; font-size: 13px; font-weight: 700; padding: 5px 16px;
+    border-radius: 999px; letter-spacing: 1px; text-transform: uppercase;
+    box-shadow: 0 2px 8px rgba(232,93,58,0.25);
+  }
+  .intro-day {
+    font-size: 48px; font-weight: 800; margin: 14px 0 4px;
+    color: var(--navy); letter-spacing: -1px;
+    background: linear-gradient(135deg, #1B2A4A, #2D4A7A);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .intro-date { color: var(--muted); font-size: 16px; margin-bottom: 20px; }
+  .intro-goal {
+    display: flex; gap: 16px; justify-content: center; margin: 20px 0;
+  }
+  .intro-goal div {
+    background: linear-gradient(135deg, var(--soft), #F0EBE4);
+    border-radius: 18px; padding: 14px 24px; min-width: 90px;
+    border: 1px solid rgba(232,228,222,0.5);
+  }
+  .intro-goal b { font-size: 32px; color: var(--accent); display: block; }
+  .intro-goal span { font-size: 13px; color: var(--muted); }
+  .intro-story {
+    background: linear-gradient(135deg, #F0F9F2, #E8F5EC);
+    border: 1px solid #C8E0D0; border-radius: 18px;
+    padding: 18px; margin: 14px 0; text-align: left;
+  }
+  .intro-story .story-title {
+    font-weight: 700; font-size: 20px; color: var(--navy); margin: 0 0 8px;
+  }
+  .intro-flow {
+    color: var(--muted); font-size: 15px; line-height: 1.8;
+    margin-top: 18px; padding: 0 12px;
+  }
+  .intro-flow b { color: var(--navy); }
+  .wcard { padding-top: 28px; }
+  .wcard-top {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 16px;
+  }
+  .wtag {
+    font-size: 13px; padding: 6px 16px; border-radius: 999px;
+    font-weight: 700; letter-spacing: 0.5px;
+  }
+  .wtag.new { background: #E8F2FC; color: #1D6FA8; }
+  .wtag.review { background: #FEF0E7; color: #D4782A; }
+  .wnum {
+    font-size: 13px; color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .phase { margin: 16px 0; }
+  .phase-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 13px; font-weight: 700; padding: 6px 18px 6px 14px;
+    border-radius: 999px; margin-bottom: 12px;
+  }
+  .phase-tag.think { background: #E8F0FC; color: #1D6FA8; }
+  .phase-tag.think::before { content: '💭'; font-size: 13px; }
+  .phase-tag.input { background: #E4F5EC; color: #1A8A5A; }
+  .phase-tag.input::before { content: '📖'; font-size: 13px; }
+  .phase-tag.output { background: #FEF0E7; color: #D4782A; }
+  .phase-tag.output::before { content: '✏️'; font-size: 13px; }
+  .think-q {
+    color: var(--muted); font-size: 17px; margin: 10px 0 16px;
+    line-height: 1.6;
+  }
+  .meaning {
+    font-size: 28px; line-height: 1.5; color: var(--navy);
+    font-weight: 700; margin: 0 0 16px; padding: 18px 24px;
+    background: #F8F4EE; border-radius: 16px; text-align: center;
+    border: 1px dashed var(--line);
+  }
+  .hint { color: var(--muted); font-size: 14px; margin-top: 10px; }
+  .rate-msg {
+    color: var(--accent); font-size: 16px; margin-top: 12px;
+    min-height: 20px; font-weight: 600;
+  }
+  .rbtns {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+  }
+  .rbtns button {
+    font-size: 16px; padding: 12px 6px;
+    border: 1px solid var(--line); border-radius: 14px;
+    background: var(--soft); cursor: pointer; font-weight: 600;
+    transition: all 0.2s; color: var(--ink);
+  }
+  .rbtns button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+  .rbtns button.rate.sel {
+    background: linear-gradient(135deg, #E85D3A, #F0A07A);
+    color: #fff; border-color: #E85D3A; transform: scale(1.05);
+    box-shadow: 0 4px 16px rgba(232,93,58,0.3);
+  }
+  .opts {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+    margin-top: 12px;
+  }
+  .opt {
+    padding: 16px 18px; background: #F9F6EF;
+    border: 1px solid var(--line); border-radius: 16px;
+    cursor: pointer; font-size: 16px; line-height: 1.5;
+    transition: all 0.15s; display: flex; align-items: center; gap: 8px;
+  }
+  .opt:hover {
+    border-color: #D4C9B8; background: #F5F0E8;
+    transform: translateY(-1px);
+  }
+  .opt input { margin: 0; accent-color: var(--accent); }
+  .opt.right {
+    background: #E4F5EC; border-color: var(--ok);
+    animation: pulse 0.3s ease;
+  }
+  .opt.wrong { background: #FEF2F2; border-color: var(--bad); }
+  .opt.soft { opacity: 0.45; }
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+  }
+  .feedback {
+    margin-top: 16px; padding: 16px 18px; border-radius: 16px;
+    background: #F0F9F2; border: 1px solid #C8E0D0;
+    animation: cardIn 0.2s ease;
+  }
+  .feedback.wrong { background: #FEF2F2; border-color: #F0C8C8; }
+  .fb-line { margin: 6px 0; font-size: 17px; line-height: 1.6; }
+  .fb-ok { color: var(--ok); }
+  .fb-wrong { color: var(--bad); }
+  .explain { margin: 8px 0; padding-left: 20px; }
+  .explain li { margin: 4px 0; font-size: 16px; }
+  .opt-explain { margin: 6px 0; font-size: 16px; line-height: 1.6; }
+  .opt-reason { color: var(--muted); font-size: 14px; }
+  .think-path {
+    margin: 12px 0; padding: 12px 14px; border-radius: 14px;
+    background: #FFF8E8; border: 1px solid #F0E3C0;
+  }
+  .distractor-item {
+    margin: 5px 0; font-size: 15px; line-height: 1.6;
+    color: var(--ink);
+  }
+  .distractors {
+    margin: 12px 0; padding: 12px 14px; border-radius: 14px;
+    background: #FEF2F2; border: 1px solid #F5D0D0;
+  }
+  .tag-correct { color: var(--ok); font-weight: 700; }
+  .out-q { font-size: 17px; line-height: 1.7; margin-bottom: 10px; color: var(--navy); font-weight: 600; }
+  .out-sentence { font-size: 18px; line-height: 1.8; background: var(--soft); padding: 14px 18px; border-radius: 16px; margin: 10px 0 14px; }
+  .out-fb {
+    margin-top: 14px; padding: 14px 16px; border-radius: 14px;
+    background: #F0F9F2; border: 1px solid #C8E0D0;
+    animation: cardIn 0.2s ease;
+  }
+  .story-title {
+    font-weight: 700; font-size: 18px; color: var(--navy);
+    margin: 8px 0; line-height: 1.4;
+  }
+  .story-body { font-size: 18px; line-height: 2; color: #1A3040; }
+  .story-paragraph { margin: 12px 0; line-height: 1.9; }
+  mark {
+    background: linear-gradient(180deg, transparent 60%, #FFE9C9 60%);
+    padding: 0 3px; border-radius: 2px;
+  }
+  /* 讲解音频 */
+  .lecture-row {
+    display: flex; align-items: center; gap: 8px;
+    margin-top: 8px; padding-top: 8px;
+    border-top: 1px solid var(--line);
+  }
+  .lecture-label {
+    font-size: 13px; color: var(--accent); font-weight: 600;
+    white-space: nowrap; flex-shrink: 0;
+  }
+  .lecture-player {
+    height: 36px; width: 200px; flex-shrink: 0;
+  }
+  @media (max-width: 600px) {
+    .lecture-player { width: 140px; }
+  }
+  audio {
+    height: 36px; width: 100%; margin-top: 10px;
+    border-radius: 10px;
+  }
+  .dict-word {
+    padding: 1px 4px; border-radius: 4px; cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s; font-weight: 600;
+  }
+  .dict-word.dict-new {
+    background: linear-gradient(180deg, transparent 60%, #FFE9C9 60%);
+    border-bottom-color: var(--accent);
+  }
+  .dict-word.dict-new:hover { background: #FFDCA8; }
+  .dict-word.dict-review {
+    background: linear-gradient(180deg, transparent 60%, #F0E8FF 60%);
+    border-bottom-color: #8B5CF6;
+  }
+  .dict-word.dict-review:hover { background: #E2D4F5; }
+  .dict-modal {
+    display: none; position: fixed; inset: 0; z-index: 50;
+    background: rgba(27,42,74,0.4);
+    align-items: center; justify-content: center;
+    backdrop-filter: blur(6px);
+  }
+  .dict-modal.show { display: flex; }
+  .dict-box {
+    width: min(88vw, 460px); background: #fff; border-radius: 24px;
+    padding: 28px; box-shadow: var(--shadow-xl);
+    animation: cardIn 0.15s ease;
+  }
+  .dict-box .d-en {
+    font-size: 30px; font-weight: 800; color: var(--navy);
+  }
+  .dict-box .d-ph {
+    color: var(--muted); font-size: 15px; margin: 4px 0 10px;
+  }
+  .dict-box .d-zh {
+    font-size: 17px; line-height: 1.5; margin-bottom: 12px;
+    color: var(--ink);
+  }
+  .dict-close {
+    position: absolute; top: 14px; right: 18px; font-size: 26px;
+    color: var(--muted); cursor: pointer; background: none; border: none;
+    line-height: 1; transition: color 0.15s;
+  }
+  .dict-close:hover { color: var(--navy); }
+  .dict-box-wrap { position: relative; }
+  .rich { padding: 0; }
+  .rich-head {
+    margin-bottom: 24px; padding-bottom: 20px;
+    border-bottom: 2px solid var(--line);
+    background: linear-gradient(180deg, #FAF8F5 0%, transparent 100%);
+    margin: -16px -16px 20px -16px;
+    padding: 24px 24px 20px 24px;
+    border-radius: var(--radius) var(--radius) 0 0;
+    position: relative;
+  }
+  .rich-head::after {
+    content: '';
+    position: absolute; bottom: -2px; left: 24px; right: 24px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    border-radius: 2px;
+  }
+  .rich-head .head-line1 {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  }
+  .rich-head .en {
+    font-size: 36px; font-weight: 800; color: var(--navy);
+    letter-spacing: -0.5px; line-height: 1.1;
+  }
+  .rich-head .pos-chip {
+    background: linear-gradient(135deg, #F0E2CC, #E8D6B8);
+    color: #8A5A1C; font-size: 12px;
+    font-weight: 700; padding: 3px 14px; border-radius: 8px;
+  }
+  .rich-head .phon {
+    color: var(--muted); font-size: 15px;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .rich-head .head-meaning {
+    margin-top: 10px; font-size: 20px; font-weight: 700;
+    color: var(--accent); line-height: 1.5;
+  }
+  .rich-sec {
+    margin: 18px 0; padding: 18px 20px;
+    background: #FAF8F5; border-radius: 18px;
+    border: 1px solid #EDE8E0;
+    position: relative; overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .rich-sec:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(27,42,74,0.08);
+  }
+  .rich-sec::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 5px; height: 100%;
+    border-radius: 0 3px 3px 0;
+  }
+  .rich-sec .sec-title {
+    font-size: 17px; font-weight: 700;
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .rich-sec .sec-body {
+    font-size: 17px; line-height: 1.8; color: #333; margin: 0;
+  }
+  .rich-sec .sec-list {
+    margin: 6px 0 6px 18px; padding: 0;
+  }
+  .rich-sec .sec-list li {
+    font-size: 16px; line-height: 1.9; margin: 6px 0;
+  }
+  .rich-sec .sec-list li .en {
+    font-size: 17px; font-weight: 600; color: var(--navy);
+  }
+  .rich-sec .sec-list li .zh {
+    color: var(--muted); font-size: 15px;
+  }
+  .rich-sec .sec-list li.err-pair {
+    list-style: none; margin: 12px 0;
+    padding: 12px 14px;
+    background: rgba(231,76,60,0.04);
+    border-radius: 12px;
+    border: 1px solid rgba(231,76,60,0.1);
+  }
+  .err-wrong {
+    color: #C0392B; font-size: 16px;
+    text-decoration: line-through;
+  }
+  .err-right {
+    color: #1A8A5A; font-size: 16px; font-weight: 600;
+    margin-top: 4px;
+  }
+  .err-note {
+    color: #888; font-size: 15px; margin-top: 4px;
+    line-height: 1.6;
+  }
+  mark.target {
+    background: #FFD9A0; color: #8A4A12; font-weight: 700;
+    padding: 0 4px; border-radius: 3px;
+  }
+  .rich-sec.sec-etym::before { background: var(--c-etym); }
+  .rich-sec.sec-etym .sec-title { color: var(--c-etym); }
+  .rich-sec.sec-etym { background: var(--bg-etym); border-color: #C8E0D0; }
+  .rich-sec.sec-memory::before { background: var(--c-memory); }
+  .rich-sec.sec-memory .sec-title { color: var(--c-memory); }
+  .rich-sec.sec-memory { background: var(--bg-memory); border-color: #DCD4F5; }
+  .rich-sec.sec-usage::before { background: var(--c-usage); }
+  .rich-sec.sec-usage .sec-title { color: var(--c-usage); }
+  .rich-sec.sec-usage { background: var(--bg-usage); border-color: #C8DCE8; }
+  .rich-sec.sec-error::before { background: var(--c-error); }
+  .rich-sec.sec-error .sec-title { color: var(--c-error); }
+  .rich-sec.sec-error { background: var(--bg-error); border-color: #F0C8C8; }
+  .rich-sec.sec-exam::before { background: var(--c-exam); }
+  .rich-sec.sec-exam .sec-title { color: var(--c-exam); }
+  .rich-sec.sec-exam { background: var(--bg-exam); border-color: #DCC4E8; }
+  .rich-sec.sec-family::before { background: var(--c-family); }
+  .rich-sec.sec-family .sec-title { color: var(--c-family); }
+  .rich-sec.sec-family { background: var(--bg-family); border-color: #A8D5BA; }
+  .rich-sec.sec-colloc::before { background: var(--c-colloc); }
+  .rich-sec.sec-colloc .sec-title { color: var(--c-colloc); }
+  .rich-sec.sec-colloc { background: var(--bg-colloc); border-color: #B8D4E8; }
+  .rich-sec.sec-example::before { background: var(--c-example); }
+  .rich-sec.sec-example .sec-title { color: var(--c-example); }
+  .rich-sec.sec-example { background: var(--bg-example); border-color: #DCD4EC; }
+  .rich-sec.sec-confuse::before { background: var(--c-confuse); }
+  .rich-sec.sec-confuse .sec-title { color: var(--c-confuse); }
+  .rich-sec.sec-confuse { background: var(--bg-confuse); border-color: #F0D4B8; }
+  .chips {
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .chip {
+    background: #fff; border: 1px solid var(--line);
+    border-radius: 999px; padding: 8px 20px;
+    font-size: 16px; transition: all 0.15s;
+  }
+  .chip:hover {
+    border-color: var(--accent);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .chip b { color: var(--navy); }
+  .chip .chip-zh { color: var(--muted); font-weight: 400; font-size: 15px; margin-left: 4px; }
+  .wf-card { border-top: none; }
+  .wf-card .qhead { color: #7C3AED; }
+  .wf-card .wf-word { font-weight: 700; color: var(--navy); }
+  .wf-card .wf-stem {
+    background: #F5F3FF; border: 1px solid #D3C4EA;
+    padding: 16px 18px; border-radius: 14px; font-size: 17px;
+    line-height: 1.8; margin: 10px 0 14px;
+  }
+  .al-card { border-top: none; }
+  .al-card .qhead { color: #D4782A; }
+  .al-card .para-sentence {
+    background: var(--soft); padding: 16px 18px;
+    border-radius: 16px; font-size: 17px; line-height: 1.8;
+    margin: 10px 0 14px; color: var(--ink);
+  }
+  .al-card .para-blank {
+    display: inline-block; background: #fff;
+    border: 2px dashed #D4782A; padding: 0 12px;
+    border-radius: 8px; color: #D4782A; font-weight: 700;
+    font-family: monospace; font-size: 14px;
+  }
+  .cloze .sentence {
+    font-size: 18px; line-height: 1.9; background: var(--soft);
+    padding: 16px 18px; border-radius: 16px; margin: 10px 0 14px;
+  }
+  .writing textarea {
+    width: 100%; padding: 14px 16px; border: 1px solid var(--line);
+    border-radius: 16px; font-size: 15px; font-family: var(--font);
+    resize: vertical; margin: 10px 0; transition: border-color 0.2s;
+  }
+  .writing textarea:focus {
+    outline: none; border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(232,93,58,0.1);
+  }
+  .writing button {
+    font-size: 15px; padding: 12px 24px; border: none;
+    border-radius: 14px; background: var(--accent); color: #fff;
+    cursor: pointer; font-weight: 600; transition: all 0.2s;
+  }
+  .writing button:hover {
+    background: #D04D2A; transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(232,93,58,0.3);
+  }
+  .writing button:disabled { background: #CCB; cursor: not-allowed; }
+  .writing-msg { margin-top: 12px; font-size: 16px; color: var(--navy); }
+  .writing .prompt {
+    font-size: 17px; line-height: 1.8; color: var(--navy);
+    font-weight: 600; margin: 6px 0;
+  }
+  .report-card { text-align: center; }
+  .report-hero { font-size: 60px; margin-bottom: 6px; }
+  .report-title {
+    color: var(--navy); margin: 8px 0 4px; font-size: 28px;
+    font-weight: 800;
+  }
+  .report-sub {
+    color: var(--muted); font-size: 16px; margin-bottom: 24px;
+  }
+  .report-stats {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+    margin-bottom: 20px;
+  }
+  .stat {
+    background: linear-gradient(135deg, var(--soft), #F0EBE4);
+    border-radius: 18px; padding: 16px 8px;
+    border: 1px solid rgba(232,228,222,0.5);
+  }
+  .stat b { display: block; font-size: 34px; color: var(--navy); }
+  .stat span { font-size: 13px; color: var(--muted); }
+  .report-weak {
+    background: #FEF0E7; border: 1px solid #F5D9BD;
+    border-radius: 18px; padding: 16px; font-size: 16px; line-height: 1.8;
+  }
+  .report-tip { color: var(--muted); font-size: 15px; margin-top: 18px; }
+  .card-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid var(--line);
+    padding: 12px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 14px; box-shadow: 0 -4px 24px rgba(0,0,0,0.06);
+    z-index: 30;
+  }
+  .card-nav button {
+    font-size: 17px; padding: 12px 24px; border: none;
+    border-radius: 14px; background: var(--accent); color: #fff;
+    cursor: pointer; font-weight: 600; transition: all 0.15s;
+  }
+  .card-nav button:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(232,93,58,0.3);
+  }
+  .card-nav button:disabled { background: #DDD; cursor: not-allowed; }
+  .card-nav .nav-prev {
+    background: transparent; color: var(--accent);
+    border: 1px solid var(--accent);
+  }
+  .card-nav .nav-prev:hover:not(:disabled) {
+    background: var(--accent-light);
+  }
+  .card-nav .nav-pos {
+    color: var(--muted); font-size: 13px;
+    font-variant-numeric: tabular-nums;
+  }
+  .footer {
+    text-align: center; padding: 18px; color: #BBB; font-size: 11px;
+    letter-spacing: 0.5px;
+  }
+  .hero-area {
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+    gap: 20px; margin-bottom: 24px;
+    background: linear-gradient(135deg, #FAF8F5, #F5F2ED);
+    border-radius: 18px; padding: 24px 20px; border: 1px solid #EDE8E0;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-area::before {
+    content: '';
+    position: absolute; top: 0; right: 0;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(232,93,58,0.04) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero-info { position: relative; z-index: 1; width: 100%; }
+  .hero-word {
+    font-size: 48px;
+    line-height: 1.1; margin: 0 0 8px; letter-spacing: -0.5px; text-align: center;
+  }
+  .hero-phon {
+    font-size: 20px;
+    display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 10px;
+  }
+  .hero-pos {
+    display: inline-block; font-size: 14px; font-weight: 600;
+    color: #fff; background: var(--accent);
+    padding: 3px 12px; border-radius: 8px; margin-right: 8px;
+  }
+  .hero-meaning {
+    font-size: 26px;
+    margin: 8px 0 0; line-height: 1.4; text-align: center;
+  }
+  .hero-img {
+    flex-shrink: 0; width: min(340px, 80vw); height: min(340px, 80vw);
+    border-radius: 20px; overflow: hidden;
+    box-shadow: 0 8px 24px rgba(27,42,74,0.18);
+    border: 3px solid #fff;
+    background: #ffffff;
+    position: relative; z-index: 1; margin: 0 auto;
+    transition: transform 0.2s;
+  }
+  .hero-img:hover { transform: scale(1.03); }
+  .hero-img img {
+    width: 100%; height: 100%; object-fit: cover;
+    object-position: center; display: block;
+  }
+  .concept-map {
+    position: relative; width: 100%; margin: 20px auto;
+    padding: 20px 0;
+    display: flex; justify-content: center; align-items: center;
+    gap: 20px; flex-wrap: wrap;
+    background: linear-gradient(135deg, #FAF8F5, #F5F2ED);
+    border-radius: 18px; border: 1px solid #EDE8E0;
+    min-height: 120px;
+  }
+  .concept-center {
+    width: 88px; height: 88px; border-radius: 50%;
+    background: linear-gradient(135deg, #1B2A4A, #2D4A7A);
+    color: #fff; display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 14px; text-align: center;
+    box-shadow: 0 6px 24px rgba(27,42,74,0.3);
+    z-index: 2; line-height: 1.2; padding: 6px;
+    border: 3px solid #fff;
+    position: relative;
+  }
+  .concept-center::after {
+    content: ''; position: absolute; inset: -8px; border-radius: 50%;
+    border: 2px dashed rgba(27,42,74,0.12);
+  }
+  .concept-center::before {
+    content: ''; position: absolute; inset: -16px; border-radius: 50%;
+    border: 1px solid rgba(27,42,74,0.05);
+  }
+  .concept-nodes {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    justify-content: center; max-width: 320px;
+  }
+  .concept-node {
+    padding: 8px 18px; border-radius: 999px; font-size: 13px;
+    font-weight: 600; white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    transition: all 0.2s; border: 1px solid transparent;
+    cursor: default;
+  }
+  .concept-node:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  }
+  .concept-node.family {
+    background: #E4F5EC; color: #1A8A5A;
+    border-color: #A8D5BA;
+  }
+  .concept-node.colloc {
+    background: #E8F2FC; color: #1D6FA8;
+    border-color: #B8D4E8;
+  }
+  .concept-node.synonym {
+    background: #FEF0E7; color: #D4782A;
+    border-color: #F0D4B8;
+  }
+  .concept-node.antonym {
+    background: #FEF2F2; color: #C0392B;
+    border-color: #F0B8B8;
+  }
+  .concept-node.example {
+    background: #F5F3FF; color: #7C3AED;
+    border-color: #D4C4EC;
+  }
+  /* 词素着色：前缀蓝 / 词根绿 / 后缀紫 / 连接元音墨色（inherit） / 中缀粉；
+     同一类型连续出现时用 -2 / -3 深浅轮换，保证“分几段就有几种颜色”。 */
+  .morph-prefix { color: #3B82F6; }
+  .morph-prefix-2 { color: #60A5FA; }
+  .morph-prefix-3 { color: #2563EB; }
+  .morph-root { color: #1B8C3A; }
+  .morph-root-2 { color: #16A34A; }
+  .morph-root-3 { color: #22C55E; }
+  .morph-suffix { color: #8B5CF6; }
+  .morph-suffix-2 { color: #A78BFA; }
+  .morph-suffix-3 { color: #7C3AED; }
+  .morph-connect { color: inherit; }  /* 连接元音保持原本色（墨色），不额外染色 */
+  .morph-connect-2 { color: inherit; }
+  .morph-connect-3 { color: inherit; }
+  .morph-infix { color: #EC4899; }
+  .morph-other { color: #64748B; }
+  .hero-word { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0; }
+  .hero-word .morph-part { font-size: inherit; font-weight: 800; letter-spacing: -0.5px; }
+
+@media (max-width: 600px) {
+    .hero-area { flex-direction: column; align-items: center; text-align: center; }
+    .hero-area::before { display: none; }
+    .hero-img { width: min(280px, 78vw); height: min(280px, 78vw); }
+    .hero-word { font-size: 32px; text-align: center; }
+    .hero-meaning { text-align: center; }
+    .hero-phon { justify-content: center; }
+    .concept-map { gap: 12px; padding: 16px 0; }
+    .concept-center { width: 72px; height: 72px; font-size: 12px; }
+    .concept-nodes { max-width: 240px; }
+    .opts { grid-template-columns: 1fr; }
+    .rbtns { grid-template-columns: repeat(4, 1fr); gap: 4px; }
+    .q { padding: 24px 18px 28px; min-height: 320px; }
+    .meaning { font-size: 21px; }
+    .intro-day { font-size: 34px; }
+    .rich-head .en { font-size: 28px; }
+    .rich-head { margin: -12px -12px 16px -12px; padding: 20px 18px 16px 18px; }
+    .stage { max-width: 100%; padding: 8px 10px 20px; }
+    .card-nav button { font-size: 13px; padding: 10px 16px; }
+    .intro-goal { gap: 10px; }
+    .intro-goal div { padding: 12px 16px; min-width: 70px; }
+    .report-stats { grid-template-columns: repeat(2, 1fr); }
+    .rich-sec { padding: 14px 16px; }
+    .rich-sec .sec-body { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">小韩英语角 · Day_115</div>
+  <div class="progress"><div class="progress-bar" id="bar"></div></div>
+  <div class="counter" id="counter">0 / 21</div>
+  <span class="rate-chip" id="rate-chip">词卡 0/12</span>
+  <div class="blocks" id="blocks"></div>
+</div>
+<div class="meta">2026-08-17 · 主题：科技与创新 · 键盘 1-4 评分，←/→ 翻卡</div>
+<div class="stage" id="stage">
+  <section class='q intro-card' data-block='intro' data-card='1'><div class='intro-badge'>今日学习单</div><h1 class='intro-day'>Day_115</h1><p class='intro-date'>2026-08-17 · 主题：科技与创新</p><div class='intro-goal'><div><b>8</b> 新词</div><div><b>4</b> 复习</div><div><b>1</b> 短文</div></div><div class='intro-story'><p class='story-title'>治愈系健身 App 的诞生</p><audio controls preload='none' src='audio/story.mp3'><source src='audio/story.m4a'></audio></div><p class='intro-flow'>每个词按 <b>先思考 → 再输入 → 再输出</b> 三步走。先想一遍，再看答案，最后动手用一次。</p></section><section class='q wcard new' data-block='words' data-card='1' data-word='programmer'><div class='wcard-top'><span class='wtag new'>新词</span><span class='wnum'>01 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>程序员；编程人员</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-root'>programmer</span></p><p class='hero-phon'><span class='hero-pos'>n</span>UK /prəʊgræmə/ US /progræmɚ/ <audio controls preload='none' src='audio/programmer_en.mp3'><source src='audio/programmer_en.m4a'></audio></p><p class='hero-meaning'>程序员；编程人员</p><div class='lecture-row'><span class='lecture-label'>🎧 听讲解</span><audio controls preload='none' class='lecture-player' src='audio/programmer_lecture.mp3'></audio></div></div><div class='hero-img'><img class='anchor-img' src='../../data/images/programmer.png' alt='programmer 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>programmer 由 program（程序）加 -er（做事的人）组成。program 来自希腊语 programma（πρόγραμμα），原指&#x27;公开书写的内容&#x27;，最早是戏院门口的节目单，由 pro-（向前）+ graphein（写）拼成。19世纪它开始指&#x27;计划、节目表&#x27;，1940年代进入计算机领域成为&#x27;程序&#x27;。所以 programmer 字面上就是&#x27;写程序的人&#x27;。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>谐音法：programmer → &#x27;普若哥rua莫儿&#x27;，普若哥在 RUA（虚拟编程擂台赛）里狂敲代码，他是个程序员。</li><li>拆分法：program（程序）+ m（中间像中间人）+ er（人后缀）= 站在程序中间调试的人 = 程序员。</li><li>场景联想法：凌晨3点，卧室还亮着屏幕，一个戴发光眼镜的人对着三块屏幕敲键盘，旁边堆着第六杯空咖啡——他就是程序员 programmer。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>可数名词，-er 是表示&#x27;做某事的人&#x27;的施动者后缀；口语色彩比 software engineer 更浓，专指&#x27;写代码的人&#x27;。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>He is a programer.</s></div><div class='err-right'>✅ He is a programmer.</div><div class='err-note'>programmer 中间是两个 m，容易漏写一个；记住 program + m + er 的结构就不会错。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>She is a programming who loves coding.</s></div><div class='err-right'>✅ She is a programmer who loves coding.</div><div class='err-note'>-ing 形式（programming）指&#x27;编程这件事&#x27;，不能用来指人；指人必须用 -er 后缀 programmer。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>CET-4 阅读理解：科技/职场类文章高频词，注意区分 programmer 与 program 的词性和用法。</li><li>高考/完形填空：常考 programmer 的复数形式 programmers、所属格 programmer&#x27;s，以及与 program 的拼写辨析（双 m vs 单 m）。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>program</b> n./v. 程序；编程；安排</span><span class='chip'><b>programming</b> n. 编程；程序设计</span><span class='chip'><b>programmer</b> n. 程序员</span><span class='chip'><b>programmable</b> adj. 可编程的</span><span class='chip'><b>reprogram</b> v. 重新编程；改写程序</span><span class='chip'><b>microprogrammer</b> n. 微程序设计员</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'>senior programmer 高级程序员</span><span class='chip'>experienced programmer 经验丰富的程序员</span><span class='chip'>freelance programmer 自由职业程序员</span><span class='chip'>lead programmer 主程序员</span><span class='chip'>programmer analyst 程序员分析师</span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>My sister works as a <mark class='target'>programmer</mark> at a fast-growing tech company in Shenzhen.</span><br><span class='zh'>我妹妹在深圳一家发展很快的科技公司当程序员。</span></li><li><span class='en'>The startup is hiring experienced <mark class='target'>programmers</mark> to help build its new AI product.</span><br><span class='zh'>这家初创公司正在招有经验的程序员，帮他们做新的 AI 产品。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>developer</b>（开发者）— programmer 强调&#x27;写代码的人&#x27;；developer 范围更广，常包括设计、规划、调试等整个开发流程，可以不亲自写代码。</li><li><b>software engineer</b>（软件工程师）— software engineer 强调&#x27;工程化思维&#x27;，讲求架构、测试、文档；programmer 更口语、专指写代码的岗位，三者在招聘中常被混用。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>programmer</div><div class='concept-nodes'><span class='concept-node family'>program</span><span class='concept-node family'>programming</span><span class='concept-node family'>programmer</span><span class='concept-node family'>programmable</span><span class='concept-node family'>reprogram</span><span class='concept-node family'>microprogrammer</span><span class='concept-node colloc'>senior programmer 高级程序员</span><span class='concept-node colloc'>experienced programmer 经验丰富的程序员</span><span class='concept-node colloc'>freelance programmer 自由职业程序员</span><span class='concept-node colloc'>lead programmer 主程序员</span><span class='concept-node colloc'>programmer analyst 程序员分析师</span><span class='concept-node synonym'>developer</span><span class='concept-node synonym'>software engineer</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 programmer 填回句子：</p><p class='out-sentence'>My sister works as a ______ at a fast-growing tech company in Shenzhen.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out1' value='approximately'> approximately</label><label class='opt ' data-correct='0'><input type='radio' name='out1' value='disappointing'> disappointing</label><label class='opt ' data-correct='0'><input type='radio' name='out1' value='appreciation'> appreciation</label><label class='opt ' data-correct='1'><input type='radio' name='out1' value='programmer'> programmer</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>programmer</b> UK /prəʊgræmə/ US /progræmɚ/</p><p class='fb-line'>📝 完整句：My sister works as a programmer at a fast-growing tech company in Shenzhen.</p><p class='fb-line'>🀄 译文：我妹妹在深圳一家发展很快的科技公司当程序员。</p></div></div></section><section class='q wcard new' data-block='words' data-card='2' data-word='disappointing'><div class='wcard-top'><span class='wtag new'>新词</span><span class='wnum'>02 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>令人失望的；让人扫兴的</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-root'>disappointing</span></p><p class='hero-phon'><span class='hero-pos'>adj</span>UK /dɪsə&#x27;pɒɪntɪŋ/ US /,dɪsə&#x27;pɔɪntɪŋ/ <audio controls preload='none' src='audio/disappointing_en.mp3'><source src='audio/disappointing_en.m4a'></audio></p><p class='hero-meaning'>令人失望的；让人扫兴的</p><div class='lecture-row'><span class='lecture-label'>🎧 听讲解</span><audio controls preload='none' class='lecture-player' src='audio/disappointing_lecture.mp3'></audio></div></div><div class='hero-img'><img class='anchor-img' src='../../data/images/disappointing.png' alt='disappointing 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>来自中世纪法语 desappointer（取消任命），由前缀 dis-（否定、撤销）和 appoint（约定、安排）构成。appoint 本身源自拉丁语 ad-（朝向）+ punctum（点、决定），本义是「定下日期或安排」，所以 disappoint 字面意思就是「把原本安排好的事撤销掉」，引申为「让人期待落空」。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>谐音法：dis-破-appointing（破银亭），想象你去 ATM 取钱，结果机器坏了，钱取不出来，简直「破银亭」→ 令人失望透顶。</li><li>拆分法：dis（否定前缀）+ appoint（约定、安排）+ ing → 没按约定好的来 → 令人失望。和 appointment（约会/预约）一起记，约定被打破自然让人失望。</li><li>场景联想法：等了一周终于抢到演唱会门票，结果发现是假票，进不去场——你脱口而出：This is so disappointing!</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>修饰「事/物/结果」让人觉得失望，主语通常是无生命名词或 it；形容「人感到失望」要用被动式 disappointed，不可混用。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>I am disappointing with the score.</s></div><div class='err-right'>✅ I am disappointed with the score.</div><div class='err-note'>人「感到失望」是情绪上的被动体验，必须用 disappointed；disappointing 是形容事物「令人失望」的，不能用在人身上做表语。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>The result was very disappoint.</s></div><div class='err-right'>✅ The result was very disappointing.</div><div class='err-note'>disappoint 是动词，不能直接作形容词修饰名词或作表语，描述事物的性质要变成 disappointing。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>完形填空高频考点：辨析 disappointing（形容事/物）vs disappointed（形容人）的搭配和主语。</li><li>写作与语法填空里，作定语或表语时确认词形，常考 disappointing / disappointed / disappoint / to disappoint 之间的转换。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>disappoint</b> v. 使失望，使落空</span><span class='chip'><b>disappointed</b> adj. 感到失望的（形容人）</span><span class='chip'><b>disappointment</b> n. 失望，扫兴</span><span class='chip'><b>disappointedly</b> adv. 失望地</span><span class='chip'><b>appointment</b> n. 约会，预约，任命（词根同源）</span><span class='chip'><b>point</b> n./v. 点；指向（appoint 的源头词）</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'>deeply disappointing 非常令人失望的</span><span class='chip'>rather disappointing 相当令人失望的</span><span class='chip'>a disappointing result 令人失望的结果</span><span class='chip'>a disappointing performance 表现不佳</span><span class='chip'>disappointing news 令人沮丧的消息</span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>The new phone&#x27;s battery life is <mark class='target'>disappointing</mark> — it dies in just four hours.</span><br><span class='zh'>这部新手机续航太让人失望了，只能撑四个小时就没电。</span></li><li><span class='en'>It&#x27;s <mark class='target'>disappointing</mark> that the restaurant we booked was closed when we arrived.</span><br><span class='zh'>我们订的那家餐厅到了才发现没开门，真扫兴。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>disappointed</b>（感到失望的（形容人））— disappointing 修饰事/物（令人失望的），disappointed 修饰人（感到失望的），主语一旦是人，就要用 disappointed。</li><li><b>unsatisfying</b>（不令人满意的）— unsatisfying 强调「没满足需求」，侧重质量不够；disappointing 强调「没达到期望」，侧重心理落差，两者常可互换，但 disappointed 语气更重。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>disappointing</div><div class='concept-nodes'><span class='concept-node family'>disappoint</span><span class='concept-node family'>disappointed</span><span class='concept-node family'>disappointment</span><span class='concept-node family'>disappointedly</span><span class='concept-node family'>appointment</span><span class='concept-node family'>point</span><span class='concept-node colloc'>deeply disappointing 非常令人失望的</span><span class='concept-node colloc'>rather disappointing 相当令人失望的</span><span class='concept-node colloc'>a disappointing result 令人失望的结果</span><span class='concept-node colloc'>a disappointing performance 表现不佳</span><span class='concept-node colloc'>disappointing news 令人沮丧的消息</span><span class='concept-node synonym'>disappointed</span><span class='concept-node synonym'>unsatisfying</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 disappointing 填回句子：</p><p class='out-sentence'>The new phone&amp;#x27;s battery life is ______ — it dies in just four hours.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out2' value='appreciation'> appreciation</label><label class='opt ' data-correct='1'><input type='radio' name='out2' value='disappointing'> disappointing</label><label class='opt ' data-correct='0'><input type='radio' name='out2' value='programmer'> programmer</label><label class='opt ' data-correct='0'><input type='radio' name='out2' value='approximately'> approximately</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>disappointing</b> UK /dɪsə&#x27;pɒɪntɪŋ/ US /,dɪsə&#x27;pɔɪntɪŋ/</p><p class='fb-line'>📝 完整句：The new phone&#x27;s battery life is disappointing — it dies in just four hours.</p><p class='fb-line'>🀄 译文：这部新手机续航太让人失望了，只能撑四个小时就没电。</p></div></div></section><section class='q wcard new' data-block='words' data-card='3' data-word='appreciation'><div class='wcard-top'><span class='wtag new'>新词</span><span class='wnum'>03 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>感激；欣赏，鉴赏；（货币、资产等的）升值，增值</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-root'>appreciat</span><span class='morph-part morph-suffix'>ion</span></p><p class='hero-phon'><span class='hero-pos'>n</span>UK /ə,pri:ʃi&#x27;eiʃən/ US /ə,priʃɪ&#x27;eʃən/ <audio controls preload='none' src='audio/appreciation_en.mp3'><source src='audio/appreciation_en.m4a'></audio></p><p class='hero-meaning'>感激；欣赏，鉴赏；（货币、资产等的）升值，增值</p><div class='lecture-row'><span class='lecture-label'>🎧 听讲解</span><audio controls preload='none' class='lecture-player' src='audio/appreciation_lecture.mp3'></audio></div></div><div class='hero-img'><img class='anchor-img' src='../../data/images/appreciation.png' alt='appreciation 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>词根拆解：来自拉丁语 &#x27;appretiationem&#x27;（估价、珍视），动词原型 &#x27;appretiare&#x27; 意为&#x27;给某物定一个价格&#x27;。前缀 ad- 表示&#x27;朝向&#x27;，词根 pretium 意为&#x27;价格、价值&#x27;——本义就是&#x27;为某物标上它该有的价值&#x27;，后来延伸出&#x27;感激&#x27;与&#x27;欣赏&#x27;，因为感激与欣赏本质上都是&#x27;看到了对方/某物的价值&#x27;。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>谐音法：&#x27;阿婆瑞神&#x27;——想象一位阿婆双手合十感谢神明：&#x27;阿婆瑞神！&#x27;，对应 appreciation（感激）。</li><li>拆分法：ap-preci-ation = 阿婆 + precious（珍贵的）+ ation（名词尾巴），合起来就是&#x27;阿婆觉得珍贵&#x27;，既感激又欣赏。</li><li>场景联想法：学期末你给同桌补了一整本笔记，同桌在毕业册写下一整页感谢的话——这就是 appreciation；你去美术馆看莫奈的画久久不愿离开——这也算 appreciation。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>短语搭配上区分：appreciation for sb/sth 表示&#x27;对…的感激/欣赏&#x27;，in appreciation of 表示&#x27;作为对…的感谢&#x27;；注意动词 appreciate 后面接 doing 而不接 to do。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>I want to show my appreciation to you for your kindness.</s></div><div class='err-right'>✅ I want to show my appreciation for your kindness.</div><div class='err-note'>appreciation 后直接接 for + 宾语表示&#x27;对…的感激&#x27;，不需要再加 to you；to you 是冗余的。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>I would appreciate to receive a reply at your earliest convenience.</s></div><div class='err-right'>✅ I would appreciate receiving a reply at your earliest convenience.</div><div class='err-note'>动词 appreciate 只能接 doing 或名词，不能接 to do，这是高频考点。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>CET-4 完形/语法题常考 appreciate 后接 doing 而非 to do；以及名词 appreciation 与形容词 appreciative 的词性转换。</li><li>高考/CET-4 阅读中 in appreciation of、mutual appreciation、deep appreciation 是高频词块，写作中表达感谢可直接套用 express my sincere appreciation for…。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>appreciate</b> v. 感激；欣赏；领会</span><span class='chip'><b>appreciative</b> adj. 感激的；有欣赏力的</span><span class='chip'><b>appreciatively</b> adv. 感激地；欣赏地</span><span class='chip'><b>appreciable</b> adj. 可察觉的；相当可观的</span><span class='chip'><b>appreciably</b> adv. 明显地；相当多地</span><span class='chip'><b>unappreciated</b> adj. 不被感激的；被埋没的</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'>express / show appreciation (表达感激)</span><span class='chip'>deep / sincere / heartfelt appreciation (深深的感激)</span><span class='chip'>in appreciation of (作为对…的感谢)</span><span class='chip'>appreciation for music / art / nature (对音乐/艺术/自然的欣赏)</span><span class='chip'>mutual appreciation (相互欣赏)</span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>She sent me a heartfelt card to express her <mark class='target'>appreciation</mark> for helping her move last weekend.</span><br><span class='zh'>她给我寄来一张真心的卡片，感谢我上周末帮她搬家。</span></li><li><span class='en'>The sudden <mark class='target'>appreciation</mark> of the company&#x27;s shares made early investors quite wealthy overnight.</span><br><span class='zh'>这家公司股价突然大涨，让早期投资者一夜之间变得相当富有。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>gratitude</b>（感激，感恩）— appreciation 范围更广，既可指对人的感激，也可指对艺术、自然、能力等的&#x27;欣赏、鉴赏&#x27;；gratitude 更聚焦于人际间的感恩之情，语气也更正式庄重。</li><li><b>recognition</b>（认可，识别）— appreciation 强调发自内心地&#x27;珍视、感激&#x27;，带感情温度；recognition 更偏&#x27;承认、认可、识别身份&#x27;，可以是客观或官方的，比如获奖时的 recognition。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>appreciation</div><div class='concept-nodes'><span class='concept-node family'>appreciate</span><span class='concept-node family'>appreciative</span><span class='concept-node family'>appreciatively</span><span class='concept-node family'>appreciable</span><span class='concept-node family'>appreciably</span><span class='concept-node family'>unappreciated</span><span class='concept-node colloc'>express / show appreciation (表达感激)</span><span class='concept-node colloc'>deep / sincere / heartfelt appreciation (深深的感激)</span><span class='concept-node colloc'>in appreciation of (作为对…的感谢)</span><span class='concept-node colloc'>appreciation for music / art / nature (对音乐/艺术/自然的欣赏)</span><span class='concept-node colloc'>mutual appreciation (相互欣赏)</span><span class='concept-node synonym'>gratitude</span><span class='concept-node synonym'>recognition</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 appreciation 填回句子：</p><p class='out-sentence'>She sent me a heartfelt card to express her ______ for helping her move last weekend.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out3' value='disappointing'> disappointing</label><label class='opt ' data-correct='1'><input type='radio' name='out3' value='appreciation'> appreciation</label><label class='opt ' data-correct='0'><input type='radio' name='out3' value='approximately'> approximately</label><label class='opt ' data-correct='0'><input type='radio' name='out3' value='programmer'> programmer</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>appreciation</b> UK /ə,pri:ʃi&#x27;eiʃən/ US /ə,priʃɪ&#x27;eʃən/</p><p class='fb-line'>📝 完整句：She sent me a heartfelt card to express her appreciation for helping her move last weekend.</p><p class='fb-line'>🀄 译文：她给我寄来一张真心的卡片，感谢我上周末帮她搬家。</p></div></div></section><section class='q wcard new' data-block='words' data-card='4' data-word='approximately'><div class='wcard-top'><span class='wtag new'>新词</span><span class='wnum'>04 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>大约，大概（用于数字、时间、距离等具体数值前）</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-root'>approximate</span><span class='morph-part morph-suffix'>ly</span></p><p class='hero-phon'><span class='hero-pos'>adv</span>UK /ə&#x27;prɔksimitli/ US /ə&#x27;prɑksɪmətli/ <audio controls preload='none' src='audio/approximately_en.mp3'><source src='audio/approximately_en.m4a'></audio></p><p class='hero-meaning'>大约，大概（用于数字、时间、距离等具体数值前）</p><div class='lecture-row'><span class='lecture-label'>🎧 听讲解</span><audio controls preload='none' class='lecture-player' src='audio/approximately_lecture.mp3'></audio></div></div><div class='hero-img'><img class='anchor-img' src='../../data/images/approximately.png' alt='approximately 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>这个词来自拉丁语 approximare，由两部分拼成：前缀 ap-（相当于 to，向…去）+ proximus（意思是&#x27;最近的&#x27;，proximus 又是 prope&#x27;近&#x27;的最高级）。原义是&#x27;向最近的地方走过去&#x27;，引申为&#x27;差不多、接近&#x27;。再加 -ly 变成副词，所以 approximately 就是&#x27;接近地、大约地&#x27;。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>谐音法：approximately 读音像&#x27;阿婆-夸-西-马-特-里&#x27;，想象你奶奶（阿婆）在菜场拎着秤，皱着眉嘟囔&#x27;差不多、大概就这样&#x27;，把&#x27;大约&#x27;的语感塞进耳朵里。</li><li>拆分法：ap-（向）+ proxim-（最近，来自拉丁语 proximus 这个最高级）+ -ate（使…）+ -ly（副词）→&#x27;使某物向最近处移动&#x27;，不是刚刚好，而是&#x27;接近地、大约地&#x27;。</li><li>场景联想法：你在星巴克问咖啡师这杯拿铁大概多少卡路里，他耸耸肩说&#x27;Approximately 200 大卡吧&#x27;。下次想说&#x27;大概&#x27;，脑子里就浮现这个咖啡师。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>副词，直接放在数字/数量前使用，写作中比 about 更正式，常用于科技、学术、报告类文本。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>There are approximate 200 students in the hall.</s></div><div class='err-right'>✅ There are approximately 200 students in the hall.</div><div class='err-note'>approximate 是形容词，修饰动词或数量时必须用副词 approximately。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>The meeting will start at approximately to 9 AM.</s></div><div class='err-right'>✅ The meeting will start at approximately 9 AM.</div><div class='err-note'>approximately 后面直接接数字或数量，不加介词 to；想表达&#x27;接近 9 点&#x27;可用 close to 9 AM。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>CET-4 阅读理解：approximately 常作为约数的标记词出现，看到它要立刻反应成&#x27;约、大概&#x27;，便于快速解题。</li><li>高考/四级写作：用 approximately 替换 about、around，可让表达更正式地道，是提分小技巧。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>approximate</b> adj. 大约的、近似的</span><span class='chip'><b>approximate</b> v. 接近、近似</span><span class='chip'><b>approximation</b> n. 近似值、估算</span><span class='chip'><b>proximity</b> n. 接近、邻近</span><span class='chip'><b>proximate</b> adj. 最接近的、直接的</span><span class='chip'><b>approach</b> v./n. 接近；方法、途径</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'>approximately equal to 大约等于</span><span class='chip'>approximately the same 大致相同</span><span class='chip'>at approximately 大约在（某时/某量）</span><span class='chip'>approximately speaking 大体说来</span><span class='chip'>approximately 30 / 50% / 100 people 约 30 人 / 50% / 100 人</span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>The flight from Shanghai to Tokyo takes <mark class='target'>approximately</mark> three hours.</span><br><span class='zh'>从上海飞往东京的航班大约需要三个小时。</span></li><li><span class='en'>The new model costs <mark class='target'>approximately</mark> 800 dollars, which is much cheaper than the previous one.</span><br><span class='zh'>新款大约 800 美元，比上一代便宜不少。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>about</b>（大约）— approximately 比 about 更正式书面，多出现在论文、报告、新闻里；about 更口语、更日常。</li><li><b>roughly</b>（粗略地）— approximately 强调&#x27;接近精确值&#x27;，roughly 强调&#x27;粗粗一估、可能有出入&#x27;，语气更随便。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>approximately</div><div class='concept-nodes'><span class='concept-node family'>approximate</span><span class='concept-node family'>approximate</span><span class='concept-node family'>approximation</span><span class='concept-node family'>proximity</span><span class='concept-node family'>proximate</span><span class='concept-node family'>approach</span><span class='concept-node colloc'>approximately equal to 大约等于</span><span class='concept-node colloc'>approximately the same 大致相同</span><span class='concept-node colloc'>at approximately 大约在（某时/某量）</span><span class='concept-node colloc'>approximately speaking 大体说来</span><span class='concept-node colloc'>approximately 30 / 50% / 100 people 约 30 人 / 50% / 100 人</span><span class='concept-node synonym'>about</span><span class='concept-node synonym'>roughly</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 approximately 填回句子：</p><p class='out-sentence'>The flight from Shanghai to Tokyo takes ______ three hours.</p><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='out4' value='approximately'> approximately</label><label class='opt ' data-correct='0'><input type='radio' name='out4' value='programmer'> programmer</label><label class='opt ' data-correct='0'><input type='radio' name='out4' value='appreciation'> appreciation</label><label class='opt ' data-correct='0'><input type='radio' name='out4' value='disappointing'> disappointing</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>approximately</b> UK /ə&#x27;prɔksimitli/ US /ə&#x27;prɑksɪmətli/</p><p class='fb-line'>📝 完整句：The flight from Shanghai to Tokyo takes approximately three hours.</p><p class='fb-line'>🀄 译文：从上海飞往东京的航班大约需要三个小时。</p></div></div></section><section class='q wcard new' data-block='words' data-card='5' data-word='compile'><div class='wcard-top'><span class='wtag new'>新词</span><span class='wnum'>05 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>编辑；编纂；汇编（计算机语境下指编译代码）</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-prefix'>com</span><span class='morph-part morph-root'>pile</span></p><p class='hero-phon'><span class='hero-pos'>v.</span>/kəm&#x27;paɪl/ <audio controls preload='none' src='audio/compile_en.mp3'><source src='audio/compile_en.m4a'></audio></p><p class='hero-meaning'>编辑；编纂；汇编（计算机语境下指编译代码）</p><div class='lecture-row'><span class='lecture-label'>🎧 听讲解</span><audio controls preload='none' class='lecture-player' src='audio/compile_lecture.mp3'></audio></div></div><div class='hero-img'><img class='anchor-img' src='../../data/images/compile.png' alt='compile 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>源自拉丁语 compilare，本义是「抢劫、掠夺」，因为把别人东西强行堆到一起就像抢来似的。com- 表示「一起」，词根与 pilare（压、堆）有关。到了中世纪英语里意思软化成「收集、整理」，现代又延伸出计算机「编译」代码的含义。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>谐音法：com-pile 谐音「肯派哦」——出版社催稿：「肯派点儿稿件过来，我要编辑成书！」</li><li>拆分法：com-(一起) + pile(堆) → 把一堆东西堆在一起整理好 → 编纂、汇编</li><li>场景联想法：想象你面前堆了一米高的剪报和资料，你把它们按字母顺序整理成一本厚厚的剪贴簿，这就是 compile</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>日常用法强调「收集散乱材料并整理成册」，计算机语境特指把源代码翻译成可执行程序，是及物动词，直接接宾语</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>compile a list about all members</s></div><div class='err-right'>✅ compile a list of all members</div><div class='err-note'>compile 表示「编纂、汇编」时搭配 of 引导对象，介词用 of 不用 about。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>The code needs to compile.</s></div><div class='err-right'>✅ The code needs to be compiled.</div><div class='err-note'>在「代码需要被编译」的被动含义中，必须用被动语态 be compiled，因为主语 code 是动作承受者。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>完形填空常考 compile 的过去式/过去分词 compiled，及其与 compose、collect 的辨析</li><li>阅读理解中 data compiled by researchers、statistics compiled from... 是高频结构</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>compiler</b> n. 编译器；编纂者</span><span class='chip'><b>compilation</b> n. 汇编；编纂物</span><span class='chip'><b>compiled</b> adj. 汇编好的；已编译的</span><span class='chip'><b>compile-time</b> n. 编译时间（编程术语）</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'>compile a list</span><span class='chip'>compile a report</span><span class='chip'>compile data</span><span class='chip'>compile an anthology</span><span class='chip'>compile code</span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>It took her two years to <mark class='target'>compile</mark> enough data for her thesis.</span><br><span class='zh'>她花了两年才收集到足够写论文的数据。</span></li><li><span class='en'>The new app failed to <mark class='target'>compile</mark>, so we couldn&#x27;t test it on the phone.</span><br><span class='zh'>这个新应用编译失败，所以我们没法在手机上测试它。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>compose</b>（创作、撰写）— compile 侧重把已有的材料收集整理成册，compose 侧重从无到有原创写作；compile a dictionary 是汇集多人成果，compose a poem 强调原创。</li><li><b>edit</b>（编辑、剪辑）— edit 强调对已有内容做修改、删减、润色，compile 强调把零散材料汇总成整体，范围更大；先 compile 收集，再 edit 加工。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>compile</div><div class='concept-nodes'><span class='concept-node family'>compiler</span><span class='concept-node family'>compilation</span><span class='concept-node family'>compiled</span><span class='concept-node family'>compile-time</span><span class='concept-node colloc'>compile a list</span><span class='concept-node colloc'>compile a report</span><span class='concept-node colloc'>compile data</span><span class='concept-node colloc'>compile an anthology</span><span class='concept-node colloc'>compile code</span><span class='concept-node synonym'>compose</span><span class='concept-node synonym'>edit</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 compile 填回句子：</p><p class='out-sentence'>It took her two years to ______ enough data for her thesis.</p><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='out5' value='compile'> compile</label><label class='opt ' data-correct='0'><input type='radio' name='out5' value='appreciation'> appreciation</label><label class='opt ' data-correct='0'><input type='radio' name='out5' value='programmer'> programmer</label><label class='opt ' data-correct='0'><input type='radio' name='out5' value='disappointing'> disappointing</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>compile</b> /kəm&#x27;paɪl/</p><p class='fb-line'>📝 完整句：It took her two years to compile enough data for her thesis.</p><p class='fb-line'>🀄 译文：她花了两年才收集到足够写论文的数据。</p></div></div></section><section class='q wcard new' data-block='words' data-card='6' data-word='directory'><div class='wcard-top'><span class='wtag new'>新词</span><span class='wnum'>06 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>目录；指南；（尤指）电话簿/姓名地址录</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-prefix'>di</span><span class='morph-part morph-root'>rect</span><span class='morph-part morph-suffix'>ory</span></p><p class='hero-phon'><span class='hero-pos'>n.</span> <audio controls preload='none' src='audio/directory_en.mp3'><source src='audio/directory_en.m4a'></audio></p><p class='hero-meaning'>目录；指南；（尤指）电话簿/姓名地址录</p><div class='lecture-row'><span class='lecture-label'>🎧 听讲解</span><audio controls preload='none' class='lecture-player' src='audio/directory_lecture.mp3'></audio></div></div><div class='hero-img'><img class='anchor-img' src='../../data/images/directory.png' alt='directory 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>来自拉丁语 directorius，意为「用于指引的」，由 dirigere（指引、引导）演变而来，dis-（分开）+ regere（掌管、引导）。15 世纪进入英语，最初指「指南书」，后扩展到「电话簿」「地址录」。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>谐音法：directory 读音像「滴(di)-瑞克特(rect)-瑞(ry)」——想象你弟弟(di)迷路了，抱着一本厚厚的「瑞克特瑞」(谐音)指南册满大街找路。</li><li>拆分法：direct（指引）+-ory（名词后缀，表示「物品/场所」）→ 用来「指引」你去某处的东西，即「目录；指南」。</li><li>场景联想法：站在大型商场电梯口的 directory 指引牌前，对着一排排店铺名找你想去的奶茶店，门牌号一目了然。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>可数名词，常与 phone/business/online 搭配；计算机语境里也指「文件夹」。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>directerys</s></div><div class='err-right'>✅ directories</div><div class='err-note'>以辅音字母 + y 结尾的词，复数要变 y 为 i 再加 es。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>I bought a directory of the new iPhone.</s></div><div class='err-right'>✅ I bought a catalogue/manual of the new iPhone.</div><div class='err-note'>电子产品说明书/产品目录用 catalogue 或 manual，directory 不用于「产品目录」。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>CET-4 阅读和完形常考「phone directory」「business directory」等固定搭配，理解成「电话簿/商业名录」。</li><li>写作中可用 directory 替换 list，使表达更书面，如 a directory of resources（资源目录）。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>direct</b> adj./v. 直接的；指导</span><span class='chip'><b>direction</b> n. 方向；指导</span><span class='chip'><b>director</b> n. 主管；导演</span><span class='chip'><b>indirect</b> adj. 间接的</span><span class='chip'><b>indirectly</b> adv. 间接地</span><span class='chip'><b>directive</b> n. 指令；方针</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'>phone directory 电话簿</span><span class='chip'>business directory 商业名录</span><span class='chip'>directory assistance 电话查询台</span><span class='chip'>online directory 在线目录</span><span class='chip'>directory listing 目录列表</span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>I couldn&#x27;t find her number in the phone <mark class='target'>directory</mark>, so I asked <mark class='target'>directory</mark> assistance for help.</span><br><span class='zh'>我在电话簿里找不到她的号码，就打电话问了查询台。</span></li><li><span class='en'>The hotel provides a <mark class='target'>directory</mark> of nearby restaurants and tourist attractions at the front desk.</span><br><span class='zh'>酒店前台提供一份附近餐馆和景点的指南册。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>directory</b>（目录/地址录）— directory 偏向「人名/地址/电话的清单」或「场所指引牌」，比如电话簿、商场楼层指引。</li><li><b>catalogue</b>（商品/书籍目录）— catalogue 偏向「商品或书籍的详细清单」，常附有图片和价格；directory 不带商品介绍。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>directory</div><div class='concept-nodes'><span class='concept-node family'>direct</span><span class='concept-node family'>direction</span><span class='concept-node family'>director</span><span class='concept-node family'>indirect</span><span class='concept-node family'>indirectly</span><span class='concept-node family'>directive</span><span class='concept-node colloc'>phone directory 电话簿</span><span class='concept-node colloc'>business directory 商业名录</span><span class='concept-node colloc'>directory assistance 电话查询台</span><span class='concept-node colloc'>online directory 在线目录</span><span class='concept-node colloc'>directory listing 目录列表</span><span class='concept-node synonym'>directory</span><span class='concept-node synonym'>catalogue</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 directory 填回句子：</p><p class='out-sentence'>I couldn&amp;#x27;t find her number in the phone ______, so I asked ______ assistance for help.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out6' value='disappointing'> disappointing</label><label class='opt ' data-correct='0'><input type='radio' name='out6' value='programmer'> programmer</label><label class='opt ' data-correct='0'><input type='radio' name='out6' value='appreciation'> appreciation</label><label class='opt ' data-correct='1'><input type='radio' name='out6' value='directory'> directory</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>directory</b> </p><p class='fb-line'>📝 完整句：I couldn&#x27;t find her number in the phone directory, so I asked directory assistance for help.</p><p class='fb-line'>🀄 译文：我在电话簿里找不到她的号码，就打电话问了查询台。</p></div></div></section><section class='q wcard new' data-block='words' data-card='7' data-word='accelerate'><div class='wcard-top'><span class='wtag new'>新词</span><span class='wnum'>07 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>加速；促进（使某事的发生速度变快）</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-root'>accelerate</span></p><p class='hero-phon'><span class='hero-pos'>v.</span>UK /ək&#x27;seləreɪt/ US /əkˈsɛləˌret/ <audio controls preload='none' src='audio/accelerate_en.mp3'><source src='audio/accelerate_en.m4a'></audio></p><p class='hero-meaning'>加速；促进（使某事的发生速度变快）</p><div class='lecture-row'><span class='lecture-label'>🎧 听讲解</span><audio controls preload='none' class='lecture-player' src='audio/accelerate_lecture.mp3'></audio></div></div><div class='hero-img'><img class='anchor-img' src='../../data/images/accelerate.png' alt='accelerate 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>来自拉丁语 accelerare，由前缀 ad-（朝向、加强）和词根 celer（快速的）构成。celer 源自原始印欧语 *kel-（推动、催促）。16世纪进入英语，最初用于物理学描述物体运动速率增加，后泛化为&#x27;加速、促进&#x27;。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>谐音法：accelerate 谐音&#x27;阿克塞了瑞特&#x27;→想象朋友阿克塞车堵成长龙，急得大喊&#x27;快加速啊&#x27;，瞬间画面就来了。</li><li>拆分法：ac-（加强前缀）+ celer（快，来自拉丁语&#x27;迅速&#x27;）+ -ate（动词后缀）→ 使变快 = 加速。</li><li>场景联想法：站在赛车场发车线前，绿灯亮起的瞬间，赛车&#x27;嗖&#x27;地冲出起跑线——那就是 accelerate 的现场感。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>及物与不及物皆可；表示&#x27;急剧加速&#x27;时常用 accelerate rapidly / dramatically，不要画蛇添足再加 fast。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>The car accelerated fast.</s></div><div class='err-right'>✅ The car accelerated rapidly. / The car accelerated.</div><div class='err-note'>accelerate 本身已含&#x27;加速&#x27;之意，加 fast 属语义冗余；如要强调程度，用 rapidly / dramatically。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>He accelerated to do his homework quickly.</s></div><div class='err-right'>✅ He accelerated his homework.</div><div class='err-note'>accelerate 表示&#x27;加快某事的速度&#x27;，及物时直接接宾语，不要再加 to do 句式造成冗余。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>阅读理解：常以同义替换形式出现，需在 accelerate / speed up / promote / boost 之间辨析细微差异。</li><li>写作应用：写作中可用 accelerate 替换 increase 或 develop，使表达更高级、更专业。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>acceleration</b> n. 加速；加速度</span><span class='chip'><b>accelerator</b> n. 加速器；油门踏板</span><span class='chip'><b>accelerated</b> adj. 加速的；加快的</span><span class='chip'><b>decelerate</b> v. 减速</span><span class='chip'><b>deceleration</b> n. 减速</span><span class='chip'><b>accelerative</b> adj. 加速性的；促进的</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'>accelerate the pace of something</span><span class='chip'>accelerate growth / development</span><span class='chip'>accelerate the process</span><span class='chip'>rapidly accelerate</span><span class='chip'>accelerate progress</span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>The pandemic accelerated the shift toward remote work across many industries.</span><br><span class='zh'>疫情加速了众多行业向远程办公的转变。</span></li><li><span class='en'>Tesla plans to <mark class='target'>accelerate</mark> the production of its more affordable EV model next year.</span><br><span class='zh'>特斯拉计划明年加快更亲民款电动车的生产。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>speed up</b>（加快）— speed up 更口语、更日常；accelerate 更正式书面，常用于科技、政策、经济等正式语境。</li><li><b>boost</b>（促进、提升）— boost 侧重数量或水平的&#x27;推高&#x27;，如 boost sales；accelerate 侧重时间或速度的&#x27;变快&#x27;，如 accelerate progress。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>accelerate</div><div class='concept-nodes'><span class='concept-node family'>acceleration</span><span class='concept-node family'>accelerator</span><span class='concept-node family'>accelerated</span><span class='concept-node family'>decelerate</span><span class='concept-node family'>deceleration</span><span class='concept-node family'>accelerative</span><span class='concept-node colloc'>accelerate the pace of something</span><span class='concept-node colloc'>accelerate growth / development</span><span class='concept-node colloc'>accelerate the process</span><span class='concept-node colloc'>rapidly accelerate</span><span class='concept-node colloc'>accelerate progress</span><span class='concept-node synonym'>speed up</span><span class='concept-node synonym'>boost</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 accelerate 填回句子：</p><p class='out-sentence'>The pandemic accelerated the shift toward remote work across many industries.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out7' value='disappointing'> disappointing</label><label class='opt ' data-correct='0'><input type='radio' name='out7' value='appreciation'> appreciation</label><label class='opt ' data-correct='0'><input type='radio' name='out7' value='programmer'> programmer</label><label class='opt ' data-correct='1'><input type='radio' name='out7' value='accelerate'> accelerate</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>accelerate</b> UK /ək&#x27;seləreɪt/ US /əkˈsɛləˌret/</p><p class='fb-line'>📝 完整句：The pandemic accelerated the shift toward remote work across many industries.</p><p class='fb-line'>🀄 译文：疫情加速了众多行业向远程办公的转变。</p></div></div></section><section class='q wcard new' data-block='words' data-card='8' data-word='appealing'><div class='wcard-top'><span class='wtag new'>新词</span><span class='wnum'>08 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>吸引人的；动人的；令人心动的</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-root'>appealing</span></p><p class='hero-phon'><span class='hero-pos'>adj</span>UK /əˈpi:lɪŋ/ US /əˈpiːlɪŋ/ <audio controls preload='none' src='audio/appealing_en.mp3'><source src='audio/appealing_en.m4a'></audio></p><p class='hero-meaning'>吸引人的；动人的；令人心动的</p><div class='lecture-row'><span class='lecture-label'>🎧 听讲解</span><audio controls preload='none' class='lecture-player' src='audio/appealing_lecture.mp3'></audio></div></div><div class='hero-img'><img class='anchor-img' src='../../data/images/appealing.png' alt='appealing 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>来自古法语 &#x27;apolier&#x27;（控告、呼吁），进一步追溯到拉丁语 &#x27;appellare&#x27;，原意为&#x27;走近、呼唤、恳求&#x27;。加上 -ing 后，从&#x27;恳求的动作&#x27;演变成&#x27;能打动人心的&#x27;形容词——就像一个人不停喊你，你自然会注意到他。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>谐音法：&#x27;a 皮领&#x27;——想象一件大衣镶着闪亮的皮领子，走在街上回头率超高，谁都觉得 appealing。</li><li>拆分法：appeal（v. 吸引 / 呼吁）+ -ing（……的）= &#x27;正在吸引人的&#x27;，appeal 本身是动词，-ing 让它变成形容词。</li><li>场景联想法：周末逛奶茶店，菜单上写着&#x27;买一送一&#x27;，你眼睛一亮——这种让你心动的感觉就叫 appealing。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>既可形容具体事物（外观、价格、设计）吸引人，也可形容抽象事物（想法、请求）让人想接受，常与 to 搭配。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>The price is appeal.</s></div><div class='err-right'>✅ The price is appealing.</div><div class='err-note'>appeal 单独是动词或名词，作形容词必须用 appealing，不能省略 -ing。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>It is appealing for everyone.</s></div><div class='err-right'>✅ It is appealing to everyone.</div><div class='err-note'>表达&#x27;对某人有吸引力&#x27;用 appeal to，介词是 to 不是 for。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>完形填空：常考 appealing 与 attractive / desirable / tempting 的近义辨析。</li><li>写作：用 appealing 替换 attractive，可丰富词汇，例如 The design is visually appealing.</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>appeal</b> v./n. 呼吁；吸引力；上诉</span><span class='chip'><b>appealingly</b> adv. 动人地；诱人地</span><span class='chip'><b>unappealing</b> adj. 不吸引人的；乏味的</span><span class='chip'><b>appellate</b> adj. 上诉的（法律术语）</span><span class='chip'><b>appealable</b> adj. 可上诉的</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'>appealing to sb</span><span class='chip'>find sth appealing</span><span class='chip'>an appealing offer / price</span><span class='chip'>visually appealing</span><span class='chip'>appeal to / appeal for</span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>The travel package was <mark class='target'>appealing</mark> because it included free hotel upgrades.</span><br><span class='zh'>这个旅行套餐很诱人，因为包含了免费酒店升级。</span></li><li><span class='en'>She gave him an <mark class='target'>appealing</mark> look when she wanted to borrow his jacket.</span><br><span class='zh'>她想要借他的夹克时，露出了一副惹人怜的表情。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>attractive</b>（有吸引力的）— appealing 偏重勾起兴趣或同情，可形容抽象事物；attractive 更偏重外貌、颜值、物理吸引力。</li><li><b>desirable</b>（值得拥有的）— appealing 是&#x27;看着就想靠近&#x27;；desirable 是&#x27;理性判断后值得拥有&#x27;，更冷静客观。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>appealing</div><div class='concept-nodes'><span class='concept-node family'>appeal</span><span class='concept-node family'>appealingly</span><span class='concept-node family'>unappealing</span><span class='concept-node family'>appellate</span><span class='concept-node family'>appealable</span><span class='concept-node colloc'>appealing to sb</span><span class='concept-node colloc'>find sth appealing</span><span class='concept-node colloc'>an appealing offer / price</span><span class='concept-node colloc'>visually appealing</span><span class='concept-node colloc'>appeal to / appeal for</span><span class='concept-node synonym'>attractive</span><span class='concept-node synonym'>desirable</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 appealing 填回句子：</p><p class='out-sentence'>The travel package was ______ because it included free hotel upgrades.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out8' value='programmer'> programmer</label><label class='opt ' data-correct='1'><input type='radio' name='out8' value='appealing'> appealing</label><label class='opt ' data-correct='0'><input type='radio' name='out8' value='disappointing'> disappointing</label><label class='opt ' data-correct='0'><input type='radio' name='out8' value='appreciation'> appreciation</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>appealing</b> UK /əˈpi:lɪŋ/ US /əˈpiːlɪŋ/</p><p class='fb-line'>📝 完整句：The travel package was appealing because it included free hotel upgrades.</p><p class='fb-line'>🀄 译文：这个旅行套餐很诱人，因为包含了免费酒店升级。</p></div></div></section><section class='q wcard review' data-block='words' data-card='9' data-word='injury'><div class='wcard-top'><span class='wtag review'>复习</span><span class='wnum'>09 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>身体或情感的损伤；受伤；损害</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-prefix'>in</span><span class='morph-part morph-root'>jur</span><span class='morph-part morph-suffix'>y</span></p><p class='hero-phon'><span class='hero-pos'>n.</span>/ˈɪndʒəri/ <audio controls preload='none' src='audio/injury_en.mp3'><source src='audio/injury_en.m4a'></audio></p><p class='hero-meaning'>身体或情感的损伤；受伤；损害</p><div class='lecture-row'><span class='lecture-label'>🎧 听讲解</span><audio controls preload='none' class='lecture-player' src='audio/injury_lecture.mp3'></audio></div></div><div class='hero-img'><img class='anchor-img' src='../../data/images/injury.png' alt='injury 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>来自拉丁语 injuria，意为“不公正”。由 in-（不）+ jus/juris（法律、权利）+-ia 组成，本指“侵犯他人权利”，后引申为“伤害、损伤”.</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>谐音法：“injury”发音像“硬折”，想象骨头硬生生折断，就是受伤。</li><li>拆分法：in（进入）+ jury（陪审团）——你受伤后要进法院，由陪审团裁定赔偿。</li><li>场景联想法：看到运动员被担架抬出场外，电视屏幕上打出“INJURY”红色警示，记住这个词。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>injury 是可数名词，常与 suffer/sustain 搭配表示受伤；have an injury 也可以接受，注意用不定冠词 an injury。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>He injured his injury.</s></div><div class='err-right'>✅ He injured his leg.</div><div class='err-note'>injure 的宾语是身体部位，不能是 injury 本身。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>She has injury on her arm.</s></div><div class='err-right'>✅ She has an injury on her arm.</div><div class='err-note'>injury 是可数名词，单数前需加冠词 a/an。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>CET-4 词汇题常考固定搭配 suffer/sustain an injury，注意与 hurt, wound, damage 的辨析。</li><li>写作中可用 cause injury 替换 simple hurt，提升表达正式度。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>injure</b> v. 使受伤</span><span class='chip'><b>injured</b> adj. 受伤的</span><span class='chip'><b>injurious</b> adj. 有害的</span><span class='chip'><b>injury</b> n. 伤害</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'>sustain an injury</span><span class='chip'>suffer an injury</span><span class='chip'>serious injury</span><span class='chip'>minor injury</span><span class='chip'>injury prevention</span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>He suffered a serious <mark class='target'>injury</mark> in the car accident.</span><br><span class='zh'>他在车祸中受了重伤。</span></li><li><span class='en'>The <mark class='target'>injury</mark> to her ankle kept her out of the game.</span><br><span class='zh'>她脚踝的伤让她无法参加比赛。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>wound</b>（伤口）— wound 指由于切割、射击等造成的外伤，通常有破口；injury 涵盖更广，包括内伤、挫伤等。</li><li><b>hurt</b>（伤痛（动词/名词））— hurt 口语常用，可作动词或名词；injury 更正式，且作为名词时指具体的伤害。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>injury</div><div class='concept-nodes'><span class='concept-node family'>injure</span><span class='concept-node family'>injured</span><span class='concept-node family'>injurious</span><span class='concept-node family'>injury</span><span class='concept-node colloc'>sustain an injury</span><span class='concept-node colloc'>suffer an injury</span><span class='concept-node colloc'>serious injury</span><span class='concept-node colloc'>minor injury</span><span class='concept-node colloc'>injury prevention</span><span class='concept-node synonym'>wound</span><span class='concept-node synonym'>hurt</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 injury 填回句子：</p><p class='out-sentence'>He suffered a serious ______ in the car accident.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out9' value='programmer'> programmer</label><label class='opt ' data-correct='0'><input type='radio' name='out9' value='appreciation'> appreciation</label><label class='opt ' data-correct='1'><input type='radio' name='out9' value='injury'> injury</label><label class='opt ' data-correct='0'><input type='radio' name='out9' value='disappointing'> disappointing</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>injury</b> /ˈɪndʒəri/</p><p class='fb-line'>📝 完整句：He suffered a serious injury in the car accident.</p><p class='fb-line'>🀄 译文：他在车祸中受了重伤。</p></div></div></section><section class='q wcard review' data-block='words' data-card='10' data-word='recover'><div class='wcard-top'><span class='wtag review'>复习</span><span class='wnum'>10 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>恢复，康复；重新获得（体力、意识、数据等）</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-prefix'>re</span><span class='morph-part morph-root'>cover</span></p><p class='hero-phon'><span class='hero-pos'>v.</span>/rɪˈkʌvər/ <audio controls preload='none' src='audio/recover_en.mp3'><source src='audio/recover_en.m4a'></audio></p><p class='hero-meaning'>恢复，康复；重新获得（体力、意识、数据等）</p><div class='lecture-row'><span class='lecture-label'>🎧 听讲解</span><audio controls preload='none' class='lecture-player' src='audio/recover_lecture.mp3'></audio></div></div><div class='hero-img'><img class='anchor-img' src='../../data/images/recover.png' alt='recover 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>Recover 来自古法语 recoverer，最终源于拉丁语 recuperare，由 re-（再，回来）+ capere（拿取）组成，字面意思是“重新拿回”。最早用于拿回失去的财产，后来引申为恢复健康或精力。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>谐音法：谐音“瑞克服”——想象一个叫瑞克的人，靠顽强意志“克服”了病魔，成功康复。</li><li>拆分法：re-（再）+ cover（覆盖）→ 把失去的体力“重新覆盖”回来；生病时裹好被子（cover）好好休息，才能再次（re）康复。</li><li>场景联想法：生病请假躺在床上，裹着厚被子（cover）昏睡；醒来后感觉好多了，于是“再（re）”次活力满满——这就是 recover。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>recover 作不及物动词时用 recover from sth；作及物动词时直接跟宾语，如 recover lost data。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>He recovered his illness after taking medicine.</s></div><div class='err-right'>✅ He recovered from his illness after taking medicine.</div><div class='err-note'>表示“从疾病中康复”要用 recover from sth，不能把疾病直接放在 recover 后面作宾语。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>The doctors recovered him from pneumonia.</s></div><div class='err-right'>✅ The doctors cured him of pneumonia.</div><div class='err-note'>recover 一般不用作“治愈某人”的及物动词；表示医生“治好”某人，要用 cure sb of sth。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>CET-4 完形/阅读中高频出现 recover from 搭配，注意介词 from。</li><li>写作中表达“恢复健康”可用 recover/recover from，替换 get better，使表达更正式。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>recovery</b> n. 恢复，康复</span><span class='chip'><b>recovered</b> adj. 已恢复的，康复的</span><span class='chip'><b>recoverable</b> adj. 可恢复的，可收回的</span><span class='chip'><b>unrecoverable</b> adj. 无法恢复的</span><span class='chip'><b>recuperate</b> v. 休养，恢复（正式）</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'>recover from an illness</span><span class='chip'>recover quickly</span><span class='chip'>fully recover</span><span class='chip'>recover lost data</span><span class='chip'>recover consciousness</span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>After the surgery, it took him three months to fully <mark class='target'>recover</mark> and return to his normal routine.</span><br><span class='zh'>手术之后，他花了三个月时间才完全康复，回归正常生活。</span></li><li><span class='en'>Police have <mark class='target'>recovered</mark> the stolen paintings from a warehouse outside the city.</span><br><span class='zh'>警方已在城外的一个仓库里找回了被盗的画作。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>heal</b>（治愈，愈合）— recover 强调病人自己从疾病中复原，主语是人；heal 强调伤口或组织愈合，主语常是伤口或损伤。</li><li><b>regain</b>（重新获得）— recover 可指恢复健康，也可指找回丢失物；regain 更正式，强调重新获得失去的状态或能力，如 regain balance。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>recover</div><div class='concept-nodes'><span class='concept-node family'>recovery</span><span class='concept-node family'>recovered</span><span class='concept-node family'>recoverable</span><span class='concept-node family'>unrecoverable</span><span class='concept-node family'>recuperate</span><span class='concept-node colloc'>recover from an illness</span><span class='concept-node colloc'>recover quickly</span><span class='concept-node colloc'>fully recover</span><span class='concept-node colloc'>recover lost data</span><span class='concept-node colloc'>recover consciousness</span><span class='concept-node synonym'>heal</span><span class='concept-node synonym'>regain</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 recover 填回句子：</p><p class='out-sentence'>After the surgery, it took him three months to fully ______ and return to his normal routine.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out10' value='programmer'> programmer</label><label class='opt ' data-correct='0'><input type='radio' name='out10' value='appreciation'> appreciation</label><label class='opt ' data-correct='1'><input type='radio' name='out10' value='recover'> recover</label><label class='opt ' data-correct='0'><input type='radio' name='out10' value='disappointing'> disappointing</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>recover</b> /rɪˈkʌvər/</p><p class='fb-line'>📝 完整句：After the surgery, it took him three months to fully recover and return to his normal routine.</p><p class='fb-line'>🀄 译文：手术之后，他花了三个月时间才完全康复，回归正常生活。</p></div></div></section><section class='q wcard review' data-block='words' data-card='11' data-word='treatment'><div class='wcard-top'><span class='wtag review'>复习</span><span class='wnum'>11 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>治疗，疗法；对待，处理</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-root'>treat</span><span class='morph-part morph-suffix'>ment</span></p><p class='hero-phon'><span class='hero-pos'>n.</span>/ˈtriːtmənt/ <audio controls preload='none' src='audio/treatment_en.mp3'><source src='audio/treatment_en.m4a'></audio></p><p class='hero-meaning'>治疗，疗法；对待，处理</p><div class='lecture-row'><span class='lecture-label'>🎧 听讲解</span><audio controls preload='none' class='lecture-player' src='audio/treatment_lecture.mp3'></audio></div></div><div class='hero-img'><img class='anchor-img' src='../../data/images/treatment.png' alt='treatment 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>来自古法语 &#x27;traitement&#x27;，源于拉丁语 &#x27;tractare&#x27;（处理、对待），由 &#x27;tract-&#x27;（拉、拖）加后缀 &#x27;-ment&#x27; 构成，本意是“处理某事物的方式”，后引申为“医疗上的处理”。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>谐音法：谐音“踹他门特”，想象病人踹开医院的门大喊“我要治疗！”，记住 treatment 是治疗。</li><li>拆分法：treat（对待）+ ment（名词后缀），对待病人的方式就是治疗，所以 treatment 是治疗。</li><li>场景联想法：医生给你开药、打针、手术，这些都是 treatment，就像把病“处理”掉一样。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>表示“治疗某种疾病”时，常用 treatment for + 疾病；表示“对待某人/某物”时，常用 treatment of + 对象。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>He is under treatment of a serious illness.</s></div><div class='err-right'>✅ He is under treatment for a serious illness.</div><div class='err-note'>表示“因……接受治疗”时用 for，不用 of。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>She received a treatment for her back pain.</s></div><div class='err-right'>✅ She received treatment for her back pain.</div><div class='err-note'>表示“接受治疗”时 treatment 通常不可数，不加 a；只有指某种特定疗法时才用 a treatment。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>完形填空：常考 treatment 与 cure、therapy 的词义辨析，注意语境是过程还是结果。</li><li>阅读理解：medical treatment 是高频短语，注意 receive/undergo 等搭配动词。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>treat</b> v. 对待；治疗</span><span class='chip'><b>treatable</b> adj. 可治疗的</span><span class='chip'><b>treated</b> adj. 已处理的</span><span class='chip'><b>untreated</b> adj. 未治疗的</span><span class='chip'><b>maltreatment</b> n. 虐待；粗暴对待</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'>medical treatment</span><span class='chip'>receive treatment</span><span class='chip'>undergo treatment</span><span class='chip'>treatment for</span><span class='chip'>effective treatment</span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>The new <mark class='target'>treatment</mark> for cancer has shown promising results in clinical trials.</span><br><span class='zh'>这种新的癌症治疗方法在临床试验中显示了令人鼓舞的结果。</span></li><li><span class='en'>The <mark class='target'>treatment</mark> of prisoners should respect their basic human rights.</span><br><span class='zh'>对待囚犯的方式应尊重他们的基本人权。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>cure</b>（治愈）— treatment 指治疗的过程或具体治疗方案；cure 指治愈的结果。a treatment for cancer 是正确的，指癌症治疗方案；a cure for cancer 才强调彻底治愈癌症。</li><li><b>therapy</b>（疗法）— therapy 更多指非药物的康复疗法，如 physical therapy；treatment 更宽泛，包括药物、手术等。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>treatment</div><div class='concept-nodes'><span class='concept-node family'>treat</span><span class='concept-node family'>treatable</span><span class='concept-node family'>treated</span><span class='concept-node family'>untreated</span><span class='concept-node family'>maltreatment</span><span class='concept-node colloc'>medical treatment</span><span class='concept-node colloc'>receive treatment</span><span class='concept-node colloc'>undergo treatment</span><span class='concept-node colloc'>treatment for</span><span class='concept-node colloc'>effective treatment</span><span class='concept-node synonym'>cure</span><span class='concept-node synonym'>therapy</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 treatment 填回句子：</p><p class='out-sentence'>The new ______ for cancer has shown promising results in clinical trials.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out11' value='disappointing'> disappointing</label><label class='opt ' data-correct='1'><input type='radio' name='out11' value='treatment'> treatment</label><label class='opt ' data-correct='0'><input type='radio' name='out11' value='programmer'> programmer</label><label class='opt ' data-correct='0'><input type='radio' name='out11' value='appreciation'> appreciation</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>treatment</b> /ˈtriːtmənt/</p><p class='fb-line'>📝 完整句：The new treatment for cancer has shown promising results in clinical trials.</p><p class='fb-line'>🀄 译文：这种新的癌症治疗方法在临床试验中显示了令人鼓舞的结果。</p></div></div></section><section class='q wcard review' data-block='words' data-card='12' data-word='overweight'><div class='wcard-top'><span class='wtag review'>复习</span><span class='wnum'>12 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>超重的，体重超过正常标准的</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-prefix'>over</span><span class='morph-part morph-root'>weight</span></p><p class='hero-phon'><span class='hero-pos'>adj.</span>UK /ˌəʊvəˈweɪt/ US /ˌoʊvərˈweɪt/ <audio controls preload='none' src='audio/overweight_en.mp3'><source src='audio/overweight_en.m4a'></audio></p><p class='hero-meaning'>超重的，体重超过正常标准的</p><div class='lecture-row'><span class='lecture-label'>🎧 听讲解</span><audio controls preload='none' class='lecture-player' src='audio/overweight_lecture.mp3'></audio></div></div><div class='hero-img'><img class='anchor-img' src='../../data/images/overweight.png' alt='overweight 画面锚'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>由前缀 over-（超过）和名词 weight（重量）构成。weight 源自古英语 gewiht，本义是“重量”；表示“称重”的是动词 weigh。字面意思是“重量超过标准”。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>谐音法：谐音&#x27;欧文卫特&#x27;，想象一个叫欧文的小伙子特别胖，体重超重，需要特别关注体重。</li><li>拆分法：over（超过）+ weight（重量）→ 超过正常重量 → 超重的。</li><li>场景联想法：想象体检时医生指着体重秤说 &#x27;You are overweight&#x27;，秤的指针越过红色警戒线，你心下一惊。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>常用作形容词，可作定语或表语，如 an overweight person / He is overweight。也可作动词表示&#x27;使负担过重&#x27;，但使用较少。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>She is 20 kilograms overweights.</s></div><div class='err-right'>✅ She is 20 kilograms overweight.</div><div class='err-note'>overweight 是形容词，没有复数形式。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>He overweights 80kg.</s></div><div class='err-right'>✅ He weighs 80kg and is overweight.</div><div class='err-note'>overweight 不能直接接重量，表示&#x27;超重多少&#x27;可用 be overweight by... 或分句。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>高考/四级阅读中常以形容词形式出现在健康话题中，注意与 obesity、obese 等词区分。</li><li>写作中可用于描述健康问题，可搭配 overweight and obesity 以提升表达。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>weight</b> n. 重量</span><span class='chip'><b>weigh</b> v. 称重</span><span class='chip'><b>overweighted</b> adj. 超重的（较少用）</span><span class='chip'><b>underweight</b> adj. 体重过轻的</span><span class='chip'><b>obesity</b> n. 肥胖</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'>be overweight</span><span class='chip'>overweight people</span><span class='chip'>become overweight</span><span class='chip'>overweight and obesity</span><span class='chip'>slightly overweight</span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>According to the latest report, nearly 30% of adults in the country are <mark class='target'>overweight</mark>.</span><br><span class='zh'>根据最新报告，该国近30%的成年人超重。</span></li><li><span class='en'>The doctor advised him to exercise regularly because he was <mark class='target'>overweight</mark>.</span><br><span class='zh'>医生建议他经常锻炼，因为他超重了。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>obese</b>（肥胖的）— obese 指严重肥胖，通常比 overweight 程度更重，且医学上有明确的 BMI 标准（如≥30）。</li><li><b>fat</b>（胖的）— fat 语气口语化、带贬义，overweight 更中性、正式，常用于健康语境。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>overweight</div><div class='concept-nodes'><span class='concept-node family'>weight</span><span class='concept-node family'>weigh</span><span class='concept-node family'>overweighted</span><span class='concept-node family'>underweight</span><span class='concept-node family'>obesity</span><span class='concept-node colloc'>be overweight</span><span class='concept-node colloc'>overweight people</span><span class='concept-node colloc'>become overweight</span><span class='concept-node colloc'>overweight and obesity</span><span class='concept-node colloc'>slightly overweight</span><span class='concept-node synonym'>obese</span><span class='concept-node synonym'>fat</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 overweight 填回句子：</p><p class='out-sentence'>According to the latest report, nearly 30% of adults in the country are ______.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out12' value='appreciation'> appreciation</label><label class='opt ' data-correct='0'><input type='radio' name='out12' value='disappointing'> disappointing</label><label class='opt ' data-correct='1'><input type='radio' name='out12' value='overweight'> overweight</label><label class='opt ' data-correct='0'><input type='radio' name='out12' value='programmer'> programmer</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>overweight</b> UK /ˌəʊvəˈweɪt/ US /ˌoʊvərˈweɪt/</p><p class='fb-line'>📝 完整句：According to the latest report, nearly 30% of adults in the country are overweight.</p><p class='fb-line'>🀄 译文：根据最新报告，该国近30%的成年人超重。</p></div></div></section><section class='q reading-card' data-block='reading' data-card='1'><div class='qhead'><b>③ 语境阅读</b> <span class='hint-inline'>&#x1F50D; 点击任意词 = 查词义（<span style='color:#E85D3A;font-weight:700;'>新词</span> / <span style='color:#8B5CF6;font-weight:700;'>复习</span> / <span style='color:#6B7280;border-bottom:1px dashed #6B7280;'>其他</span>）</span></div><p class='story-title'>治愈系健身 App 的诞生</p><audio controls preload='none' src='audio/story.mp3'><source src='audio/story.m4a'></audio><div class='story-body'><p class='story-paragraph'>Last spring, a young <span class='dict-word dict-new' data-word='programmer'>programmer</span> named Lin quit her office job to build a fitness app. Her goal was simple: help people who had suffered an <span class='dict-word dict-review' data-word='injury'>injury</span> <span class='dict-word dict-review' data-word='recover'>recover</span> faster at home. She hoped her tools could <span class='dict-word dict-new' data-word='accelerate'>accelerate</span> the healing process.</p><p class='story-paragraph'>At first, results were <span class='dict-word dict-new' data-word='disappointing'>disappointing</span>. The app crashed often, and the <span class='dict-word dict-new' data-word='directory'>directory</span> of exercises was too short. &quot;We only had <span class='dict-word dict-new' data-word='approximately'>approximately</span> fifty users in the first month,&quot; Lin admitted.</p><p class='story-paragraph'>Then she added a smart feature that could <span class='dict-word dict-new' data-word='compile'>compile</span> a daily plan for each user. The app learned what <span class='dict-word dict-review' data-word='treatment'>treatment</span> worked best for someone who was <span class='dict-word dict-review' data-word='overweight'>overweight</span> or in pain. People said the friendly design made exercising more <span class='dict-word dict-new' data-word='appealing'>appealing</span>, not boring.</p><p class='story-paragraph'>Now, six months later, the app has over two million users. Doctors even recommend it. &quot;I feel deep <span class='dict-word dict-new' data-word='appreciation'>appreciation</span>,&quot; Lin said. &quot;We just wanted to help.&quot;</p></div><details><summary>中文梗概</summary><p>程序员小林辞职开发了一款健身应用，希望帮助受伤的人在家更快康复。初期用户寥寥无几，结果令人失望，但她后来加入了智能功能，能为超重或疼痛的用户量身定制每日治疗方案。如今这款应用用户突破两百万，她对此充满感激。</p></details><p class='muted'>读完整篇 → 进入 ④ 输出挑战。</p></section><section class='q cloze' data-block='output' data-card='1' data-answer='disappointing'><div class='qhead'><span class='qn'>完·1</span><b>完形填空</b></div><p class='sentence'>At first, results were ______.</p><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='clo1' value='disappointing'> disappointing</label><label class='opt ' data-correct='0'><input type='radio' name='clo1' value='surprising'> surprising</label><label class='opt ' data-correct='0'><input type='radio' name='clo1' value='satisfactory'> satisfactory</label><label class='opt ' data-correct='0'><input type='radio' name='clo1' value='disturbing'> disturbing</label></div><div class='feedback hidden' data-answer='disappointing'><p class='fb-line'>📌 <b>答案：</b>disappointing — 令人失望的；让人扫兴的</p><p class='fb-line'>📝 <b>完整句子：</b>At first, results were ______.</p><p class='fb-line'>💡 <b>考点：</b>形容词作表语，描述结果令人失望。</p><p class='fb-line'>🔎 <b>选项辨析：</b></p><ul class='explain'><li><b>disappointing</b>：令人失望的；让人扫兴的 <span class="tag-correct">✓</span></li><li><b>surprising</b>：</li><li><b>satisfactory</b>：令人满意的，良好的</li><li><b>disturbing</b>：扰人的；引起不安的</li></ul></div></section><section class='q cloze' data-block='output' data-card='2' data-answer='approximately'><div class='qhead'><span class='qn'>完·2</span><b>完形填空</b></div><p class='sentence'>We only had ______ fifty users in the first month,</p><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='clo2' value='approximately'> approximately</label><label class='opt ' data-correct='0'><input type='radio' name='clo2' value='exactly'> exactly</label><label class='opt ' data-correct='0'><input type='radio' name='clo2' value='rarely'> rarely</label><label class='opt ' data-correct='0'><input type='radio' name='clo2' value='probably'> probably</label></div><div class='feedback hidden' data-answer='approximately'><p class='fb-line'>📌 <b>答案：</b>approximately — 大约，大概（用于数字、时间、距离等具体数值前）</p><p class='fb-line'>📝 <b>完整句子：</b>We only had ______ fifty users in the first month,</p><p class='fb-line'>💡 <b>考点：</b>副词，意为“大约”，修饰用户数量。</p><p class='fb-line'>🔎 <b>选项辨析：</b></p><ul class='explain'><li><b>approximately</b>：大约，大概（用于数字、时间、距离等具体数值前） <span class="tag-correct">✓</span></li><li><b>exactly</b>：确切地；精确地</li><li><b>rarely</b>：很少，难得</li><li><b>probably</b>：或许，大概</li></ul></div></section><section class='q cloze' data-block='output' data-card='3' data-answer='accelerate'><div class='qhead'><span class='qn'>完·3</span><b>完形填空</b></div><p class='sentence'>She hoped her tools could ______ the healing process.</p><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='clo3' value='accelerate'> accelerate</label><label class='opt ' data-correct='0'><input type='radio' name='clo3' value='decelerate'> decelerate</label><label class='opt ' data-correct='0'><input type='radio' name='clo3' value='measure'> measure</label><label class='opt ' data-correct='0'><input type='radio' name='clo3' value='observe'> observe</label></div><div class='feedback hidden' data-answer='accelerate'><p class='fb-line'>📌 <b>答案：</b>accelerate — 加速；促进（使某事的发生速度变快）</p><p class='fb-line'>📝 <b>完整句子：</b>She hoped her tools could ______ the healing process.</p><p class='fb-line'>💡 <b>考点：</b>动词，意为“加速”，宾语为 healing process。</p><p class='fb-line'>🔎 <b>选项辨析：</b></p><ul class='explain'><li><b>accelerate</b>：加速；促进（使某事的发生速度变快） <span class="tag-correct">✓</span></li><li><b>decelerate</b>：</li><li><b>measure</b>：分量，尺寸，量具，测量；</li><li><b>observe</b>：遵守</li></ul></div></section><section class='q cloze' data-block='output' data-card='4' data-answer='compile'><div class='qhead'><span class='qn'>完·4</span><b>完形填空</b></div><p class='sentence'>Then she added a smart feature that could ______ a daily plan for each user.</p><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='clo4' value='compile'> compile</label><label class='opt ' data-correct='0'><input type='radio' name='clo4' value='scatter'> scatter</label><label class='opt ' data-correct='0'><input type='radio' name='clo4' value='ignore'> ignore</label><label class='opt ' data-correct='0'><input type='radio' name='clo4' value='confuse'> confuse</label></div><div class='feedback hidden' data-answer='compile'><p class='fb-line'>📌 <b>答案：</b>compile — 编辑；编纂；汇编（计算机语境下指编译代码）</p><p class='fb-line'>📝 <b>完整句子：</b>Then she added a smart feature that could ______ a daily plan for each user.</p><p class='fb-line'>💡 <b>考点：</b>动词，意为“编制、整理”，指生成每日方案。</p><p class='fb-line'>🔎 <b>选项辨析：</b></p><ul class='explain'><li><b>compile</b>：编辑；编纂；汇编（计算机语境下指编译代码） <span class="tag-correct">✓</span></li><li><b>scatter</b>：使消散；撒；散播</li><li><b>ignore</b>：忽视，不顾</li><li><b>confuse</b>：使混乱；迷惑</li></ul></div></section><section class='q cloze' data-block='output' data-card='5' data-answer='appealing'><div class='qhead'><span class='qn'>完·5</span><b>完形填空</b></div><p class='sentence'>People said the friendly design made exercising more ______, not boring.</p><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='clo5' value='appealing'> appealing</label><label class='opt ' data-correct='0'><input type='radio' name='clo5' value='exhausting'> exhausting</label><label class='opt ' data-correct='0'><input type='radio' name='clo5' value='terrible'> terrible</label><label class='opt ' data-correct='0'><input type='radio' name='clo5' value='mechanical'> mechanical</label></div><div class='feedback hidden' data-answer='appealing'><p class='fb-line'>📌 <b>答案：</b>appealing — 吸引人的；动人的；令人心动的</p><p class='fb-line'>📝 <b>完整句子：</b>People said the friendly design made exercising more ______, not boring.</p><p class='fb-line'>💡 <b>考点：</b>形容词作表语，意为“有吸引力的”。</p><p class='fb-line'>🔎 <b>选项辨析：</b></p><ul class='explain'><li><b>appealing</b>：吸引人的；动人的；令人心动的 <span class="tag-correct">✓</span></li><li><b>exhausting</b>：</li><li><b>terrible</b>：可怕的；极度的</li><li><b>mechanical</b>：机械的；力学的</li></ul></div></section><section class='q writing' data-block='output' data-card='6'><div class='qhead'><b>自由写作</b></div><p class='prompt'>用这三个词写 2-3 句：programmer, directory, recover</p><textarea rows='4' placeholder='写 2-3 句…'></textarea><button type='button' data-act='check-writing'>检查（LLM 一句反馈）</button><div class='writing-msg'></div></section><section class='q report-card' data-block='report' data-card='1'><div class='report-hero'>🎉</div><h2 class='report-title'>今日学习报告</h2><p class='report-sub'>先思考 → 再输入 → 再输出，完成度记录在这里。</p><div class='report-stats' id='report-stats'></div><div class='report-weak' id='report-weak'></div><p class='report-tip' id='report-tip'></p></section>
+</div>
+<div class="card-nav">
+  <button class="nav-prev" data-nav="prev">← 上一张</button>
+  <span class="nav-pos" id="nav-pos">1 / 1</span>
+  <button class="nav-next" data-nav="next">下一张 →</button>
+</div>
+<div class="footer">小韩陪你学英语 · 先思考 → 再输入 → 再输出</div>
+<div class="study-done hidden" id="study-done">🎉 今日学习完成</div>
+
+<!-- 点读词典弹窗 -->
+<div class="dict-modal" id="dict-modal"><div class="dict-box-wrap">
+  <button class="dict-close" id="dict-close">×</button>
+  <div class="dict-box" id="dict-box"></div>
+</div></div>
+
+<script>
+(function(){
+  var DICT = {"programmer": {"ph": "UK /prəʊgræmə/ US /progræmɚ/", "zh": "程序员；编程人员", "au": "programmer_en"}, "disappointing": {"ph": "UK /dɪsə'pɒɪntɪŋ/ US /,dɪsə'pɔɪntɪŋ/", "zh": "令人失望的；让人扫兴的", "au": "disappointing_en"}, "appreciation": {"ph": "UK /ə,pri:ʃi'eiʃən/ US /ə,priʃɪ'eʃən/", "zh": "感激；欣赏，鉴赏；（货币、资产等的）升值，增值", "au": "appreciation_en"}, "approximately": {"ph": "UK /ə'prɔksimitli/ US /ə'prɑksɪmətli/", "zh": "大约，大概（用于数字、时间、距离等具体数值前）", "au": "approximately_en"}, "compile": {"ph": "/kəm'paɪl/", "zh": "编辑；编纂；汇编（计算机语境下指编译代码）", "au": "compile_en"}, "directory": {"ph": "", "zh": "目录；指南；（尤指）电话簿/姓名地址录", "au": "directory_en"}, "accelerate": {"ph": "UK /ək'seləreɪt/ US /əkˈsɛləˌret/", "zh": "加速；促进（使某事的发生速度变快）", "au": "accelerate_en"}, "appealing": {"ph": "UK /əˈpi:lɪŋ/ US /əˈpiːlɪŋ/", "zh": "吸引人的；动人的；令人心动的", "au": "appealing_en"}, "injury": {"ph": "/ˈɪndʒəri/", "zh": "身体或情感的损伤；受伤；损害", "au": "injury_en"}, "recover": {"ph": "/rɪˈkʌvər/", "zh": "恢复，康复；重新获得（体力、意识、数据等）", "au": "recover_en"}, "treatment": {"ph": "/ˈtriːtmənt/", "zh": "治疗，疗法；对待，处理", "au": "treatment_en"}, "overweight": {"ph": "UK /ˌəʊvəˈweɪt/ US /ˌoʊvərˈweɪt/", "zh": "超重的，体重超过正常标准的", "au": "overweight_en"}};
+  var DAY = 115;
+  var stage = document.getElementById('stage');
+  var cards = Array.prototype.slice.call(stage.querySelectorAll('.q'));
+  var bar = document.getElementById('bar');
+  var counter = document.getElementById('counter');
+  var blocksEl = document.getElementById('blocks');
+  var BLOCK_NAMES = { 'intro': '开始', 'words': '一词一卡',
+                      'word_forms': '词性转化', 'article_logic': '文章逻辑',
+                      'reading': '阅读', 'output': '输出', 'report': '报告' };
+  var groups = {};
+  cards.forEach(function(c){
+    var b = c.getAttribute('data-block');
+    (groups[b] = groups[b] || []).push(c);
+  });
+  var firstCardOfBlock = {};
+  Object.keys(groups).forEach(function(b){
+    firstCardOfBlock[b] = groups[b][0];
+    var btn = document.createElement('button');
+    btn.textContent = BLOCK_NAMES[b] || b;
+    btn.setAttribute('data-block', b);
+    btn.addEventListener('click', function(){ showCard(firstCardOfBlock[b]); });
+    blocksEl.appendChild(btn);
+  });
+  var curIdx = 0;
+  function showCard(c){
+    cards.forEach(function(x){ x.classList.remove('active'); });
+    c.classList.add('active');
+    curIdx = cards.indexOf(c);
+    bar.style.width = (100 * (curIdx + 1) / cards.length) + '%';
+    counter.textContent = (curIdx + 1) + ' / ' + cards.length;
+    Array.prototype.forEach.call(blocksEl.children, function(b){
+      b.classList.toggle('on', b.getAttribute('data-block') === c.getAttribute('data-block'));
+    });
+    document.getElementById('nav-pos').textContent = (curIdx + 1) + ' / ' + cards.length;
+    document.querySelectorAll('.card-nav button').forEach(function(b){
+      var dir = b.getAttribute('data-nav');
+      b.disabled = (dir === 'prev' && curIdx === 0) || (dir === 'next' && curIdx === cards.length - 1);
+    });
+    window.scrollTo(0, 0);
+  }
+  function navNext(){ if (curIdx < cards.length - 1) showCard(cards[curIdx + 1]); }
+  function navPrev(){ if (curIdx > 0) showCard(cards[curIdx - 1]); }
+  document.body.addEventListener('click', function(e){
+    var t = e.target.closest('[data-nav]');
+    if (!t) return;
+    if (t.getAttribute('data-nav') === 'next') navNext(); else navPrev();
+  });
+
+  // 词卡：评分 → 揭晓输入 + 展开输出（含进度计数 / 离线兜底 / 自动完成）
+  var ratings = {};  // word -> quality（会话内）
+  var wcards = Array.prototype.slice.call(document.querySelectorAll('.wcard'));
+  var ratedSet = {};  // word -> true（含 localStorage 恢复）
+  var LS_RATINGS = 'xiaohan_ratings_' + DAY;
+  var LS_PENDING = 'xiaohan_pending_' + DAY;
+  function lsGet(k){ try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch(e){ return null; } }
+  function lsSet(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+  var savedRatings = lsGet(LS_RATINGS) || {};
+  Object.keys(savedRatings).forEach(function(w){
+    if (savedRatings[w]) ratedSet[w] = true;
+  });
+  function ratedCount(){
+    var n = 0;
+    wcards.forEach(function(c){
+      if (ratedSet[c.getAttribute('data-word')]) n++;
+    });
+    return n;
+  }
+  function refreshRateChip(){
+    var chip = document.getElementById('rate-chip');
+    if (!chip) return;
+    var n = ratedCount(), total = wcards.length;
+    chip.textContent = '词卡 ' + n + '/' + total;
+    chip.classList.toggle('done', n === total);
+    if (n === total) chip.textContent += ' · 学完';
+  }
+  function showStudyDone(offlineOnly){
+    var el = document.getElementById('study-done');
+    if (!el) return;
+    el.textContent = offlineOnly
+      ? '🎉 今日词卡已全部评分（离线已存，联网后自动同步）'
+      : '🎉 今日学习完成！';
+    el.classList.remove('hidden');
+  }
+  // 同步端点列表：依次尝试，任一成功即视为已同步。
+  // 1) 同源相对路径（经本地服务页 http://127.0.0.1:8090/ 打开时）
+  // 2) 本地服务绝对地址（从桌面 file:// 直接打开学习单时，跨源 CORS 推送）
+  var SYNC_ENDPOINTS = ['/api/review', 'http://127.0.0.1:8090/api/review'];
+  function postSync(path, body){
+    var payload = {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(body)
+    };
+    var chain = Promise.resolve(false);
+    SYNC_ENDPOINTS.forEach(function(base){
+      var url = (base.indexOf('http') === 0 ? base : '');
+      chain = chain.then(function(ok){
+        if (ok) return true;
+        return fetch(url + path, payload).then(function(resp){ return resp.ok; }, function(){ return false; });
+      });
+    });
+    return chain;
+  }
+  function sendReview(word, q){
+    return postSync('/api/review', {word: word, quality: q, channel: 'study', day_num: DAY});
+  }
+  function flushPending(){
+    var pend = lsGet(LS_PENDING) || [];
+    if (!pend.length) return Promise.resolve();
+    var next = [];
+    pend.forEach(function(p){ next.push({word: p.word, q: p.q}); });
+    var queue = next.slice();
+    return queue.reduce(function(acc, item){
+      return acc.then(function(){ return sendReview(item.word, item.q); }).then(function(ok){
+        if (!ok) return;
+        var rest = [];
+        pend.forEach(function(p){
+          if (!(p.word === item.word && p.q === item.q)) rest.push(p);
+        });
+        pend = rest;
+        lsSet(LS_PENDING, pend);
+      });
+    }, Promise.resolve());
+  }
+  function maybeComplete(){
+    flushPending().then(function(){
+      return postSync('/api/study-complete', {day_num: DAY});
+    }).then(function(ok){
+      if (ok) showStudyDone(false); else showStudyDone(true);
+    }).catch(function(){ showStudyDone(true); });
+  }
+  function rateWord(card, q){
+    var word = card.getAttribute('data-word');
+    ratings[word] = q;
+    ratedSet[word] = true;
+    var s = lsGet(LS_RATINGS) || {};
+    s[word] = q;
+    lsSet(LS_RATINGS, s);
+    refreshRateChip();
+    sendReview(word, q).then(function(ok){
+      if (!ok) {
+        var pend = lsGet(LS_PENDING) || [];
+        pend.push({word: word, q: q});
+        lsSet(LS_PENDING, pend);
+      }
+      if (ratedCount() >= wcards.length) maybeComplete();
+    });
+  }
+  document.querySelectorAll('.wcard .rate').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var q = parseInt(btn.getAttribute('data-q'), 10);
+      var card = btn.closest('.wcard');
+      card.querySelectorAll('.rate').forEach(function(b){ b.classList.remove('sel'); });
+      btn.classList.add('sel');
+      card.querySelector('.phase-input').classList.remove('hidden');
+      card.querySelector('.phase-output').classList.remove('hidden');
+      var labels = {1: '忘了', 3: '模糊', 4: '想起', 5: '熟练'};
+      card.querySelector('.rate-msg').textContent = '已记录「' + (labels[q] || q) + '」—— 答案和讲解展开啦';
+      rateWord(card, q);
+    });
+  });
+  refreshRateChip();
+  // 打开页面即自动补推历史遗留评分（避免漏同步）
+  flushPending();
+
+  // 词卡输出小练习：选完立刻反馈
+  document.querySelectorAll('.wcard .opts input').forEach(function(r){
+    r.addEventListener('change', function(){
+      var card = r.closest('.wcard');
+      var word = card.getAttribute('data-word');
+      var ok = r.value === word;
+      card.querySelectorAll('label.opt').forEach(function(l){
+        l.classList.remove('right', 'wrong', 'soft');
+        if (l.getAttribute('data-correct') === '1') l.classList.add('right');
+        else if (l.querySelector('input').checked) l.classList.add('wrong');
+        else l.classList.add('soft');
+      });
+      var fb = card.querySelector('.out-fb');
+      if (fb) fb.classList.remove('hidden');
+    });
+  });
+
+  // 阅读点读词典 — 点击任意词访问小字典
+  function showDict(word, info) {
+    var audioHtml = info.au ? "<audio controls autoplay preload='auto' src='audio/" + info.au + ".mp3'></audio>" : '';
+    var defHtml = '';
+    if (info.def) {
+      defHtml = "<div class='d-def'>" + info.def + "</div>";
+    }
+    document.getElementById('dict-box').innerHTML =
+      "<div class='d-en'>" + word + "</div>" +
+      "<div class='d-ph'>" + (info.ph || '') + "</div>" +
+      "<div class='d-zh'>" + (info.zh || '') + "</div>" + defHtml +
+      audioHtml;
+    document.getElementById('dict-modal').classList.add('show');
+  }
+
+  // 已知词（当日目标词）的点击
+  document.querySelectorAll('.dict-word').forEach(function(sw){
+    sw.addEventListener('click', function(e){
+      e.stopPropagation();
+      var w = sw.getAttribute('data-word');
+      var info = DICT[w] || {};
+      showDict(w, info);
+    });
+  });
+
+  // 任意词点击查询 — 通过在线词典 API
+  document.querySelectorAll('.story-paragraph, .story-body').forEach(function(el){
+    el.addEventListener('click', function(e){
+      // 如果已经是 .dict-word 的点击，不要重复处理
+      if (e.target.closest('.dict-word')) return;
+      // 如果点击的是普通文本节点，获取选中的词
+      var sel = window.getSelection();
+      if (!sel || !sel.toString().trim()) {
+        // 没有选中文字，尝试获取点击位置的词
+        var t = e.target;
+        if (t.nodeType === 3) { // Text node
+          var text = t.textContent;
+          var range = document.createRange();
+          range.selectNodeContents(t);
+          var pos = e.offsetX;
+          // 简单处理：获取点击位置附近的词
+          var words = text.match(/\w+/g) || [];
+          if (words.length > 0) {
+            var word = words[Math.floor(words.length / 2)];
+            lookupWord(word);
+          }
+          return;
+        }
+        return;
+      }
+      var word = sel.toString().trim().toLowerCase();
+      if (word && word.length > 0 && word.length < 30) {
+        lookupWord(word);
+      }
+      sel.removeAllRanges();
+    });
+  });
+
+  function lookupWord(word) {
+    // 先查本地词典
+    var info = DICT[word];
+    if (info) {
+      showDict(word, info);
+      return;
+    }
+    // 再尝试在线 API
+    var apiUrl = 'https://api.dictionaryapi.dev/api/v2/entries/en/' + encodeURIComponent(word);
+    fetch(apiUrl)
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        if (Array.isArray(data) && data.length > 0) {
+          var entry = data[0];
+          var ph = entry.phonetic || (entry.phonetics && entry.phonetics[0] ? entry.phonetics[0].text : '') || '';
+          var meanings = entry.meanings || [];
+          var defs = [];
+          meanings.forEach(function(m){
+            (m.definitions || []).slice(0, 2).forEach(function(d){
+              defs.push('<span class="d-pos">' + (m.partOfSpeech || '') + '</span> ' + (d.definition || ''));
+            });
+          });
+          var defHtml = defs.join('<br>');
+          // 网络翻译（简单处理）
+          var zh = '';
+          if (meanings.length > 0 && meanings[0].definitions && meanings[0].definitions[0]) {
+            var syn = meanings[0].synonyms || [];
+            if (syn.length > 0) zh = '同义词：' + syn.slice(0, 3).join(', ');
+          }
+          showDict(word, {ph: ph, zh: zh, def: defHtml, au: ''});
+        } else {
+          showDict(word, {ph: '', zh: '未找到该词的定义', def: '', au: ''});
+        }
+      })
+      .catch(function(){
+        showDict(word, {ph: '', zh: '网络查询失败', def: '', au: ''});
+      });
+  }
+  document.getElementById('dict-close').addEventListener('click', function(){
+    document.getElementById('dict-modal').classList.remove('show');
+  });
+  document.getElementById('dict-modal').addEventListener('click', function(e){
+    if (e.target === this) this.classList.remove('show');
+  });
+
+  // 完形 / 预热共用反馈
+  function revealFeedback(card, isCorrect){
+    card.querySelectorAll('label.opt').forEach(function(l){
+      var input = l.querySelector('input');
+      l.classList.remove('right', 'wrong', 'soft');
+      if (l.getAttribute('data-correct') === '1') l.classList.add('right');
+      else if (input && input.checked) l.classList.add('wrong');
+      else l.classList.add('soft');
+    });
+    var fb = card.querySelector('.feedback');
+    if (fb) {
+      fb.classList.remove('hidden');
+      fb.classList.toggle('wrong', !isCorrect);
+    }
+  }
+  cards.forEach(function(card){
+    if (card.classList.contains('wcard')) return;
+    card.querySelectorAll('input[type=radio]').forEach(function(r){
+      r.addEventListener('change', function(){
+        var ans = card.getAttribute('data-answer');
+        revealFeedback(card, r.value === ans);
+      });
+    });
+  });
+
+  // 写作反馈
+  document.querySelectorAll('[data-act="check-writing"]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var card = btn.closest('.q');
+      var ta = card.querySelector('textarea');
+      var sentence = (ta.value || '').trim();
+      if (!sentence) { card.querySelector('.writing-msg').textContent = '请先写一句'; return; }
+      var prompt = card.querySelector('.prompt').textContent;
+      var m = prompt.match(/用.{0,20}?(\w+)[、，](\w+)[、，](\w+)/);
+      var word = m ? m[1] : 'word';
+      btn.disabled = true; btn.textContent = '反馈中…';
+      fetch('/api/check', {
+        method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({word: word, sentence: sentence})
+      }).then(function(r){ return r.json(); }).then(function(d){
+        var msg = card.querySelector('.writing-msg');
+        if (d.error) { msg.textContent = d.error; return; }
+        msg.textContent = (d.ok ? '✓ ' : '⚠ ') + d.feedback;
+      }).catch(function(e){
+        card.querySelector('.writing-msg').textContent = '反馈失败：' + e;
+      }).finally(function(){ btn.disabled = false; btn.textContent = '检查（LLM 一句反馈）'; });
+    });
+  });
+
+  // 键盘
+  document.addEventListener('keydown', function(e){
+    if (e.target && (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT')) return;
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); navNext(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); navPrev(); }
+    else if (['1','2','3','4'].indexOf(e.key) >= 0) {
+      var cur = cards[curIdx];
+      if (!cur || !cur.classList.contains('wcard')) return;
+      var map = {'1': 1, '2': 3, '3': 4, '4': 5};
+      var q = map[e.key];
+      var btn = cur.querySelector('.rate[data-q="' + q + '"]');
+      if (btn) btn.click();
+    }
+  });
+
+  // 学习报告：会话内汇总
+  function renderReport(){
+    var stats = {'1': 0, '3': 0, '4': 0, '5': 0};
+    var weak = [];
+    Object.keys(ratings).forEach(function(w){
+      stats[ratings[w]]++;
+      if (ratings[w] <= 3) weak.push(w);
+    });
+    var labels = {1: '忘了', 3: '模糊', 4: '想起', 5: '熟练'};
+    var cols = ['1','3','4','5'].map(function(q){
+      return "<div class='stat'><b>" + stats[q] + "</b><span>" + labels[q] + "</span></div>";
+    }).join('');
+    document.getElementById('report-stats').innerHTML = cols;
+    var weakEl = document.getElementById('report-weak');
+    if (weak.length) {
+      weakEl.innerHTML = "⚠️ 明天优先复习：<b>" + weak.join('、') + "</b><br>" +
+        "睡前再听一遍故事音频，回忆这些词出现的语境。";
+    } else {
+      weakEl.innerHTML = "🌟 今天没有弱项！每个词都记牢了，太棒了。";
+    }
+  }
+  var reportCard = document.querySelector('.report-card');
+  if (reportCard) {
+    // 进入报告卡时渲染（在 showCard 里通过 MutationObserver 太复杂，直接监听点击）
+    var obs = new MutationObserver(function(){
+      if (reportCard.classList.contains('active')) renderReport();
+    });
+    obs.observe(reportCard, {attributes: true, attributeFilter: ['class']});
+  }
+
+  if (cards.length > 0) showCard(cards[0]);
+})();
+</script>
+</body>
+</html>

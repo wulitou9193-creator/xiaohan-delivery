@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day_129 学习单 · 小韩英语角</title>
+<style>
+  :root {
+    --bg: #F7F5F2;
+    --card: #ffffff;
+    --ink: #1A1A2E;
+    --muted: #8B8FA3;
+    --line: #E8E4DE;
+    --accent: #E85D3A;
+    --accent-light: #FFF0EA;
+    --navy: #1B2A4A;
+    --ok: #2E9E6B;
+    --bad: #E74C3C;
+    --soft: #F5F2ED;
+    --radius: 24px;
+    --radius-sm: 14px;
+    --radius-xs: 10px;
+    --shadow: 0 1px 4px rgba(27,42,74,0.04), 0 2px 12px rgba(27,42,74,0.06);
+    --shadow-lg: 0 4px 12px rgba(27,42,74,0.06), 0 8px 32px rgba(27,42,74,0.10);
+    --shadow-xl: 0 8px 24px rgba(27,42,74,0.10), 0 16px 48px rgba(27,42,74,0.12);
+    --font: "PingFang SC", "Microsoft YaHei", -apple-system, sans-serif;
+    --c-etym: #1B8C3A;
+    --c-memory: #6C5CE7;
+    --c-usage: #2D7FC1;
+    --c-error: #E74C3C;
+    --c-exam: #8B5CF6;
+    --c-family: #10B981;
+    --c-colloc: #3B82F6;
+    --c-example: #7C3AED;
+    --c-confuse: #F59E0B;
+    --bg-etym: #F0F9F2;
+    --bg-memory: #F5F3FF;
+    --bg-usage: #F0F7FC;
+    --bg-error: #FEF2F2;
+    --bg-exam: #F8F4FF;
+    --bg-family: #ECFDF5;
+    --bg-colloc: #EFF6FF;
+    --bg-example: #F9F4FF;
+    --bg-confuse: #FFFBEB;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font); background: var(--bg);
+    color: var(--ink); padding-bottom: 100px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .topbar {
+    position: sticky; top: 0; z-index: 20;
+    background: linear-gradient(135deg, #1B2A4A 0%, #243B5E 100%);
+    color: #fff; padding: 12px 18px;
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  }
+  .topbar .brand {
+    font-weight: 700; font-size: 16px;
+    background: linear-gradient(90deg, #FFD9A0, #F0B37A);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; letter-spacing: 0.5px;
+  }
+  .topbar .progress {
+    flex: 1; min-width: 80px; height: 6px;
+    background: rgba(255,255,255,0.15); border-radius: 4px; overflow: hidden;
+  }
+  .topbar .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #E85D3A, #F0B37A);
+    width: 0%; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .topbar .counter {
+    font-size: 14px; color: rgba(255,255,255,0.6);
+    font-variant-numeric: tabular-nums; min-width: 50px; text-align: right;
+  }
+  .topbar .rate-chip {
+    font-size: 12px; padding: 4px 10px;
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.16);
+    border-radius: 999px; color: #FFE2C9; white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  .topbar .rate-chip.done {
+    background: var(--ok); border-color: var(--ok);
+    color: #fff; font-weight: 700;
+  }
+  .study-done {
+    position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%);
+    background: var(--ok); color: #fff; font-weight: 700;
+    padding: 12px 24px; border-radius: 999px;
+    box-shadow: 0 6px 24px rgba(46,158,107,0.35); z-index: 50;
+    animation: cardIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .topbar .blocks { display: flex; gap: 4px; }
+  .topbar .blocks button {
+    font-size: 13px; padding: 4px 10px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.6); border-radius: 8px;
+    cursor: pointer; transition: all 0.2s; font-weight: 500;
+  }
+  .topbar .blocks button:hover { background: rgba(255,255,255,0.12); color: #fff; }
+  .topbar .blocks button.on {
+    background: #E85D3A; color: #fff; border-color: #E85D3A;
+  }
+  .meta {
+    text-align: center; padding: 10px 12px 4px;
+    color: var(--muted); font-size: 14px; letter-spacing: 0.3px;
+  }
+  .stage { max-width: 700px; margin: 0 auto; padding: 8px 14px 20px; min-height: 65vh; }
+  .q {
+    display: none; background: var(--card); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 32px 28px 36px;
+    min-height: 380px; position: relative;
+    overflow: hidden; border: 1px solid rgba(232,228,222,0.6);
+  }
+  .q.active {
+    display: block;
+    animation: cardIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(20px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .hidden { display: none !important; }
+  .qhead {
+    font-size: 16px; margin-bottom: 16px; color: var(--muted);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .qn { font-weight: 700; color: var(--accent); margin-right: 4px; }
+  .intro-card { text-align: center; padding-top: 40px; }
+  .intro-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #E85D3A, #F0A07A);
+    color: #fff; font-size: 13px; font-weight: 700; padding: 5px 16px;
+    border-radius: 999px; letter-spacing: 1px; text-transform: uppercase;
+    box-shadow: 0 2px 8px rgba(232,93,58,0.25);
+  }
+  .intro-day {
+    font-size: 48px; font-weight: 800; margin: 14px 0 4px;
+    color: var(--navy); letter-spacing: -1px;
+    background: linear-gradient(135deg, #1B2A4A, #2D4A7A);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .intro-date { color: var(--muted); font-size: 16px; margin-bottom: 20px; }
+  .intro-goal {
+    display: flex; gap: 16px; justify-content: center; margin: 20px 0;
+  }
+  .intro-goal div {
+    background: linear-gradient(135deg, var(--soft), #F0EBE4);
+    border-radius: 18px; padding: 14px 24px; min-width: 90px;
+    border: 1px solid rgba(232,228,222,0.5);
+  }
+  .intro-goal b { font-size: 32px; color: var(--accent); display: block; }
+  .intro-goal span { font-size: 13px; color: var(--muted); }
+  .intro-story {
+    background: linear-gradient(135deg, #F0F9F2, #E8F5EC);
+    border: 1px solid #C8E0D0; border-radius: 18px;
+    padding: 18px; margin: 14px 0; text-align: left;
+  }
+  .intro-story .story-title {
+    font-weight: 700; font-size: 20px; color: var(--navy); margin: 0 0 8px;
+  }
+  .intro-flow {
+    color: var(--muted); font-size: 15px; line-height: 1.8;
+    margin-top: 18px; padding: 0 12px;
+  }
+  .intro-flow b { color: var(--navy); }
+  .wcard { padding-top: 28px; }
+  .wcard-top {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 16px;
+  }
+  .wtag {
+    font-size: 13px; padding: 6px 16px; border-radius: 999px;
+    font-weight: 700; letter-spacing: 0.5px;
+  }
+  .wtag.new { background: #E8F2FC; color: #1D6FA8; }
+  .wtag.review { background: #FEF0E7; color: #D4782A; }
+  .wnum {
+    font-size: 13px; color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .phase { margin: 16px 0; }
+  .phase-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 13px; font-weight: 700; padding: 6px 18px 6px 14px;
+    border-radius: 999px; margin-bottom: 12px;
+  }
+  .phase-tag.think { background: #E8F0FC; color: #1D6FA8; }
+  .phase-tag.think::before { content: '💭'; font-size: 13px; }
+  .phase-tag.input { background: #E4F5EC; color: #1A8A5A; }
+  .phase-tag.input::before { content: '📖'; font-size: 13px; }
+  .phase-tag.output { background: #FEF0E7; color: #D4782A; }
+  .phase-tag.output::before { content: '✏️'; font-size: 13px; }
+  .think-q {
+    color: var(--muted); font-size: 17px; margin: 10px 0 16px;
+    line-height: 1.6;
+  }
+  .meaning {
+    font-size: 28px; line-height: 1.5; color: var(--navy);
+    font-weight: 700; margin: 0 0 16px; padding: 18px 24px;
+    background: #F8F4EE; border-radius: 16px; text-align: center;
+    border: 1px dashed var(--line);
+  }
+  .hint { color: var(--muted); font-size: 14px; margin-top: 10px; }
+  .rate-msg {
+    color: var(--accent); font-size: 16px; margin-top: 12px;
+    min-height: 20px; font-weight: 600;
+  }
+  .rbtns {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+  }
+  .rbtns button {
+    font-size: 16px; padding: 12px 6px;
+    border: 1px solid var(--line); border-radius: 14px;
+    background: var(--soft); cursor: pointer; font-weight: 600;
+    transition: all 0.2s; color: var(--ink);
+  }
+  .rbtns button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+  .rbtns button.rate.sel {
+    background: linear-gradient(135deg, #E85D3A, #F0A07A);
+    color: #fff; border-color: #E85D3A; transform: scale(1.05);
+    box-shadow: 0 4px 16px rgba(232,93,58,0.3);
+  }
+  .opts {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+    margin-top: 12px;
+  }
+  .opt {
+    padding: 16px 18px; background: #F9F6EF;
+    border: 1px solid var(--line); border-radius: 16px;
+    cursor: pointer; font-size: 16px; line-height: 1.5;
+    transition: all 0.15s; display: flex; align-items: center; gap: 8px;
+  }
+  .opt:hover {
+    border-color: #D4C9B8; background: #F5F0E8;
+    transform: translateY(-1px);
+  }
+  .opt input { margin: 0; accent-color: var(--accent); }
+  .opt.right {
+    background: #E4F5EC; border-color: var(--ok);
+    animation: pulse 0.3s ease;
+  }
+  .opt.wrong { background: #FEF2F2; border-color: var(--bad); }
+  .opt.soft { opacity: 0.45; }
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+  }
+  .feedback {
+    margin-top: 16px; padding: 16px 18px; border-radius: 16px;
+    background: #F0F9F2; border: 1px solid #C8E0D0;
+    animation: cardIn 0.2s ease;
+  }
+  .feedback.wrong { background: #FEF2F2; border-color: #F0C8C8; }
+  .fb-line { margin: 6px 0; font-size: 17px; line-height: 1.6; }
+  .fb-ok { color: var(--ok); }
+  .fb-wrong { color: var(--bad); }
+  .explain { margin: 8px 0; padding-left: 20px; }
+  .explain li { margin: 4px 0; font-size: 16px; }
+  .opt-explain { margin: 6px 0; font-size: 16px; line-height: 1.6; }
+  .opt-reason { color: var(--muted); font-size: 14px; }
+  .think-path {
+    margin: 12px 0; padding: 12px 14px; border-radius: 14px;
+    background: #FFF8E8; border: 1px solid #F0E3C0;
+  }
+  .distractor-item {
+    margin: 5px 0; font-size: 15px; line-height: 1.6;
+    color: var(--ink);
+  }
+  .distractors {
+    margin: 12px 0; padding: 12px 14px; border-radius: 14px;
+    background: #FEF2F2; border: 1px solid #F5D0D0;
+  }
+  .tag-correct { color: var(--ok); font-weight: 700; }
+  .out-q { font-size: 17px; line-height: 1.7; margin-bottom: 10px; color: var(--navy); font-weight: 600; }
+  .out-sentence { font-size: 18px; line-height: 1.8; background: var(--soft); padding: 14px 18px; border-radius: 16px; margin: 10px 0 14px; }
+  .out-fb {
+    margin-top: 14px; padding: 14px 16px; border-radius: 14px;
+    background: #F0F9F2; border: 1px solid #C8E0D0;
+    animation: cardIn 0.2s ease;
+  }
+  .story-title {
+    font-weight: 700; font-size: 18px; color: var(--navy);
+    margin: 8px 0; line-height: 1.4;
+  }
+  .story-body { font-size: 18px; line-height: 2; color: #1A3040; }
+  .story-paragraph { margin: 12px 0; line-height: 1.9; }
+  mark {
+    background: linear-gradient(180deg, transparent 60%, #FFE9C9 60%);
+    padding: 0 3px; border-radius: 2px;
+  }
+  /* 讲解音频 */
+  .lecture-row {
+    display: flex; align-items: center; gap: 8px;
+    margin-top: 8px; padding-top: 8px;
+    border-top: 1px solid var(--line);
+  }
+  .lecture-label {
+    font-size: 13px; color: var(--accent); font-weight: 600;
+    white-space: nowrap; flex-shrink: 0;
+  }
+  .lecture-player {
+    height: 36px; width: 200px; flex-shrink: 0;
+  }
+  @media (max-width: 600px) {
+    .lecture-player { width: 140px; }
+  }
+  audio {
+    height: 36px; width: 100%; margin-top: 10px;
+    border-radius: 10px;
+  }
+  .dict-word {
+    padding: 1px 4px; border-radius: 4px; cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s; font-weight: 600;
+  }
+  .dict-word.dict-new {
+    background: linear-gradient(180deg, transparent 60%, #FFE9C9 60%);
+    border-bottom-color: var(--accent);
+  }
+  .dict-word.dict-new:hover { background: #FFDCA8; }
+  .dict-word.dict-review {
+    background: linear-gradient(180deg, transparent 60%, #F0E8FF 60%);
+    border-bottom-color: #8B5CF6;
+  }
+  .dict-word.dict-review:hover { background: #E2D4F5; }
+  .dict-modal {
+    display: none; position: fixed; inset: 0; z-index: 50;
+    background: rgba(27,42,74,0.4);
+    align-items: center; justify-content: center;
+    backdrop-filter: blur(6px);
+  }
+  .dict-modal.show { display: flex; }
+  .dict-box {
+    width: min(88vw, 460px); background: #fff; border-radius: 24px;
+    padding: 28px; box-shadow: var(--shadow-xl);
+    animation: cardIn 0.15s ease;
+  }
+  .dict-box .d-en {
+    font-size: 30px; font-weight: 800; color: var(--navy);
+  }
+  .dict-box .d-ph {
+    color: var(--muted); font-size: 15px; margin: 4px 0 10px;
+  }
+  .dict-box .d-zh {
+    font-size: 17px; line-height: 1.5; margin-bottom: 12px;
+    color: var(--ink);
+  }
+  .dict-close {
+    position: absolute; top: 14px; right: 18px; font-size: 26px;
+    color: var(--muted); cursor: pointer; background: none; border: none;
+    line-height: 1; transition: color 0.15s;
+  }
+  .dict-close:hover { color: var(--navy); }
+  .dict-box-wrap { position: relative; }
+  .rich { padding: 0; }
+  .rich-head {
+    margin-bottom: 24px; padding-bottom: 20px;
+    border-bottom: 2px solid var(--line);
+    background: linear-gradient(180deg, #FAF8F5 0%, transparent 100%);
+    margin: -16px -16px 20px -16px;
+    padding: 24px 24px 20px 24px;
+    border-radius: var(--radius) var(--radius) 0 0;
+    position: relative;
+  }
+  .rich-head::after {
+    content: '';
+    position: absolute; bottom: -2px; left: 24px; right: 24px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    border-radius: 2px;
+  }
+  .rich-head .head-line1 {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  }
+  .rich-head .en {
+    font-size: 36px; font-weight: 800; color: var(--navy);
+    letter-spacing: -0.5px; line-height: 1.1;
+  }
+  .rich-head .pos-chip {
+    background: linear-gradient(135deg, #F0E2CC, #E8D6B8);
+    color: #8A5A1C; font-size: 12px;
+    font-weight: 700; padding: 3px 14px; border-radius: 8px;
+  }
+  .rich-head .phon {
+    color: var(--muted); font-size: 15px;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .rich-head .head-meaning {
+    margin-top: 10px; font-size: 20px; font-weight: 700;
+    color: var(--accent); line-height: 1.5;
+  }
+  .rich-sec {
+    margin: 18px 0; padding: 18px 20px;
+    background: #FAF8F5; border-radius: 18px;
+    border: 1px solid #EDE8E0;
+    position: relative; overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .rich-sec:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(27,42,74,0.08);
+  }
+  .rich-sec::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 5px; height: 100%;
+    border-radius: 0 3px 3px 0;
+  }
+  .rich-sec .sec-title {
+    font-size: 17px; font-weight: 700;
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .rich-sec .sec-body {
+    font-size: 17px; line-height: 1.8; color: #333; margin: 0;
+  }
+  .rich-sec .sec-list {
+    margin: 6px 0 6px 18px; padding: 0;
+  }
+  .rich-sec .sec-list li {
+    font-size: 16px; line-height: 1.9; margin: 6px 0;
+  }
+  .rich-sec .sec-list li .en {
+    font-size: 17px; font-weight: 600; color: var(--navy);
+  }
+  .rich-sec .sec-list li .zh {
+    color: var(--muted); font-size: 15px;
+  }
+  .rich-sec .sec-list li.err-pair {
+    list-style: none; margin: 12px 0;
+    padding: 12px 14px;
+    background: rgba(231,76,60,0.04);
+    border-radius: 12px;
+    border: 1px solid rgba(231,76,60,0.1);
+  }
+  .err-wrong {
+    color: #C0392B; font-size: 16px;
+    text-decoration: line-through;
+  }
+  .err-right {
+    color: #1A8A5A; font-size: 16px; font-weight: 600;
+    margin-top: 4px;
+  }
+  .err-note {
+    color: #888; font-size: 15px; margin-top: 4px;
+    line-height: 1.6;
+  }
+  mark.target {
+    background: #FFD9A0; color: #8A4A12; font-weight: 700;
+    padding: 0 4px; border-radius: 3px;
+  }
+  .rich-sec.sec-etym::before { background: var(--c-etym); }
+  .rich-sec.sec-etym .sec-title { color: var(--c-etym); }
+  .rich-sec.sec-etym { background: var(--bg-etym); border-color: #C8E0D0; }
+  .rich-sec.sec-memory::before { background: var(--c-memory); }
+  .rich-sec.sec-memory .sec-title { color: var(--c-memory); }
+  .rich-sec.sec-memory { background: var(--bg-memory); border-color: #DCD4F5; }
+  .rich-sec.sec-usage::before { background: var(--c-usage); }
+  .rich-sec.sec-usage .sec-title { color: var(--c-usage); }
+  .rich-sec.sec-usage { background: var(--bg-usage); border-color: #C8DCE8; }
+  .rich-sec.sec-error::before { background: var(--c-error); }
+  .rich-sec.sec-error .sec-title { color: var(--c-error); }
+  .rich-sec.sec-error { background: var(--bg-error); border-color: #F0C8C8; }
+  .rich-sec.sec-exam::before { background: var(--c-exam); }
+  .rich-sec.sec-exam .sec-title { color: var(--c-exam); }
+  .rich-sec.sec-exam { background: var(--bg-exam); border-color: #DCC4E8; }
+  .rich-sec.sec-family::before { background: var(--c-family); }
+  .rich-sec.sec-family .sec-title { color: var(--c-family); }
+  .rich-sec.sec-family { background: var(--bg-family); border-color: #A8D5BA; }
+  .rich-sec.sec-colloc::before { background: var(--c-colloc); }
+  .rich-sec.sec-colloc .sec-title { color: var(--c-colloc); }
+  .rich-sec.sec-colloc { background: var(--bg-colloc); border-color: #B8D4E8; }
+  .rich-sec.sec-example::before { background: var(--c-example); }
+  .rich-sec.sec-example .sec-title { color: var(--c-example); }
+  .rich-sec.sec-example { background: var(--bg-example); border-color: #DCD4EC; }
+  .rich-sec.sec-confuse::before { background: var(--c-confuse); }
+  .rich-sec.sec-confuse .sec-title { color: var(--c-confuse); }
+  .rich-sec.sec-confuse { background: var(--bg-confuse); border-color: #F0D4B8; }
+  .chips {
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .chip {
+    background: #fff; border: 1px solid var(--line);
+    border-radius: 999px; padding: 8px 20px;
+    font-size: 16px; transition: all 0.15s;
+  }
+  .chip:hover {
+    border-color: var(--accent);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .chip b { color: var(--navy); }
+  .chip .chip-zh { color: var(--muted); font-weight: 400; font-size: 15px; margin-left: 4px; }
+  .wf-card { border-top: none; }
+  .wf-card .qhead { color: #7C3AED; }
+  .wf-card .wf-word { font-weight: 700; color: var(--navy); }
+  .wf-card .wf-stem {
+    background: #F5F3FF; border: 1px solid #D3C4EA;
+    padding: 16px 18px; border-radius: 14px; font-size: 17px;
+    line-height: 1.8; margin: 10px 0 14px;
+  }
+  .al-card { border-top: none; }
+  .al-card .qhead { color: #D4782A; }
+  .al-card .para-sentence {
+    background: var(--soft); padding: 16px 18px;
+    border-radius: 16px; font-size: 17px; line-height: 1.8;
+    margin: 10px 0 14px; color: var(--ink);
+  }
+  .al-card .para-blank {
+    display: inline-block; background: #fff;
+    border: 2px dashed #D4782A; padding: 0 12px;
+    border-radius: 8px; color: #D4782A; font-weight: 700;
+    font-family: monospace; font-size: 14px;
+  }
+  .cloze .sentence {
+    font-size: 18px; line-height: 1.9; background: var(--soft);
+    padding: 16px 18px; border-radius: 16px; margin: 10px 0 14px;
+  }
+  .writing textarea {
+    width: 100%; padding: 14px 16px; border: 1px solid var(--line);
+    border-radius: 16px; font-size: 15px; font-family: var(--font);
+    resize: vertical; margin: 10px 0; transition: border-color 0.2s;
+  }
+  .writing textarea:focus {
+    outline: none; border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(232,93,58,0.1);
+  }
+  .writing button {
+    font-size: 15px; padding: 12px 24px; border: none;
+    border-radius: 14px; background: var(--accent); color: #fff;
+    cursor: pointer; font-weight: 600; transition: all 0.2s;
+  }
+  .writing button:hover {
+    background: #D04D2A; transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(232,93,58,0.3);
+  }
+  .writing button:disabled { background: #CCB; cursor: not-allowed; }
+  .writing-msg { margin-top: 12px; font-size: 16px; color: var(--navy); }
+  .writing .prompt {
+    font-size: 17px; line-height: 1.8; color: var(--navy);
+    font-weight: 600; margin: 6px 0;
+  }
+  .report-card { text-align: center; }
+  .report-hero { font-size: 60px; margin-bottom: 6px; }
+  .report-title {
+    color: var(--navy); margin: 8px 0 4px; font-size: 28px;
+    font-weight: 800;
+  }
+  .report-sub {
+    color: var(--muted); font-size: 16px; margin-bottom: 24px;
+  }
+  .report-stats {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+    margin-bottom: 20px;
+  }
+  .stat {
+    background: linear-gradient(135deg, var(--soft), #F0EBE4);
+    border-radius: 18px; padding: 16px 8px;
+    border: 1px solid rgba(232,228,222,0.5);
+  }
+  .stat b { display: block; font-size: 34px; color: var(--navy); }
+  .stat span { font-size: 13px; color: var(--muted); }
+  .report-weak {
+    background: #FEF0E7; border: 1px solid #F5D9BD;
+    border-radius: 18px; padding: 16px; font-size: 16px; line-height: 1.8;
+  }
+  .report-tip { color: var(--muted); font-size: 15px; margin-top: 18px; }
+  .card-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid var(--line);
+    padding: 12px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 14px; box-shadow: 0 -4px 24px rgba(0,0,0,0.06);
+    z-index: 30;
+  }
+  .card-nav button {
+    font-size: 17px; padding: 12px 24px; border: none;
+    border-radius: 14px; background: var(--accent); color: #fff;
+    cursor: pointer; font-weight: 600; transition: all 0.15s;
+  }
+  .card-nav button:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(232,93,58,0.3);
+  }
+  .card-nav button:disabled { background: #DDD; cursor: not-allowed; }
+  .card-nav .nav-prev {
+    background: transparent; color: var(--accent);
+    border: 1px solid var(--accent);
+  }
+  .card-nav .nav-prev:hover:not(:disabled) {
+    background: var(--accent-light);
+  }
+  .card-nav .nav-pos {
+    color: var(--muted); font-size: 13px;
+    font-variant-numeric: tabular-nums;
+  }
+  .footer {
+    text-align: center; padding: 18px; color: #BBB; font-size: 11px;
+    letter-spacing: 0.5px;
+  }
+  .hero-area {
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+    gap: 20px; margin-bottom: 24px;
+    background: linear-gradient(135deg, #FAF8F5, #F5F2ED);
+    border-radius: 18px; padding: 24px 20px; border: 1px solid #EDE8E0;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-area::before {
+    content: '';
+    position: absolute; top: 0; right: 0;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(232,93,58,0.04) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero-info { position: relative; z-index: 1; width: 100%; }
+  .hero-word {
+    font-size: 48px;
+    line-height: 1.1; margin: 0 0 8px; letter-spacing: -0.5px; text-align: center;
+  }
+  .hero-phon {
+    font-size: 20px;
+    display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 10px;
+  }
+  .hero-pos {
+    display: inline-block; font-size: 14px; font-weight: 600;
+    color: #fff; background: var(--accent);
+    padding: 3px 12px; border-radius: 8px; margin-right: 8px;
+  }
+  .hero-meaning {
+    font-size: 26px;
+    margin: 8px 0 0; line-height: 1.4; text-align: center;
+  }
+  .hero-img {
+    flex-shrink: 0; width: min(340px, 80vw); height: min(340px, 80vw);
+    border-radius: 20px; overflow: hidden;
+    box-shadow: 0 8px 24px rgba(27,42,74,0.18);
+    border: 3px solid #fff;
+    background: #ffffff;
+    position: relative; z-index: 1; margin: 0 auto;
+    transition: transform 0.2s;
+  }
+  .hero-img:hover { transform: scale(1.03); }
+  .hero-img img {
+    width: 100%; height: 100%; object-fit: cover;
+    object-position: center; display: block;
+  }
+  .concept-map {
+    position: relative; width: 100%; margin: 20px auto;
+    padding: 20px 0;
+    display: flex; justify-content: center; align-items: center;
+    gap: 20px; flex-wrap: wrap;
+    background: linear-gradient(135deg, #FAF8F5, #F5F2ED);
+    border-radius: 18px; border: 1px solid #EDE8E0;
+    min-height: 120px;
+  }
+  .concept-center {
+    width: 88px; height: 88px; border-radius: 50%;
+    background: linear-gradient(135deg, #1B2A4A, #2D4A7A);
+    color: #fff; display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 14px; text-align: center;
+    box-shadow: 0 6px 24px rgba(27,42,74,0.3);
+    z-index: 2; line-height: 1.2; padding: 6px;
+    border: 3px solid #fff;
+    position: relative;
+  }
+  .concept-center::after {
+    content: ''; position: absolute; inset: -8px; border-radius: 50%;
+    border: 2px dashed rgba(27,42,74,0.12);
+  }
+  .concept-center::before {
+    content: ''; position: absolute; inset: -16px; border-radius: 50%;
+    border: 1px solid rgba(27,42,74,0.05);
+  }
+  .concept-nodes {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    justify-content: center; max-width: 320px;
+  }
+  .concept-node {
+    padding: 8px 18px; border-radius: 999px; font-size: 13px;
+    font-weight: 600; white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    transition: all 0.2s; border: 1px solid transparent;
+    cursor: default;
+  }
+  .concept-node:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  }
+  .concept-node.family {
+    background: #E4F5EC; color: #1A8A5A;
+    border-color: #A8D5BA;
+  }
+  .concept-node.colloc {
+    background: #E8F2FC; color: #1D6FA8;
+    border-color: #B8D4E8;
+  }
+  .concept-node.synonym {
+    background: #FEF0E7; color: #D4782A;
+    border-color: #F0D4B8;
+  }
+  .concept-node.antonym {
+    background: #FEF2F2; color: #C0392B;
+    border-color: #F0B8B8;
+  }
+  .concept-node.example {
+    background: #F5F3FF; color: #7C3AED;
+    border-color: #D4C4EC;
+  }
+  /* 词素着色：前缀蓝 / 词根绿 / 后缀紫 / 连接元音墨色（inherit） / 中缀粉；
+     同一类型连续出现时用 -2 / -3 深浅轮换，保证“分几段就有几种颜色”。 */
+  .morph-prefix { color: #3B82F6; }
+  .morph-prefix-2 { color: #60A5FA; }
+  .morph-prefix-3 { color: #2563EB; }
+  .morph-root { color: #1B8C3A; }
+  .morph-root-2 { color: #16A34A; }
+  .morph-root-3 { color: #22C55E; }
+  .morph-suffix { color: #8B5CF6; }
+  .morph-suffix-2 { color: #A78BFA; }
+  .morph-suffix-3 { color: #7C3AED; }
+  .morph-connect { color: inherit; }  /* 连接元音保持原本色（墨色），不额外染色 */
+  .morph-connect-2 { color: inherit; }
+  .morph-connect-3 { color: inherit; }
+  .morph-infix { color: #EC4899; }
+  .morph-other { color: #64748B; }
+  .hero-word { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0; }
+  .hero-word .morph-part { font-size: inherit; font-weight: 800; letter-spacing: -0.5px; }
+
+@media (max-width: 600px) {
+    .hero-area { flex-direction: column; align-items: center; text-align: center; }
+    .hero-area::before { display: none; }
+    .hero-img { width: min(280px, 78vw); height: min(280px, 78vw); }
+    .hero-word { font-size: 32px; text-align: center; }
+    .hero-meaning { text-align: center; }
+    .hero-phon { justify-content: center; }
+    .concept-map { gap: 12px; padding: 16px 0; }
+    .concept-center { width: 72px; height: 72px; font-size: 12px; }
+    .concept-nodes { max-width: 240px; }
+    .opts { grid-template-columns: 1fr; }
+    .rbtns { grid-template-columns: repeat(4, 1fr); gap: 4px; }
+    .q { padding: 24px 18px 28px; min-height: 320px; }
+    .meaning { font-size: 21px; }
+    .intro-day { font-size: 34px; }
+    .rich-head .en { font-size: 28px; }
+    .rich-head { margin: -12px -12px 16px -12px; padding: 20px 18px 16px 18px; }
+    .stage { max-width: 100%; padding: 8px 10px 20px; }
+    .card-nav button { font-size: 13px; padding: 10px 16px; }
+    .intro-goal { gap: 10px; }
+    .intro-goal div { padding: 12px 16px; min-width: 70px; }
+    .report-stats { grid-template-columns: repeat(2, 1fr); }
+    .rich-sec { padding: 14px 16px; }
+    .rich-sec .sec-body { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">小韩英语角 · Day_129</div>
+  <div class="progress"><div class="progress-bar" id="bar"></div></div>
+  <div class="counter" id="counter">0 / 36</div>
+  <span class="rate-chip" id="rate-chip">词卡 0/12</span>
+  <div class="blocks" id="blocks"></div>
+</div>
+<div class="meta">2026-08-31 · 主题：情感与人际 · 键盘 1-4 评分，←/→ 翻卡</div>
+<div class="stage" id="stage">
+  <section class='q intro-card' data-block='intro' data-card='1'><div class='intro-badge'>今日学习单</div><h1 class='intro-day'>Day_129</h1><p class='intro-date'>2026-08-31 · 主题：情感与人际</p><div class='intro-goal'><div><b>8</b> 新词</div><div><b>4</b> 复习</div><div><b>1</b> 短文</div></div><div class='intro-story'><p class='story-title'>情感与关系：一次尴尬的约会</p><audio controls preload='none' src='audio/story.mp3'><source src='audio/story.m4a'></audio></div><p class='intro-flow'>每个词按 <b>先思考 → 再输入 → 再输出</b> 三步走。先想一遍，再看答案，最后动手用一次。</p></section><section class='q wcard new' data-block='words' data-card='1' data-word='anxiety'><div class='wcard-top'><span class='wtag new'>新词</span><span class='wnum'>01 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>焦虑；忧虑</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-root'>anx</span><span class='morph-part morph-suffix'>iety</span></p><p class='hero-phon'><span class='hero-pos'>n.</span>UK /æŋ&#x27;zaɪətɪ/ US /æŋ&#x27;zaɪəti/ <audio controls preload='none' src='audio/anxiety_en.mp3'><source src='audio/anxiety_en.m4a'></audio></p><p class='hero-meaning'>焦虑；忧虑</p><div class='lecture-row'><span class='lecture-label'>🎧 听讲解</span><audio controls preload='none' class='lecture-player' src='audio/anxiety_lecture.mp3'></audio></div></div><div class='hero-img'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>来自拉丁语 anxietas，由 anxius（焦虑的）加名词后缀 -tas 构成。anxius 源自 angere（勒紧、使苦恼），本意是“心里像被紧紧攥住一样难受”</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>词根法：anx- 表示‘勒紧’，焦虑的时候就像胸口被一只手紧紧攥住，透不过气来。</li><li>谐音＋场景法：‘俺在急’——俺这里很急，于是手心冒汗、心跳加快，这就是 anxiety。</li><li>对比法：anxiety 和 afraid 都有‘不安’，但 afraid 是面对具体危险，anxiety 是没来由的、持续的担忧，比如考前一周就开始焦虑。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>通常作不可数名词使用；表示‘对……的焦虑’时用 anxiety about/over，不接 to 动词。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>He felt anxiety to pass the exam.</s></div><div class='err-right'>✅ He felt anxiety about passing the exam.</div><div class='err-note'>表示‘对……的焦虑’介词用 about 或 over，不用不定式 to。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>She is in anxiety.</s></div><div class='err-right'>✅ She is anxious.</div><div class='err-note'>描述人‘焦虑’时直接用形容词 anxious，或用 full of anxiety，in anxiety 不自然。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>完形/阅读中常考查 anxiety 与 stress、pressure 的同义替换，词汇需认识。</li><li>写作时可用 relieve/reduce students&#x27; anxiety 表达‘减轻学生焦虑’，是高分表达。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>anxious</b> adj. 焦虑的</span><span class='chip'><b>anxiously</b> adv. 焦虑地，不安地</span><span class='chip'><b>anxiousness</b> n. 焦虑（程度）</span><span class='chip'><b>anxiety-provoking</b> adj. 引发焦虑的</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'><b>anxiety disorder</b> <span class='chip-zh'>焦虑症</span></span><span class='chip'><b>severe anxiety</b> <span class='chip-zh'>严重的焦虑</span></span><span class='chip'><b>reduce/relieve anxiety</b> <span class='chip-zh'>减轻/缓解焦虑</span></span><span class='chip'><b>anxiety about/over the future</b> <span class='chip-zh'>对未来的焦虑</span></span><span class='chip'><b>social anxiety</b> <span class='chip-zh'>社交焦虑</span></span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>She felt a lot of <mark class='target'>anxiety</mark> before her job interview.</span><br><span class='zh'>她在求职面试前感到非常焦虑。</span></li><li><span class='en'>His <mark class='target'>anxiety</mark> about the exam made it hard to fall asleep.</span><br><span class='zh'>他对考试的担忧让他难以入睡。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>worry</b>（担心，烦恼）— worry 偏指具体的、短期的事，比如‘担心下雨’；anxiety 是弥漫的、长期的负面情绪。</li><li><b>concern</b>（关切，担忧）— concern 语气中性且正面，对重要事情的关心；anxiety 则偏负面的紧张感。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>anxiety</div><div class='concept-nodes'><span class='concept-node family'>anxious</span><span class='concept-node family'>anxiously</span><span class='concept-node family'>anxiousness</span><span class='concept-node family'>anxiety-provoking</span><span class='concept-node colloc'>anxiety disorder</span><span class='concept-node colloc'>severe anxiety</span><span class='concept-node colloc'>reduce/relieve anxiety</span><span class='concept-node colloc'>anxiety about/over the future</span><span class='concept-node colloc'>social anxiety</span><span class='concept-node synonym'>worry</span><span class='concept-node synonym'>concern</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 anxiety 填回句子：</p><p class='out-sentence'>She felt a lot of ______ before her job interview.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out1' value='awkward'> awkward</label><label class='opt ' data-correct='1'><input type='radio' name='out1' value='anxiety'> anxiety</label><label class='opt ' data-correct='0'><input type='radio' name='out1' value='clumsy'> clumsy</label><label class='opt ' data-correct='0'><input type='radio' name='out1' value='despair'> despair</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>anxiety</b> UK /æŋ&#x27;zaɪətɪ/ US /æŋ&#x27;zaɪəti/</p><p class='fb-line'>📝 完整句：She felt a lot of anxiety before her job interview.</p><p class='fb-line'>🀄 译文：她在求职面试前感到非常焦虑。</p></div></div></section><section class='q wcard new' data-block='words' data-card='2' data-word='awkward'><div class='wcard-top'><span class='wtag new'>新词</span><span class='wnum'>02 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>尴尬的；笨拙的；不自在的</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-root'>awk</span><span class='morph-part morph-suffix'>ward</span></p><p class='hero-phon'><span class='hero-pos'>adj.</span>UK /ɔːkwəd/ US /ɔkwɚd/ <audio controls preload='none' src='audio/awkward_en.mp3'><source src='audio/awkward_en.m4a'></audio></p><p class='hero-meaning'>尴尬的；笨拙的；不自在的</p><div class='lecture-row'><span class='lecture-label'>🎧 听讲解</span><audio controls preload='none' class='lecture-player' src='audio/awkward_lecture.mp3'></audio></div></div><div class='hero-img'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>源自中古英语 &#x27;awkeward&#x27;，由 &#x27;awke&#x27;（古诺尔斯语 &#x27;öfugr&#x27;，意为“向后、错误的方向”）+ &#x27;-ward&#x27;（表示“朝向”）组成。最初指“转向错误的方向”，后来引申为“不灵巧的、尴尬的”。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>词根拆分法：awk（笨拙的谐音“拗口”）+ ward（朝向）→ 朝向笨拙的方向 → 尴尬的、笨拙的。</li><li>场景联想法：想象一个第一次约会的人，不小心把饮料洒在对方身上，整个场面非常 awkward（尴尬）。</li><li>对比记忆法：对比 &#x27;awkward&#x27;（笨拙的）和 &#x27;forward&#x27;（向前的），&#x27;awkward&#x27; 是“向后”的，所以不灵活。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>常用于描述社交场合的尴尬或动作的不协调，也可形容物体使用不便。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>I am awkward with him.</s></div><div class='err-right'>✅ I feel awkward with him.</div><div class='err-note'>awkward 是形容词，常用 feel awkward 表示“感到尴尬”，而不是直接 be awkward。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>He made an awkward mistake.</s></div><div class='err-right'>✅ He made an awkward mistake.</div><div class='err-note'>这个用法正确，但注意 awkward 修饰 mistake 时指“令人尴尬的错误”，不是“笨拙的错误”。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>完形填空：常考 awkward 与 embarrassed, uncomfortable 的辨析。</li><li>写作：可用于描述社交场景或人物动作，如 &#x27;The conversation became awkward.&#x27;</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>awkwardly</b> adv. 尴尬地；笨拙地</span><span class='chip'><b>awkwardness</b> n. 尴尬；笨拙</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'><b>awkward situation</b> <span class='chip-zh'>尴尬的局面</span></span><span class='chip'><b>feel awkward</b> <span class='chip-zh'>感到尴尬</span></span><span class='chip'><b>awkward silence</b> <span class='chip-zh'>尴尬的沉默</span></span><span class='chip'><b>awkward moment</b> <span class='chip-zh'>尴尬的时刻</span></span><span class='chip'><b>awkward position</b> <span class='chip-zh'>别扭的姿势</span></span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>There was an <mark class='target'>awkward</mark> silence after he made that joke.</span><br><span class='zh'>他讲完那个笑话后，出现了一阵尴尬的沉默。</span></li><li><span class='en'>She felt <mark class='target'>awkward</mark> in her new high heels at the party.</span><br><span class='zh'>她在派对上穿着新高跟鞋，感觉很不自在。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>embarrassed</b>（尴尬的（侧重主观感受））— awkward 强调局面或动作本身笨拙尴尬，而 embarrassed 强调人内心的羞愧难为情。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>awkward</div><div class='concept-nodes'><span class='concept-node family'>awkwardly</span><span class='concept-node family'>awkwardness</span><span class='concept-node colloc'>awkward situation</span><span class='concept-node colloc'>feel awkward</span><span class='concept-node colloc'>awkward silence</span><span class='concept-node colloc'>awkward moment</span><span class='concept-node colloc'>awkward position</span><span class='concept-node synonym'>embarrassed</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 awkward 填回句子：</p><p class='out-sentence'>There was an ______ silence after he made that joke.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out2' value='clumsy'> clumsy</label><label class='opt ' data-correct='0'><input type='radio' name='out2' value='anxiety'> anxiety</label><label class='opt ' data-correct='1'><input type='radio' name='out2' value='awkward'> awkward</label><label class='opt ' data-correct='0'><input type='radio' name='out2' value='despair'> despair</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>awkward</b> UK /ɔːkwəd/ US /ɔkwɚd/</p><p class='fb-line'>📝 完整句：There was an awkward silence after he made that joke.</p><p class='fb-line'>🀄 译文：他讲完那个笑话后，出现了一阵尴尬的沉默。</p></div></div></section><section class='q wcard new' data-block='words' data-card='3' data-word='clumsy'><div class='wcard-top'><span class='wtag new'>新词</span><span class='wnum'>03 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>笨拙的；不灵巧的；不圆滑的</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-root'>clums</span><span class='morph-part morph-suffix'>y</span></p><p class='hero-phon'><span class='hero-pos'>adj.</span>/klʌmzi/ <audio controls preload='none' src='audio/clumsy_en.mp3'><source src='audio/clumsy_en.m4a'></audio></p><p class='hero-meaning'>笨拙的；不灵巧的；不圆滑的</p><div class='lecture-row'><span class='lecture-label'>🎧 听讲解</span><audio controls preload='none' class='lecture-player' src='audio/clumsy_lecture.mp3'></audio></div></div><div class='hero-img'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>来自古北欧语 &#x27;klumsa&#x27;（使麻木，使僵硬），最初指因寒冷或麻木而动作不灵活。16世纪进入英语，逐渐引申为‘笨拙的、不灵巧的’。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>词根法：clums- 来自古北欧语 &#x27;klumsa&#x27;（麻木），加上 -y（形容词后缀）→ 像手脚麻木一样笨拙。</li><li>场景联想法：想象一个服务员端着一大摞盘子，突然脚下一滑，盘子噼里啪啦摔碎——他那种手忙脚乱的样子就是 clumsy。</li><li>对比记忆法：clumsy 对比 graceful（优雅的）。clumsy 是动作僵硬、不协调；graceful 是动作流畅、优美。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>既可形容人动作笨拙，也可形容言行不得体、缺乏技巧。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>He is clumsy in playing basketball.</s></div><div class='err-right'>✅ He is clumsy at playing basketball.</div><div class='err-note'>表示‘在某方面笨拙’用介词 at，不用 in。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>She made a clumsy mistake.</s></div><div class='err-right'>✅ She made a clumsy error.</div><div class='err-note'>clumsy 通常形容动作或行为，不直接修饰 mistake/error，但可以说 a clumsy mistake（笨拙的错误）在口语中可接受，更地道的是 clumsy error。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>完形填空：常考 clumsy 与 awkward、graceful 的辨析，注意上下文语境。</li><li>写作：可用 clumsy 描述人物性格或行为，增加细节描写，如 &#x27;His clumsy fingers fumbled with the keys.&#x27;</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>clumsily</b> adv. 笨拙地</span><span class='chip'><b>clumsiness</b> n. 笨拙；不灵巧</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'><b>clumsy attempt</b> <span class='chip-zh'>笨拙的尝试</span></span><span class='chip'><b>clumsy fingers</b> <span class='chip-zh'>笨拙的手指</span></span><span class='chip'><b>clumsy apology</b> <span class='chip-zh'>笨拙的道歉</span></span><span class='chip'><b>clumsy movement</b> <span class='chip-zh'>笨拙的动作</span></span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>He made a <mark class='target'>clumsy</mark> attempt to apologize, only making things worse.</span><br><span class='zh'>他笨拙地试图道歉，结果反而让事情更糟。</span></li><li><span class='en'>The <mark class='target'>clumsy</mark> waiter spilled coffee all over the customer&#x27;s new suit.</span><br><span class='zh'>那个笨手笨脚的服务员把咖啡洒了顾客一身，新西装全毁了。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>awkward</b>（尴尬的；笨拙的）— clumsy 强调动作不灵活、易出错；awkward 更侧重因紧张或不自在而显得笨拙，也指处境尴尬。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>clumsy</div><div class='concept-nodes'><span class='concept-node family'>clumsily</span><span class='concept-node family'>clumsiness</span><span class='concept-node colloc'>clumsy attempt</span><span class='concept-node colloc'>clumsy fingers</span><span class='concept-node colloc'>clumsy apology</span><span class='concept-node colloc'>clumsy movement</span><span class='concept-node synonym'>awkward</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 clumsy 填回句子：</p><p class='out-sentence'>He made a ______ attempt to apologize, only making things worse.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out3' value='despair'> despair</label><label class='opt ' data-correct='0'><input type='radio' name='out3' value='anxiety'> anxiety</label><label class='opt ' data-correct='1'><input type='radio' name='out3' value='clumsy'> clumsy</label><label class='opt ' data-correct='0'><input type='radio' name='out3' value='awkward'> awkward</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>clumsy</b> /klʌmzi/</p><p class='fb-line'>📝 完整句：He made a clumsy attempt to apologize, only making things worse.</p><p class='fb-line'>🀄 译文：他笨拙地试图道歉，结果反而让事情更糟。</p></div></div></section><section class='q wcard new' data-block='words' data-card='4' data-word='despair'><div class='wcard-top'><span class='wtag new'>新词</span><span class='wnum'>04 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>绝望，完全失去希望的状态。</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-prefix'>de</span><span class='morph-part morph-root'>spair</span></p><p class='hero-phon'><span class='hero-pos'>n.</span>UK /dɪ&#x27;speə/ US /dɪ&#x27;spɛr/ <audio controls preload='none' src='audio/despair_en.mp3'><source src='audio/despair_en.m4a'></audio></p><p class='hero-meaning'>绝望，完全失去希望的状态。</p><div class='lecture-row'><span class='lecture-label'>🎧 听讲解</span><audio controls preload='none' class='lecture-player' src='audio/despair_lecture.mp3'></audio></div></div><div class='hero-img'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>来自古法语 despoir，源自拉丁语 desperare，由 de-（表示“去掉、否定”）+ sperare（希望）组成，字面意思就是“失去希望”。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>词根法：de-（去掉）+ spair（希望）= 希望被去掉 → 绝望。</li><li>场景法：想象一个落水的人，手在水面上挣扎，最后慢慢沉下去，眼神里全是绝望。</li><li>对比法：despair（绝望） vs. desperate（绝望的，拼命的），后者是形容词，前者是名词。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>作名词时不可数，常与 in 搭配（in despair）；作动词时不及物，常与 of 搭配（despair of sth./doing sth.）。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>He is despair.</s></div><div class='err-right'>✅ He is in despair.</div><div class='err-note'>despair 是名词，不能直接作表语，需用介词短语 in despair。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>She despaired to pass the exam.</s></div><div class='err-right'>✅ She despaired of passing the exam.</div><div class='err-note'>despair 作动词时，后接 of + 名词/动名词，不接不定式。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>完形填空：常考 in despair 短语，以及 despair of 的搭配。</li><li>写作：可用 despair 表达负面情绪，但注意不要过度使用，可替换为 hopelessness。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>despairing</b> adj. 绝望的</span><span class='chip'><b>despairingly</b> adv. 绝望地</span><span class='chip'><b>desperate</b> adj. 绝望的，拼命的</span><span class='chip'><b>desperately</b> adv. 绝望地，拼命地</span><span class='chip'><b>desperation</b> n. 绝望，拼命</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'><b>in despair</b> <span class='chip-zh'>在绝望中</span></span><span class='chip'><b>despair of</b> <span class='chip-zh'>对……绝望</span></span><span class='chip'><b>drive sb. to despair</b> <span class='chip-zh'>使某人陷入绝望</span></span><span class='chip'><b>a sense of despair</b> <span class='chip-zh'>绝望感</span></span><span class='chip'><b>despair over</b> <span class='chip-zh'>对……感到绝望</span></span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>She cried out in <mark class='target'>despair</mark> when she heard the news.</span><br><span class='zh'>她听到消息后绝望地哭了出来。</span></li><li><span class='en'>He never <mark class='target'>despaired</mark> of finding a cure for the disease.</span><br><span class='zh'>他从未对找到这种疾病的治疗方法感到绝望。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>desperation</b>（绝望，拼命）— despair 强调情感上的绝望状态，desperation 更强调因绝望而采取极端行动的心态。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>despair</div><div class='concept-nodes'><span class='concept-node family'>despairing</span><span class='concept-node family'>despairingly</span><span class='concept-node family'>desperate</span><span class='concept-node family'>desperately</span><span class='concept-node family'>desperation</span><span class='concept-node colloc'>in despair</span><span class='concept-node colloc'>despair of</span><span class='concept-node colloc'>drive sb. to despair</span><span class='concept-node colloc'>a sense of despair</span><span class='concept-node colloc'>despair over</span><span class='concept-node synonym'>desperation</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 despair 填回句子：</p><p class='out-sentence'>She cried out in ______ when she heard the news.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out4' value='awkward'> awkward</label><label class='opt ' data-correct='0'><input type='radio' name='out4' value='clumsy'> clumsy</label><label class='opt ' data-correct='1'><input type='radio' name='out4' value='despair'> despair</label><label class='opt ' data-correct='0'><input type='radio' name='out4' value='anxiety'> anxiety</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>despair</b> UK /dɪ&#x27;speə/ US /dɪ&#x27;spɛr/</p><p class='fb-line'>📝 完整句：She cried out in despair when she heard the news.</p><p class='fb-line'>🀄 译文：她听到消息后绝望地哭了出来。</p></div></div></section><section class='q wcard new' data-block='words' data-card='5' data-word='distress'><div class='wcard-top'><span class='wtag new'>新词</span><span class='wnum'>05 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>（精神或身体上的）痛苦、悲痛、危难</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-prefix'>dis</span><span class='morph-part morph-root'>tress</span></p><p class='hero-phon'><span class='hero-pos'>n./v.</span>UK /dɪ&#x27;stres/ US /dɪ&#x27;strɛs/ <audio controls preload='none' src='audio/distress_en.mp3'><source src='audio/distress_en.m4a'></audio></p><p class='hero-meaning'>（精神或身体上的）痛苦、悲痛、危难</p><div class='lecture-row'><span class='lecture-label'>🎧 听讲解</span><audio controls preload='none' class='lecture-player' src='audio/distress_lecture.mp3'></audio></div></div><div class='hero-img'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>源自拉丁语 districtus，意为“拉紧、分开”，由 dis-（分开）和 stringere（拉紧）组成。古法语借入后演变为 destresse，指“被拉紧的状态”，即精神或身体的痛苦。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>词根拆分法：dis-（分开）+ tress（拉紧）= 被拉向两边 → 内心被撕裂的感觉 → 痛苦</li><li>场景联想法：想象你收到一封分手信，心脏像被两只手往相反方向拉扯，那种紧绷的疼痛就是 distress。</li><li>对比记忆法：distress（痛苦） vs. stress（压力）——压力（stress）大到一定程度就变成痛苦（distress）。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>作名词时不可数，常与 in 搭配（in distress）；作动词时及物，后接宾语。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>He is in a distress.</s></div><div class='err-right'>✅ He is in distress.</div><div class='err-note'>distress 作名词表示“痛苦”时不可数，不加冠词。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>The news distressed to me.</s></div><div class='err-right'>✅ The news distressed me.</div><div class='err-note'>distress 作动词是及物动词，直接接宾语，不需要介词。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>完形填空：常考 in distress 固定搭配，区分 distress 与 stress。</li><li>写作：可用 cause emotional distress 表达“造成情感痛苦”，提升词汇档次。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>distressed</b> adj. 痛苦的；忧虑的</span><span class='chip'><b>distressing</b> adj. 令人痛苦的</span><span class='chip'><b>distressingly</b> adv. 令人痛苦地</span><span class='chip'><b>stress</b> n./v. 压力；强调</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'><b>in distress</b> <span class='chip-zh'>处于痛苦/危难中</span></span><span class='chip'><b>distress signal</b> <span class='chip-zh'>求救信号</span></span><span class='chip'><b>emotional distress</b> <span class='chip-zh'>情感痛苦</span></span><span class='chip'><b>cause distress</b> <span class='chip-zh'>引起痛苦</span></span><span class='chip'><b>distress call</b> <span class='chip-zh'>求救电话</span></span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>The ship sent out a <mark class='target'>distress</mark> signal when it started to sink.</span><br><span class='zh'>船开始下沉时发出了求救信号。</span></li><li><span class='en'>She was in obvious <mark class='target'>distress</mark> after hearing the bad news.</span><br><span class='zh'>听到那个坏消息后，她明显很痛苦。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>sorrow</b>（悲伤）— sorrow 侧重因失去或遗憾引起的长期悲伤；distress 更强调紧迫、需要帮助的危难或痛苦。</li><li><b>anguish</b>（极度痛苦）— anguish 程度比 distress 更深，常指身心折磨；distress 可指较轻的烦恼或紧急情况。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>distress</div><div class='concept-nodes'><span class='concept-node family'>distressed</span><span class='concept-node family'>distressing</span><span class='concept-node family'>distressingly</span><span class='concept-node family'>stress</span><span class='concept-node colloc'>in distress</span><span class='concept-node colloc'>distress signal</span><span class='concept-node colloc'>emotional distress</span><span class='concept-node colloc'>cause distress</span><span class='concept-node colloc'>distress call</span><span class='concept-node synonym'>sorrow</span><span class='concept-node synonym'>anguish</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 distress 填回句子：</p><p class='out-sentence'>The ship sent out a ______ signal when it started to sink.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out5' value='awkward'> awkward</label><label class='opt ' data-correct='1'><input type='radio' name='out5' value='distress'> distress</label><label class='opt ' data-correct='0'><input type='radio' name='out5' value='clumsy'> clumsy</label><label class='opt ' data-correct='0'><input type='radio' name='out5' value='anxiety'> anxiety</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>distress</b> UK /dɪ&#x27;stres/ US /dɪ&#x27;strɛs/</p><p class='fb-line'>📝 完整句：The ship sent out a distress signal when it started to sink.</p><p class='fb-line'>🀄 译文：船开始下沉时发出了求救信号。</p></div></div></section><section class='q wcard new' data-block='words' data-card='6' data-word='disturbing'><div class='wcard-top'><span class='wtag new'>新词</span><span class='wnum'>06 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>扰人的；引起不安的</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-prefix'>dis</span><span class='morph-part morph-root'>turb</span><span class='morph-part morph-suffix'>ing</span></p><p class='hero-phon'><span class='hero-pos'>adj.</span> <audio controls preload='none' src='audio/disturbing_en.mp3'><source src='audio/disturbing_en.m4a'></audio></p><p class='hero-meaning'>扰人的；引起不安的</p><div class='lecture-row'><span class='lecture-label'>🎧 听讲解</span><audio controls preload='none' class='lecture-player' src='audio/disturbing_lecture.mp3'></audio></div></div><div class='hero-img'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>来自拉丁语 disturbare（dis- 表示&#x27;分开、加强&#x27; + turbare 表示&#x27;搅乱&#x27;），经古法语 destourber 传入英语。原意是把平静的事物搅动起来，引申为让人心神不宁。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>词根拆分法：dis-（分开）+ turb（搅动），把平静搅开 → 扰乱，引申为令人不安的。</li><li>场景联想法：半夜看新闻，画面里的战乱场景让你心里发慌，那种感觉就是 disturbing。</li><li>对比记忆法：disturb 是动词（打扰、使不安），disturbing 是形容词（令人不安的），disturbed 则常形容人感到不安。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>disturbing 通常修饰事物或事件，表示“令人不安的”，主语是物时常用；若修饰人，则常用 disturbed。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>The news was very disturb.</s></div><div class='err-right'>✅ The news was very disturbing.</div><div class='err-note'>disturb 是动词，此处需要形容词形式，用 disturbing。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>He was disturbing because he failed the exam.</s></div><div class='err-right'>✅ He was disturbed because he failed the exam.</div><div class='err-note'>形容人感到不安时用 disturbed，而不是 disturbing。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>在完形填空中常考 disturb / disturbing / disturbed 的区分，注意修饰对象是人还是物。</li><li>写作中可用 deeply disturbing 替换 very bad，提升表达档次。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>disturb</b> v. 打扰；使不安</span><span class='chip'><b>disturbed</b> adj. 不安的；心理有困扰的</span><span class='chip'><b>disturbance</b> n. 干扰；骚乱</span><span class='chip'><b>undisturbed</b> adj. 不受打扰的；平静的</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'><b>disturbing news</b> <span class='chip-zh'>令人不安的消息</span></span><span class='chip'><b>disturbing trend</b> <span class='chip-zh'>令人担忧的趋势</span></span><span class='chip'><b>deeply disturbing</b> <span class='chip-zh'>极其令人不安的</span></span><span class='chip'><b>disturbing thought</b> <span class='chip-zh'>烦人的念头</span></span><span class='chip'><b>disturbing evidence</b> <span class='chip-zh'>令人不安的证据</span></span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>The <mark class='target'>disturbing</mark> images from the flood left everyone speechless.</span><br><span class='zh'>洪水那些令人不安的画面让所有人都说不出话来。</span></li><li><span class='en'>She found his habit of staring at her really <mark class='target'>disturbing</mark>.</span><br><span class='zh'>她发现他盯着她看的习惯真的很让人不安。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>upsetting</b>（令人沮丧的，心烦的）— upsetting 侧重情绪上感到难过或烦躁，而 disturbing 更强调扰乱心神、使人不安，语气更重。</li><li><b>troubling</b>（令人烦恼的，令人担忧的）— troubling 更侧重引发忧虑，常指需要关注的问题；disturbing 则更强调心理上的不安和扰动。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>disturbing</div><div class='concept-nodes'><span class='concept-node family'>disturb</span><span class='concept-node family'>disturbed</span><span class='concept-node family'>disturbance</span><span class='concept-node family'>undisturbed</span><span class='concept-node colloc'>disturbing news</span><span class='concept-node colloc'>disturbing trend</span><span class='concept-node colloc'>deeply disturbing</span><span class='concept-node colloc'>disturbing thought</span><span class='concept-node colloc'>disturbing evidence</span><span class='concept-node synonym'>upsetting</span><span class='concept-node synonym'>troubling</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 disturbing 填回句子：</p><p class='out-sentence'>The ______ images from the flood left everyone speechless.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out6' value='anxiety'> anxiety</label><label class='opt ' data-correct='0'><input type='radio' name='out6' value='clumsy'> clumsy</label><label class='opt ' data-correct='1'><input type='radio' name='out6' value='disturbing'> disturbing</label><label class='opt ' data-correct='0'><input type='radio' name='out6' value='awkward'> awkward</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>disturbing</b> </p><p class='fb-line'>📝 完整句：The disturbing images from the flood left everyone speechless.</p><p class='fb-line'>🀄 译文：洪水那些令人不安的画面让所有人都说不出话来。</p></div></div></section><section class='q wcard new' data-block='words' data-card='7' data-word='dread'><div class='wcard-top'><span class='wtag new'>新词</span><span class='wnum'>07 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>恐惧；害怕；担忧</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-root'>dread</span></p><p class='hero-phon'><span class='hero-pos'>v./n.</span>UK /dred/ US /drɛd/ <audio controls preload='none' src='audio/dread_en.mp3'><source src='audio/dread_en.m4a'></audio></p><p class='hero-meaning'>恐惧；害怕；担忧</p><div class='lecture-row'><span class='lecture-label'>🎧 听讲解</span><audio controls preload='none' class='lecture-player' src='audio/dread_lecture.mp3'></audio></div></div><div class='hero-img'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>源自古英语 &#x27;ondrǣdan&#x27;，意为&#x27;害怕、恐惧&#x27;，由 &#x27;ond-&#x27;（反对）和 &#x27;rǣdan&#x27;（建议、思考）组成，字面意思是&#x27;反对思考&#x27;，即不敢去想。中古英语时期简化为 &#x27;draden&#x27;，最终演变为现代英语的 &#x27;dread&#x27;。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>词源故事法：古英语中 &#x27;dread&#x27; 本意是&#x27;不敢去想&#x27;——想象你害怕明天的考试，连想都不敢想，那种感觉就是 dread。</li><li>场景联想法：深夜独自在家，听到门外有脚步声，你不敢开门去看——那种手心冒汗、心跳加速的感觉就是 dread。</li><li>对比记忆法：dread 比 fear 程度更深，fear 是&#x27;害怕&#x27;，dread 是&#x27;极度恐惧、甚至不敢面对&#x27;。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>作动词时常用 dread doing sth. 或 dread to do sth.，表示&#x27;害怕做某事&#x27;；作名词时不可数，常与 a sense of 搭配。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>I dread to go to the party.</s></div><div class='err-right'>✅ I dread going to the party.</div><div class='err-note'>dread 后接动名词（doing）比不定式更常见，表示害怕做某事。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>He has a dread of snakes.</s></div><div class='err-right'>✅ He has a dread of snakes.</div><div class='err-note'>dread 作名词时，常与 of 连用，表示对某事物的恐惧。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>CET-4 完形填空：常考 dread 与 fear、terror 的辨析，注意 dread 后接动名词的用法。</li><li>高考写作：可用 dread 替换 fear，提升词汇档次，如 &#x27;I dread the thought of failing the exam.&#x27;</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>dreadful</b> adj. 可怕的；糟糕的</span><span class='chip'><b>dreadfully</b> adv. 可怕地；非常</span><span class='chip'><b>dreaded</b> adj. 令人恐惧的（常用作定语）</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'><b>dread the thought of</b> <span class='chip-zh'>害怕想到……</span></span><span class='chip'><b>live in dread of</b> <span class='chip-zh'>生活在……的恐惧中</span></span><span class='chip'><b>a sense of dread</b> <span class='chip-zh'>一种恐惧感</span></span><span class='chip'><b>dread doing sth.</b> <span class='chip-zh'>害怕做某事</span></span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>I <mark class='target'>dread</mark> going to the dentist because of the pain.</span><br><span class='zh'>我害怕去看牙医，因为太疼了。</span></li><li><span class='en'>The thought of losing her job filled her with <mark class='target'>dread</mark>.</span><br><span class='zh'>一想到可能失业，她就充满了恐惧。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>fear</b>（害怕）— fear 是通用词，程度较轻；dread 强调强烈的、令人不敢面对的恐惧。</li><li><b>terror</b>（恐怖）— terror 指极端的、突然的恐惧，常与暴力或威胁相关；dread 更偏向持续的、心理上的担忧。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>dread</div><div class='concept-nodes'><span class='concept-node family'>dreadful</span><span class='concept-node family'>dreadfully</span><span class='concept-node family'>dreaded</span><span class='concept-node colloc'>dread the thought of</span><span class='concept-node colloc'>live in dread of</span><span class='concept-node colloc'>a sense of dread</span><span class='concept-node colloc'>dread doing sth.</span><span class='concept-node synonym'>fear</span><span class='concept-node synonym'>terror</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 dread 填回句子：</p><p class='out-sentence'>I ______ going to the dentist because of the pain.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out7' value='awkward'> awkward</label><label class='opt ' data-correct='0'><input type='radio' name='out7' value='clumsy'> clumsy</label><label class='opt ' data-correct='1'><input type='radio' name='out7' value='dread'> dread</label><label class='opt ' data-correct='0'><input type='radio' name='out7' value='anxiety'> anxiety</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>dread</b> UK /dred/ US /drɛd/</p><p class='fb-line'>📝 完整句：I dread going to the dentist because of the pain.</p><p class='fb-line'>🀄 译文：我害怕去看牙医，因为太疼了。</p></div></div></section><section class='q wcard new' data-block='words' data-card='8' data-word='poisonous'><div class='wcard-top'><span class='wtag new'>新词</span><span class='wnum'>08 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>有毒的，有害的</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-root'>poison</span><span class='morph-part morph-suffix'>ous</span></p><p class='hero-phon'><span class='hero-pos'>adj</span>UK /pɒɪzənəs/ US /pɔɪzənəs/ <audio controls preload='none' src='audio/poisonous_en.mp3'><source src='audio/poisonous_en.m4a'></audio></p><p class='hero-meaning'>有毒的，有害的</p><div class='lecture-row'><span class='lecture-label'>🎧 听讲解</span><audio controls preload='none' class='lecture-player' src='audio/poisonous_lecture.mp3'></audio></div></div><div class='hero-img'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>源自13世纪古法语 &#x27;poison&#x27;（毒药），最终来自拉丁语 &#x27;potio&#x27;（饮料，尤指毒酒）。&#x27;poison&#x27; 本义是“饮料”，后来特指“毒药”。后缀 &#x27;-ous&#x27; 来自拉丁语 &#x27;-osus&#x27;，表示“充满……的”。所以 poisonous 字面意思是“充满毒药的”。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>词根拆分法：poison（毒药）+ ous（充满……的）→ 充满毒药的 → 有毒的。</li><li>场景联想法：想象一个鲜艳的蘑菇，上面写着“POISON”，旁边有骷髅标志，提醒你它有毒。</li><li>对比记忆法：对比 poison（毒药）和 potion（药水），发音相似但意思相反，一个要命一个救命。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>既可指物理上的有毒（如毒蛇、毒药），也可比喻有害的（如有毒的关系、言论）。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>This mushroom is very poison.</s></div><div class='err-right'>✅ This mushroom is very poisonous.</div><div class='err-note'>poison 是名词，poisonous 才是形容词。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>He gave me a poisonous look.</s></div><div class='err-right'>✅ He gave me a venomous look.</div><div class='err-note'>形容眼神恶毒时，常用 venomous 而非 poisonous。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>完形填空：常考 poisonous 与 toxic 的辨析，注意 poisonous 更常用于生物毒。</li><li>写作：可用于描述人际关系或环境问题，如 &#x27;a poisonous atmosphere in the office&#x27;。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>poison</b> n./v. 毒药；下毒</span><span class='chip'><b>poisoner</b> n. 投毒者</span><span class='chip'><b>poisoning</b> n. 中毒</span><span class='chip'><b>poisonously</b> adv. 有毒地</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'><b>poisonous snake</b> <span class='chip-zh'>毒蛇</span></span><span class='chip'><b>poisonous gas</b> <span class='chip-zh'>有毒气体</span></span><span class='chip'><b>poisonous relationship</b> <span class='chip-zh'>有害的关系</span></span><span class='chip'><b>poisonous plant</b> <span class='chip-zh'>有毒植物</span></span><span class='chip'><b>poisonous atmosphere</b> <span class='chip-zh'>有毒的氛围</span></span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>The snake&#x27;s venom is highly <mark class='target'>poisonous</mark> and can kill a person within minutes.</span><br><span class='zh'>这条蛇的毒液毒性极强，几分钟内就能致人死亡。</span></li><li><span class='en'>Their relationship had become <mark class='target'>poisonous</mark>, filled with jealousy and resentment.</span><br><span class='zh'>他们的关系变得有毒，充满了嫉妒和怨恨。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>toxic</b>（有毒的）— toxic 更强调化学或环境毒性，也可用于比喻；poisonous 更强调直接致毒，常用于生物毒。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>poisonous</div><div class='concept-nodes'><span class='concept-node family'>poison</span><span class='concept-node family'>poisoner</span><span class='concept-node family'>poisoning</span><span class='concept-node family'>poisonously</span><span class='concept-node colloc'>poisonous snake</span><span class='concept-node colloc'>poisonous gas</span><span class='concept-node colloc'>poisonous relationship</span><span class='concept-node colloc'>poisonous plant</span><span class='concept-node colloc'>poisonous atmosphere</span><span class='concept-node synonym'>toxic</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 poisonous 填回句子：</p><p class='out-sentence'>The snake&amp;#x27;s venom is highly ______ and can kill a person within minutes.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out8' value='awkward'> awkward</label><label class='opt ' data-correct='0'><input type='radio' name='out8' value='anxiety'> anxiety</label><label class='opt ' data-correct='0'><input type='radio' name='out8' value='clumsy'> clumsy</label><label class='opt ' data-correct='1'><input type='radio' name='out8' value='poisonous'> poisonous</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>poisonous</b> UK /pɒɪzənəs/ US /pɔɪzənəs/</p><p class='fb-line'>📝 完整句：The snake&#x27;s venom is highly poisonous and can kill a person within minutes.</p><p class='fb-line'>🀄 译文：这条蛇的毒液毒性极强，几分钟内就能致人死亡。</p></div></div></section><section class='q wcard review' data-block='words' data-card='9' data-word='awareness'><div class='wcard-top'><span class='wtag review'>复习</span><span class='wnum'>09 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>意识；察觉；认识</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-root'>aware</span><span class='morph-part morph-suffix'>ness</span></p><p class='hero-phon'><span class='hero-pos'>n</span>UK /əˈweənəs/ US /ə&#x27;wɛrnəs/ <audio controls preload='none' src='audio/awareness_en.mp3'><source src='audio/awareness_en.m4a'></audio></p><p class='hero-meaning'>意识；察觉；认识</p><div class='lecture-row'><span class='lecture-label'>🎧 听讲解</span><audio controls preload='none' class='lecture-player' src='audio/awareness_lecture.mp3'></audio></div></div><div class='hero-img'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>这个词来自古英语 &#x27;gewær&#x27;（警觉的、知道的），加上名词后缀 &#x27;-ness&#x27;。&#x27;gewær&#x27; 可以追溯到原始日耳曼语 *ga-waraz，与拉丁语 &#x27;vereri&#x27;（敬畏、小心）同源，核心意思是“保持警觉、注意到”。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>词根拆分法：aware（知道、意识到）+ ness（名词后缀）= 知道的状态 → 意识。</li><li>场景联想法：想象你走在路上，突然闻到一股烧焦味，你立刻“意识到”（aware）危险，这种“意识状态”就是 awareness。</li><li>对比记忆法：awareness（意识）和 consciousness（知觉）对比：awareness 更强调对外部信息的察觉，consciousness 更强调内在的清醒状态。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>awareness 是不可数名词，常与 of 连用，表示“对……的意识/认识”。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>I have an awareness that he is lying.</s></div><div class='err-right'>✅ I am aware that he is lying.</div><div class='err-note'>awareness 是名词，不能直接跟 that 从句。正确用法是 be aware that...</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>The awareness of the problem is important.</s></div><div class='err-right'>✅ Awareness of the problem is important.</div><div class='err-note'>awareness 作为抽象名词，通常不加冠词 the，除非特指。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>CET-4 完形填空：常考搭配 raise awareness of/about，注意介词搭配。</li><li>高考写作：可用 awareness 替换 knowledge，使表达更高级，如 raise public awareness of environmental protection。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>aware</b> adj 意识到的</span><span class='chip'><b>unaware</b> adj 未意识到的</span><span class='chip'><b>awareness</b> n 意识</span><span class='chip'><b>unawareness</b> n 无意识</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'><b>raise awareness</b> <span class='chip-zh'>提高意识</span></span><span class='chip'><b>public awareness</b> <span class='chip-zh'>公众意识</span></span><span class='chip'><b>awareness of</b> <span class='chip-zh'>对……的意识</span></span><span class='chip'><b>increase awareness</b> <span class='chip-zh'>增强意识</span></span><span class='chip'><b>brand awareness</b> <span class='chip-zh'>品牌知名度</span></span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>The campaign aims to raise public <mark class='target'>awareness</mark> about the dangers of plastic pollution.</span><br><span class='zh'>这项运动旨在提高公众对塑料污染危害的认识。</span></li><li><span class='en'>There is a growing <mark class='target'>awareness</mark> of the need for sustainable energy sources.</span><br><span class='zh'>人们对可持续能源的需求意识日益增强。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>consciousness</b>（知觉；意识）— awareness 强调对外界事物的察觉和认识，consciousness 更强调内在的清醒状态和主观体验。例如：He lost consciousness after the accident. 他事故后失去了知觉。而 awareness 则用于：He has no awareness of the risks. 他对风险毫无察觉。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>awareness</div><div class='concept-nodes'><span class='concept-node family'>aware</span><span class='concept-node family'>unaware</span><span class='concept-node family'>awareness</span><span class='concept-node family'>unawareness</span><span class='concept-node colloc'>raise awareness</span><span class='concept-node colloc'>public awareness</span><span class='concept-node colloc'>awareness of</span><span class='concept-node colloc'>increase awareness</span><span class='concept-node colloc'>brand awareness</span><span class='concept-node synonym'>consciousness</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 awareness 填回句子：</p><p class='out-sentence'>The campaign aims to raise public ______ about the dangers of plastic pollution.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out9' value='anxiety'> anxiety</label><label class='opt ' data-correct='0'><input type='radio' name='out9' value='clumsy'> clumsy</label><label class='opt ' data-correct='1'><input type='radio' name='out9' value='awareness'> awareness</label><label class='opt ' data-correct='0'><input type='radio' name='out9' value='awkward'> awkward</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>awareness</b> UK /əˈweənəs/ US /ə&#x27;wɛrnəs/</p><p class='fb-line'>📝 完整句：The campaign aims to raise public awareness about the dangers of plastic pollution.</p><p class='fb-line'>🀄 译文：这项运动旨在提高公众对塑料污染危害的认识。</p></div></div></section><section class='q wcard review' data-block='words' data-card='10' data-word='coordination'><div class='wcard-top'><span class='wtag review'>复习</span><span class='wnum'>10 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>协调；配合；协作</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-prefix'>co</span><span class='morph-part morph-root'>ordin</span><span class='morph-part morph-suffix'>at</span><span class='morph-part morph-suffix-2'>ion</span></p><p class='hero-phon'><span class='hero-pos'>n</span>UK /kəuˌɔːdɪ&#x27;neɪʃn/ US /ko,ɔrdɪ&#x27;neʃən/ <audio controls preload='none' src='audio/coordination_en.mp3'><source src='audio/coordination_en.m4a'></audio></p><p class='hero-meaning'>协调；配合；协作</p><div class='lecture-row'><span class='lecture-label'>🎧 听讲解</span><audio controls preload='none' class='lecture-player' src='audio/coordination_lecture.mp3'></audio></div></div><div class='hero-img'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>来自拉丁语 coordinatio，由 com-（共同）+ ordinatio（排列）构成。ordinatio 源自 ordo（顺序、等级），原指“共同排列”，后引申为“协调配合”。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>词根拆分法：co-（共同）+ ordin（顺序）+ ation（名词后缀）→ 让事物按共同顺序工作 → 协调。</li><li>场景联想法：想象一个交响乐团，指挥家让所有乐器同时演奏，这就是 coordination。</li><li>对比记忆法：coordination（协调）vs cooperation（合作）——合作是一起做，协调是安排谁做什么。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>常与 between 或 of 搭配，强调多方之间的协调；也可指身体动作的协调性。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>We need a good coordination.</s></div><div class='err-right'>✅ We need good coordination.</div><div class='err-note'>coordination 作抽象名词时不可数，不加 a。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>The coordination of the project is difficult.</s></div><div class='err-right'>✅ The coordination of the project is difficult.</div><div class='err-note'>此句正确，但注意 coordination 后常接 of 引出协调的对象。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>完形填空：常考 coordination 与 cooperation 的辨析，注意上下文是“安排”还是“一起做”。</li><li>写作：可用 coordination 替换 cooperation 以体现词汇多样性，如“加强部门间协调”用 enhance coordination between departments。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>coordinate</b> v. 协调；使协调</span><span class='chip'><b>coordinator</b> n. 协调员</span><span class='chip'><b>coordinated</b> adj. 协调的；配合的</span><span class='chip'><b>uncoordinated</b> adj. 不协调的</span><span class='chip'><b>coordinative</b> adj. 协调的（正式）</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'><b>coordination between departments</b> <span class='chip-zh'>部门间的协调</span></span><span class='chip'><b>hand-eye coordination</b> <span class='chip-zh'>手眼协调</span></span><span class='chip'><b>coordination of efforts</b> <span class='chip-zh'>协调各方努力</span></span><span class='chip'><b>lack of coordination</b> <span class='chip-zh'>缺乏协调</span></span><span class='chip'><b>coordination meeting</b> <span class='chip-zh'>协调会议</span></span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>Good <mark class='target'>coordination</mark> between the marketing and sales teams is essential for the product launch.</span><br><span class='zh'>市场部和销售部之间的良好协调对产品发布至关重要。</span></li><li><span class='en'>Playing the piano requires excellent hand-eye <mark class='target'>coordination</mark>.</span><br><span class='zh'>弹钢琴需要极佳的手眼协调能力。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>cooperation</b>（合作）— coordination 强调安排和同步，cooperation 强调一起工作、互相帮助。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>coordination</div><div class='concept-nodes'><span class='concept-node family'>coordinate</span><span class='concept-node family'>coordinator</span><span class='concept-node family'>coordinated</span><span class='concept-node family'>uncoordinated</span><span class='concept-node family'>coordinative</span><span class='concept-node colloc'>coordination between departments</span><span class='concept-node colloc'>hand-eye coordination</span><span class='concept-node colloc'>coordination of efforts</span><span class='concept-node colloc'>lack of coordination</span><span class='concept-node colloc'>coordination meeting</span><span class='concept-node synonym'>cooperation</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 coordination 填回句子：</p><p class='out-sentence'>Good ______ between the marketing and sales teams is essential for the product launch.</p><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='out10' value='coordination'> coordination</label><label class='opt ' data-correct='0'><input type='radio' name='out10' value='clumsy'> clumsy</label><label class='opt ' data-correct='0'><input type='radio' name='out10' value='awkward'> awkward</label><label class='opt ' data-correct='0'><input type='radio' name='out10' value='anxiety'> anxiety</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>coordination</b> UK /kəuˌɔːdɪ&#x27;neɪʃn/ US /ko,ɔrdɪ&#x27;neʃən/</p><p class='fb-line'>📝 完整句：Good coordination between the marketing and sales teams is essential for the product launch.</p><p class='fb-line'>🀄 译文：市场部和销售部之间的良好协调对产品发布至关重要。</p></div></div></section><section class='q wcard review' data-block='words' data-card='11' data-word='backward'><div class='wcard-top'><span class='wtag review'>复习</span><span class='wnum'>11 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>向后；倒退的；落后的</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-root'>back</span><span class='morph-part morph-suffix'>ward</span></p><p class='hero-phon'><span class='hero-pos'>adv./adj.</span>UK /bækwəd/ US /bækwɚd/ <audio controls preload='none' src='audio/backward_en.mp3'><source src='audio/backward_en.m4a'></audio></p><p class='hero-meaning'>向后；倒退的；落后的</p><div class='lecture-row'><span class='lecture-label'>🎧 听讲解</span><audio controls preload='none' class='lecture-player' src='audio/backward_lecture.mp3'></audio></div></div><div class='hero-img'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>来自中古英语 bakward，由 bak（back，背部/后面）和 -ward（朝向……方向）组合而成。古英语中已有 bæc（背部）和 weard（朝向）的用法，后来合并为表示“朝向后面”的副词。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>词根拆分法：back（后面）+ ward（方向）= 朝向后面 → 向后。</li><li>场景联想法：想象你正在倒车，车子向后（backward）移动，后视镜里看到路标越来越远。</li><li>对比记忆法：对比 forward（向前），backward 就是它的反义词，记住 forward 就能记住 backward。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>作副词时通常放在动词后（如 move backward），作形容词时放在名词前（如 backward step）。注意 backward 和 backwards 可互换，但美式英语更常用 backward。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>He walked backwardly.</s></div><div class='err-right'>✅ He walked backward.</div><div class='err-note'>backward 本身已是副词，不需要加 -ly。</div></li><li class='err-pair'><div class='err-wrong'>❌ <s>The country is backward in technology.</s></div><div class='err-right'>✅ The country is backward in technology.</div><div class='err-note'>此句正确，但注意 backward 作形容词时没有比较级形式，不能说 more backward。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>完形填空：常考 backward 与 forward 的对比，注意上下文方向提示。</li><li>写作：可用 backward 描述技术或社会发展的滞后，如 &#x27;The region remains backward in education.&#x27;</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>backwards</b> adv. 向后地</span><span class='chip'><b>backwardness</b> n. 落后；倒退</span><span class='chip'><b>forward</b> adv./adj. 向前；先进的</span><span class='chip'><b>back</b> n./adv./adj. 背部；向后；后面的</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'><b>backward step</b> <span class='chip-zh'>后退的一步</span></span><span class='chip'><b>backward glance</b> <span class='chip-zh'>向后一瞥</span></span><span class='chip'><b>backward country</b> <span class='chip-zh'>落后国家</span></span><span class='chip'><b>backward and forward</b> <span class='chip-zh'>来回地</span></span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>The car suddenly moved <mark class='target'>backward</mark> and hit the wall.</span><br><span class='zh'>那辆车突然向后移动，撞上了墙。</span></li><li><span class='en'>In some regions, technology is still <mark class='target'>backward</mark> compared to the rest of the world.</span><br><span class='zh'>在一些地区，技术相比世界其他地区仍然落后。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>backwards</b>（向后地）— backward 和 backwards 意思相同，但 backward 更常用于形容词，backwards 更常用于副词，尤其在英式英语中。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>backward</div><div class='concept-nodes'><span class='concept-node family'>backwards</span><span class='concept-node family'>backwardness</span><span class='concept-node family'>forward</span><span class='concept-node family'>back</span><span class='concept-node colloc'>backward step</span><span class='concept-node colloc'>backward glance</span><span class='concept-node colloc'>backward country</span><span class='concept-node colloc'>backward and forward</span><span class='concept-node synonym'>backwards</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 backward 填回句子：</p><p class='out-sentence'>The car suddenly moved ______ and hit the wall.</p><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='out11' value='backward'> backward</label><label class='opt ' data-correct='0'><input type='radio' name='out11' value='awkward'> awkward</label><label class='opt ' data-correct='0'><input type='radio' name='out11' value='anxiety'> anxiety</label><label class='opt ' data-correct='0'><input type='radio' name='out11' value='clumsy'> clumsy</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>backward</b> UK /bækwəd/ US /bækwɚd/</p><p class='fb-line'>📝 完整句：The car suddenly moved backward and hit the wall.</p><p class='fb-line'>🀄 译文：那辆车突然向后移动，撞上了墙。</p></div></div></section><section class='q wcard review' data-block='words' data-card='12' data-word='charter'><div class='wcard-top'><span class='wtag review'>复习</span><span class='wnum'>12 / 12</span></div><div class='phase phase-think'><span class='phase-tag think'>先思考</span><p class='think-q'>看中文，先在心里回忆 / 试着读出来：</p><p class='meaning'>宪章；特许状</p><div class='rbtns'><button type='button' data-q='1' class='rate'>忘了</button><button type='button' data-q='3' class='rate'>模糊</button><button type='button' data-q='4' class='rate'>想起</button><button type='button' data-q='5' class='rate'>熟练</button></div><p class='rate-msg'></p><p class='hint'>评分 = 揭晓答案 + 展开输入内容</p></div><div class='phase phase-input hidden'><span class='phase-tag input'>再输入</span><div class='hero-area'><div class='hero-info'><p class='hero-word'><span class='morph-part morph-root'>charter</span></p><p class='hero-phon'><span class='hero-pos'>n.</span>UK /tʃɑːtə/ US /tʃɑrtɚ/ <audio controls preload='none' src='audio/charter_en.mp3'><source src='audio/charter_en.m4a'></audio></p><p class='hero-meaning'>宪章；特许状</p><div class='lecture-row'><span class='lecture-label'>🎧 听讲解</span><audio controls preload='none' class='lecture-player' src='audio/charter_lecture.mp3'></audio></div></div><div class='hero-img'></div></div><div class='ans-box'><div class='rich'><div class='rich-sec sec-etym'><div class='sec-title'>📖 词根拆解</div><p class='sec-body'>来自古法语 chartre，源自拉丁语 chartula，意为“小纸片”，是 charta（纸）的指小形式。最初指写有法律条款的纸张，后引申为“特许状”和“宪章”。</p></div><div class='rich-sec sec-memory'><div class='sec-title'>🧠 记忆法</div><ul class='sec-list'><li>词源故事法：想象一张小小的纸片（chartula）上写着国王的印章，这就是特许状，赋予城市或公司特殊权利。</li><li>场景联想法：你创办了一家公司，需要一张“特许状”（charter）才能合法运营，这张纸就是你的“通行证”。</li><li>对比记忆法：charter（宪章）和 chapter（章节）拼写相似，但 charter 是“特许状”，chapter 是“书的一章”，可以联想：宪章是历史的重要章节。</li></ul></div><div class='rich-sec sec-usage'><div class='sec-title'>💡 用法</div><p class='sec-body'>作名词时，常指正式文件，如城市宪章、公司特许状；作动词时，意为“包租（船、飞机等）”。</p></div><div class='rich-sec sec-error'><div class='sec-title'>⚠️ 易错点</div><ul class='sec-list'><li class='err-pair'><div class='err-wrong'>❌ <s>The company has a charter to operate in this area.</s></div><div class='err-right'>✅ The company has a charter to operate in this area.</div><div class='err-note'>charter 作名词时，常与不定式搭配，表示“做某事的特许权”。</div></li></ul></div><div class='rich-sec sec-exam'><div class='sec-title'>🎯 考点</div><ul class='sec-list'><li>完形填空：常考 charter 与 chapter 的拼写辨析。</li><li>阅读：在历史或法律类文章中，charter 常作为关键词出现，需理解其“特许状”含义。</li></ul></div><div class='rich-sec sec-family'><div class='sec-title'>🌳 词族</div><div class='chips'><span class='chip'><b>chartered</b> adj. 特许的；包租的</span><span class='chip'><b>charterer</b> n. 租船人；包租者</span><span class='chip'><b>chartering</b> n. 包租；特许</span></div></div><div class='rich-sec sec-colloc'><div class='sec-title'>🔗 常见搭配</div><div class='chips'><span class='chip'><b>royal charter</b> <span class='chip-zh'>皇家特许状</span></span><span class='chip'><b>charter school</b> <span class='chip-zh'>特许学校</span></span><span class='chip'><b>charter flight</b> <span class='chip-zh'>包机</span></span><span class='chip'><b>charter member</b> <span class='chip-zh'>创始成员</span></span><span class='chip'><b>draft a charter</b> <span class='chip-zh'>起草宪章</span></span></div></div><div class='rich-sec sec-example'><div class='sec-title'>✏️ 真实例句</div><ul class='sec-list'><li><span class='en'>The city&#x27;s <mark class='target'>charter</mark> was granted by the king in 1215.</span><br><span class='zh'>这座城市的特许状是由国王在1215年授予的。</span></li><li><span class='en'>They <mark class='target'>chartered</mark> a private jet to fly to the conference.</span><br><span class='zh'>他们包租了一架私人飞机去参加会议。</span></li></ul></div><div class='rich-sec sec-confuse'><div class='sec-title'>🔍 近义辨析</div><ul class='sec-list'><li><b>constitution</b>（宪法）— charter 指特定组织或城市的特许文件，constitution 指国家或组织的根本大法，范围更广。</li></ul></div></div></div><div class='concept-map'><div class='concept-center'>charter</div><div class='concept-nodes'><span class='concept-node family'>chartered</span><span class='concept-node family'>charterer</span><span class='concept-node family'>chartering</span><span class='concept-node colloc'>royal charter</span><span class='concept-node colloc'>charter school</span><span class='concept-node colloc'>charter flight</span><span class='concept-node colloc'>charter member</span><span class='concept-node colloc'>draft a charter</span><span class='concept-node synonym'>constitution</span></div></div></div><div class='phase phase-output hidden'><span class='phase-tag output'>再输出</span><p class='out-q'>把 charter 填回句子：</p><p class='out-sentence'>The city&amp;#x27;s ______ was granted by the king in 1215.</p><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='out12' value='awkward'> awkward</label><label class='opt ' data-correct='0'><input type='radio' name='out12' value='anxiety'> anxiety</label><label class='opt ' data-correct='1'><input type='radio' name='out12' value='charter'> charter</label><label class='opt ' data-correct='0'><input type='radio' name='out12' value='clumsy'> clumsy</label></div><div class='hidden out-fb'><p class='fb-line fb-ok'>✓ 正确答案：<b>charter</b> UK /tʃɑːtə/ US /tʃɑrtɚ/</p><p class='fb-line'>📝 完整句：The city&#x27;s charter was granted by the king in 1215.</p><p class='fb-line'>🀄 译文：这座城市的特许状是由国王在1215年授予的。</p></div></div></section><section class='q wf-card' data-block='word_forms' data-card='1' data-answer='anxious'><div class='qhead'><span class='qn'>&#36716;&#183;01</span><b>&#35789;&#24615;&#36716;&#21270;</b> &#183; <span class='wf-word'>anxiety</span></div><p class='prompt'>选词填空，注意词性转化：</p><div class='wf-stem'>She was very _____ about the test result.</div><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='wf1' value='anxiety'> anxiety</label><label class='opt ' data-correct='1'><input type='radio' name='wf1' value='anxious'> anxious</label><label class='opt ' data-correct='0'><input type='radio' name='wf1' value='anxiously'> anxiously</label><label class='opt ' data-correct='0'><input type='radio' name='wf1' value='anxiousness'> anxiousness</label></div><div class='feedback hidden' data-answer='anxious'><p class='fb-line'>&#128204; <b>&#31572;&#26696;&#65306;</b>anxious &#8212; 焦虑的；担心的</p><p class='fb-line'>&#127992; <b>题干翻译：</b>她对考试成绩非常_____。</p><p class='fb-line'>&#128214; <b>完整句翻译：</b>她对考试成绩非常anxious。</p><p class='fb-line'>&#128221; <b>完整句：</b>She was very anxious about the test result.</p><div class='think-path'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#128300; 解题思路</p><p class='think-step'>① 确定句子空缺处需要什么词性（主语/谓语/宾语/定语/状语）。</p><p class='think-step'>② 原词 <b>anxiety</b>（焦虑；忧虑）需要转化为 <b>anxious</b> 形式。名词 -&gt; 形容词（-ous 后缀）</p><p class='think-step'>③ 将 <b>anxious</b> 代入原句，检查语法和语义是否通顺。</p></div>名词 -&gt; 形容词（-ous 后缀）<p class='fb-line'>&#127919; <b>考点：</b><li class='opt-explain'><b>anxiety</b>：焦虑；忧虑<span class='opt-reason'>这是原形，需要派生形式</span></li><li class='opt-explain'><b>anxious</b>：焦虑的；担心的<span class='opt-reason'> — 答案</span> <span class="tag-correct">&#10003;</span></li><li class='opt-explain'><b>anxiously</b>：<span class='opt-reason'>需要形容词形式（-ous）</span></li><li class='opt-explain'><b>anxiousness</b>：<span class='opt-reason'>需要形容词形式（-ous）</span></li><br>&#128218; <b>题目来源：</b>CET-4 / 考研英语 词性转化专项练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><div class='distractors'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#9888; 干扰项分析</p><p class='distractor-item'><b>anxiety</b>（焦虑；忧虑）：这是原形，需要派生形式</p><p class='distractor-item'><b>anxiously</b>（）：需要形容词形式（-ous）</p><p class='distractor-item'><b>anxiousness</b>（）：需要形容词形式（-ous）</p></div></ul><p class='fb-line'>&#128161; <b>解析：</b>be 动词后接形容词作表语，因此用 anxious（焦虑的）。</p></div></section><section class='q wf-card' data-block='word_forms' data-card='2' data-answer='awkwardly'><div class='qhead'><span class='qn'>&#36716;&#183;02</span><b>&#35789;&#24615;&#36716;&#21270;</b> &#183; <span class='wf-word'>awkward</span></div><p class='prompt'>选词填空，注意词性转化：</p><div class='wf-stem'>He smiled _____ to hide his embarrassment.</div><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='wf2' value='awkward'> awkward</label><label class='opt ' data-correct='1'><input type='radio' name='wf2' value='awkwardly'> awkwardly</label><label class='opt ' data-correct='0'><input type='radio' name='wf2' value='awkwardness'> awkwardness</label><label class='opt ' data-correct='0'><input type='radio' name='wf2' value='awkwarded'> awkwarded</label></div><div class='feedback hidden' data-answer='awkwardly'><p class='fb-line'>&#128204; <b>&#31572;&#26696;&#65306;</b>awkwardly &#8212; </p><p class='fb-line'>&#127992; <b>题干翻译：</b>他_____地笑了笑以掩饰尴尬。</p><p class='fb-line'>&#128214; <b>完整句翻译：</b>他awkwardly地笑了笑以掩饰尴尬。</p><p class='fb-line'>&#128221; <b>完整句：</b>He smiled awkwardly to hide his embarrassment.</p><div class='think-path'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#128300; 解题思路</p><p class='think-step'>① 确定句子空缺处需要什么词性（主语/谓语/宾语/定语/状语）。</p><p class='think-step'>② 原词 <b>awkward</b>（尴尬的；笨拙的；不自在的）需要转化为 <b>awkwardly</b> 形式。形容词 -&gt; 副词（-ly 后缀）</p><p class='think-step'>③ 将 <b>awkwardly</b> 代入原句，检查语法和语义是否通顺。</p></div>形容词 -&gt; 副词（-ly 后缀）<p class='fb-line'>&#127919; <b>考点：</b><li class='opt-explain'><b>awkward</b>：尴尬的；笨拙的；不自在的<span class='opt-reason'>这是原形，需要派生形式</span></li><li class='opt-explain'><b>awkwardly</b>：<span class='opt-reason'> — 答案</span> <span class="tag-correct">&#10003;</span></li><li class='opt-explain'><b>awkwardness</b>：<span class='opt-reason'>这是复数形式，此处需要单数/其他形式</span></li><li class='opt-explain'><b>awkwarded</b>：<span class='opt-reason'>这是过去式/过去分词，此处需要其他词性</span></li><br>&#128218; <b>题目来源：</b>CET-4 / 考研英语 词性转化专项练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><div class='distractors'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#9888; 干扰项分析</p><p class='distractor-item'><b>awkward</b>（尴尬的；笨拙的；不自在的）：这是原形，需要派生形式</p><p class='distractor-item'><b>awkwardness</b>（）：这是复数形式，此处需要单数/其他形式</p><p class='distractor-item'><b>awkwarded</b>（）：这是过去式/过去分词，此处需要其他词性</p></div></ul><p class='fb-line'>&#128161; <b>解析：</b>此处需要副词修饰动词 smiled，awkwardly 是副词形式。</p></div></section><section class='q wf-card' data-block='word_forms' data-card='3' data-answer='clumsily'><div class='qhead'><span class='qn'>&#36716;&#183;03</span><b>&#35789;&#24615;&#36716;&#21270;</b> &#183; <span class='wf-word'>clumsy</span></div><p class='prompt'>选词填空，注意词性转化：</p><div class='wf-stem'>He apologized so _____ that he offended her even more.</div><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='wf3' value='clumsy'> clumsy</label><label class='opt ' data-correct='1'><input type='radio' name='wf3' value='clumsily'> clumsily</label><label class='opt ' data-correct='0'><input type='radio' name='wf3' value='clumsiness'> clumsiness</label><label class='opt ' data-correct='0'><input type='radio' name='wf3' value='clumsier'> clumsier</label></div><div class='feedback hidden' data-answer='clumsily'><p class='fb-line'>&#128204; <b>&#31572;&#26696;&#65306;</b>clumsily &#8212; </p><p class='fb-line'>&#127992; <b>题干翻译：</b>他道歉得如此_____，以至于更加冒犯了她。</p><p class='fb-line'>&#128214; <b>完整句翻译：</b>他道歉得如此clumsily，以至于更加冒犯了她。</p><p class='fb-line'>&#128221; <b>完整句：</b>He apologized so clumsily that he offended her even more.</p><div class='think-path'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#128300; 解题思路</p><p class='think-step'>① 确定句子空缺处需要什么词性（主语/谓语/宾语/定语/状语）。</p><p class='think-step'>② 原词 <b>clumsy</b>（笨拙的；不灵巧的；不圆滑的）需要转化为 <b>clumsily</b> 形式。形容词 -&gt; 副词（-ly 后缀）</p><p class='think-step'>③ 将 <b>clumsily</b> 代入原句，检查语法和语义是否通顺。</p></div>形容词 -&gt; 副词（-ly 后缀）<p class='fb-line'>&#127919; <b>考点：</b><li class='opt-explain'><b>clumsy</b>：笨拙的；不灵巧的；不圆滑的<span class='opt-reason'>这是原形，需要派生形式</span></li><li class='opt-explain'><b>clumsily</b>：<span class='opt-reason'> — 答案</span> <span class="tag-correct">&#10003;</span></li><li class='opt-explain'><b>clumsiness</b>：<span class='opt-reason'>这是复数形式，此处需要单数/其他形式</span></li><li class='opt-explain'><b>clumsier</b>：<span class='opt-reason'>需要副词形式（-ly）</span></li><br>&#128218; <b>题目来源：</b>CET-4 / 考研英语 词性转化专项练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><div class='distractors'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#9888; 干扰项分析</p><p class='distractor-item'><b>clumsy</b>（笨拙的；不灵巧的；不圆滑的）：这是原形，需要派生形式</p><p class='distractor-item'><b>clumsiness</b>（）：这是复数形式，此处需要单数/其他形式</p><p class='distractor-item'><b>clumsier</b>（）：需要副词形式（-ly）</p></div></ul><p class='fb-line'>&#128161; <b>解析：</b>句子需要副词修饰动词 apologized，clumsily 是副词形式，意为‘笨拙地’；clumsy 是形容词，clumsiness 是名词，clumsier 是比较级形容词。</p></div></section><section class='q wf-card' data-block='word_forms' data-card='4' data-answer='despair'><div class='qhead'><span class='qn'>&#36716;&#183;04</span><b>&#35789;&#24615;&#36716;&#21270;</b> &#183; <span class='wf-word'>despair</span></div><p class='prompt'>选词填空，注意词性转化：</p><div class='wf-stem'>The patient&#x27;s condition left the doctors in _____.</div><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='wf4' value='despair'> despair</label><label class='opt ' data-correct='0'><input type='radio' name='wf4' value='desperate'> desperate</label><label class='opt ' data-correct='0'><input type='radio' name='wf4' value='despairing'> despairing</label><label class='opt ' data-correct='0'><input type='radio' name='wf4' value='desperation'> desperation</label></div><div class='feedback hidden' data-answer='despair'><p class='fb-line'>&#128204; <b>&#31572;&#26696;&#65306;</b>despair &#8212; 绝望，完全失去希望的状态。</p><p class='fb-line'>&#127992; <b>题干翻译：</b>病人的情况让医生们陷入了_____。</p><p class='fb-line'>&#128214; <b>完整句翻译：</b>病人的情况让医生们陷入了despair。</p><p class='fb-line'>&#128221; <b>完整句：</b>The patient&amp;#x27;s condition left the doctors in despair.</p><div class='think-path'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#128300; 解题思路</p><p class='think-step'>题目中给出的词 <b>despair</b> 已经符合句子的词性要求，不需要额外的词形变化。直接填入原形即可。</p></div>词形不变，保持原形<p class='fb-line'>&#127919; <b>考点：</b><li class='opt-explain'><b>despair</b>：绝望，完全失去希望的状态。<span class='opt-reason'> — 答案</span> <span class="tag-correct">&#10003;</span></li><li class='opt-explain'><b>desperate</b>：绝望的；不顾一切的<span class='opt-reason'>词性/形式不匹配</span></li><li class='opt-explain'><b>despairing</b>：<span class='opt-reason'>这是现在分词形式，此处需要名词/形容词</span></li><li class='opt-explain'><b>desperation</b>：<span class='opt-reason'>词性/形式不匹配</span></li><br>&#128218; <b>题目来源：</b>CET-4 / 考研英语 词性转化专项练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><div class='distractors'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#9888; 干扰项分析</p><p class='distractor-item'><b>desperate</b>（绝望的；不顾一切的）：词性/形式不匹配</p><p class='distractor-item'><b>despairing</b>（）：这是现在分词形式，此处需要名词/形容词</p><p class='distractor-item'><b>desperation</b>（）：词性/形式不匹配</p></div></ul><p class='fb-line'>&#128161; <b>解析：</b>in despair 是固定搭配，表示“在绝望中”。desperate 是形容词，不能放在介词后；despairing 也是形容词；desperation 虽然也是名词，但 in desperation 更强调“拼命地”，与语境不符。</p></div></section><section class='q wf-card' data-block='word_forms' data-card='5' data-answer='distressed'><div class='qhead'><span class='qn'>&#36716;&#183;05</span><b>&#35789;&#24615;&#36716;&#21270;</b> &#183; <span class='wf-word'>distress</span></div><p class='prompt'>选词填空，注意词性转化：</p><div class='wf-stem'>The family was deeply _____ by the sudden loss of their home.</div><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='wf5' value='distress'> distress</label><label class='opt ' data-correct='1'><input type='radio' name='wf5' value='distressed'> distressed</label><label class='opt ' data-correct='0'><input type='radio' name='wf5' value='distressing'> distressing</label><label class='opt ' data-correct='0'><input type='radio' name='wf5' value='distressingly'> distressingly</label></div><div class='feedback hidden' data-answer='distressed'><p class='fb-line'>&#128204; <b>&#31572;&#26696;&#65306;</b>distressed &#8212; </p><p class='fb-line'>&#127992; <b>题干翻译：</b>这个家庭因突然失去家园而深感_____。</p><p class='fb-line'>&#128214; <b>完整句翻译：</b>这个家庭因突然失去家园而深感distressed。</p><p class='fb-line'>&#128221; <b>完整句：</b>The family was deeply distressed by the sudden loss of their home.</p><div class='think-path'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#128300; 解题思路</p><p class='think-step'>① 确定句子空缺处需要什么词性（主语/谓语/宾语/定语/状语）。</p><p class='think-step'>② 原词 <b>distress</b>（（精神或身体上的）痛苦、悲痛、危难）需要转化为 <b>distressed</b> 形式。词性转化</p><p class='think-step'>③ 将 <b>distressed</b> 代入原句，检查语法和语义是否通顺。</p></div>词性转化<p class='fb-line'>&#127919; <b>考点：</b><li class='opt-explain'><b>distress</b>：（精神或身体上的）痛苦、悲痛、危难<span class='opt-reason'>这是原形，需要派生形式</span></li><li class='opt-explain'><b>distressed</b>：<span class='opt-reason'> — 答案</span> <span class="tag-correct">&#10003;</span></li><li class='opt-explain'><b>distressing</b>：<span class='opt-reason'>这是现在分词形式，此处需要名词/形容词</span></li><li class='opt-explain'><b>distressingly</b>：<span class='opt-reason'>词性/形式不匹配</span></li><br>&#128218; <b>题目来源：</b>CET-4 / 考研英语 词性转化专项练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><div class='distractors'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#9888; 干扰项分析</p><p class='distractor-item'><b>distress</b>（（精神或身体上的）痛苦、悲痛、危难）：这是原形，需要派生形式</p><p class='distractor-item'><b>distressing</b>（）：这是现在分词形式，此处需要名词/形容词</p><p class='distractor-item'><b>distressingly</b>（）：词性/形式不匹配</p></div></ul><p class='fb-line'>&#128161; <b>解析：</b>这里需要形容词作表语，distressed 表示“感到痛苦的”；distress 是名词/动词，distressing 是“令人痛苦的”，distressingly 是副词。</p></div></section><section class='q wf-card' data-block='word_forms' data-card='6' data-answer='disturbed'><div class='qhead'><span class='qn'>&#36716;&#183;06</span><b>&#35789;&#24615;&#36716;&#21270;</b> &#183; <span class='wf-word'>disturbing</span></div><p class='prompt'>选词填空，注意词性转化：</p><div class='wf-stem'>The loud noise outside _____ my concentration.</div><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='wf6' value='disturbed'> disturbed</label><label class='opt ' data-correct='0'><input type='radio' name='wf6' value='disturbing'> disturbing</label><label class='opt ' data-correct='0'><input type='radio' name='wf6' value='disturbance'> disturbance</label><label class='opt ' data-correct='0'><input type='radio' name='wf6' value='undisturbed'> undisturbed</label></div><div class='feedback hidden' data-answer='disturbed'><p class='fb-line'>&#128204; <b>&#31572;&#26696;&#65306;</b>disturbed &#8212; </p><p class='fb-line'>&#127992; <b>题干翻译：</b>外面巨大的噪音_____了我的注意力。</p><p class='fb-line'>&#128214; <b>完整句翻译：</b>外面巨大的噪音disturbed了我的注意力。</p><p class='fb-line'>&#128221; <b>完整句：</b>The loud noise outside disturbed my concentration.</p><div class='think-path'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#128300; 解题思路</p><p class='think-step'>① 确定句子空缺处需要什么词性（主语/谓语/宾语/定语/状语）。</p><p class='think-step'>② 原词 <b>disturbing</b>（扰人的；引起不安的）需要转化为 <b>disturbed</b> 形式。词性转化</p><p class='think-step'>③ 将 <b>disturbed</b> 代入原句，检查语法和语义是否通顺。</p></div>词性转化<p class='fb-line'>&#127919; <b>考点：</b><li class='opt-explain'><b>disturbed</b>：<span class='opt-reason'> — 答案</span> <span class="tag-correct">&#10003;</span></li><li class='opt-explain'><b>disturbing</b>：扰人的；引起不安的<span class='opt-reason'>这是原形，需要派生形式</span></li><li class='opt-explain'><b>disturbance</b>：<span class='opt-reason'>词性/形式不匹配</span></li><li class='opt-explain'><b>undisturbed</b>：<span class='opt-reason'>词性/形式不匹配</span></li><br>&#128218; <b>题目来源：</b>CET-4 / 考研英语 词性转化专项练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><div class='distractors'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#9888; 干扰项分析</p><p class='distractor-item'><b>disturbing</b>（扰人的；引起不安的）：这是原形，需要派生形式</p><p class='distractor-item'><b>disturbance</b>（）：词性/形式不匹配</p><p class='distractor-item'><b>undisturbed</b>（）：词性/形式不匹配</p></div></ul><p class='fb-line'>&#128161; <b>解析：</b>句子缺少谓语动词，应使用过去式 disturbed；disturbing 是形容词，disturbance 是名词，undisturbed 是形容词。</p></div></section><section class='q wf-card' data-block='word_forms' data-card='7' data-answer='dreadful'><div class='qhead'><span class='qn'>&#36716;&#183;07</span><b>&#35789;&#24615;&#36716;&#21270;</b> &#183; <span class='wf-word'>dread</span></div><p class='prompt'>选词填空，注意词性转化：</p><div class='wf-stem'>The news was so _____ that she couldn&#x27;t sleep all night.</div><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='wf7' value='dread'> dread</label><label class='opt ' data-correct='1'><input type='radio' name='wf7' value='dreadful'> dreadful</label><label class='opt ' data-correct='0'><input type='radio' name='wf7' value='dreadfully'> dreadfully</label><label class='opt ' data-correct='0'><input type='radio' name='wf7' value='dreaded'> dreaded</label></div><div class='feedback hidden' data-answer='dreadful'><p class='fb-line'>&#128204; <b>&#31572;&#26696;&#65306;</b>dreadful &#8212; </p><p class='fb-line'>&#127992; <b>题干翻译：</b>这个消息太_____了，她整晚都睡不着。</p><p class='fb-line'>&#128214; <b>完整句翻译：</b>这个消息太dreadful了，她整晚都睡不着。</p><p class='fb-line'>&#128221; <b>完整句：</b>The news was so dreadful that she couldn&amp;#x27;t sleep all night.</p><div class='think-path'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#128300; 解题思路</p><p class='think-step'>① 确定句子空缺处需要什么词性（主语/谓语/宾语/定语/状语）。</p><p class='think-step'>② 原词 <b>dread</b>（恐惧；害怕；担忧）需要转化为 <b>dreadful</b> 形式。名词 -&gt; 形容词（-ful 后缀）</p><p class='think-step'>③ 将 <b>dreadful</b> 代入原句，检查语法和语义是否通顺。</p></div>名词 -&gt; 形容词（-ful 后缀）<p class='fb-line'>&#127919; <b>考点：</b><li class='opt-explain'><b>dread</b>：恐惧；害怕；担忧<span class='opt-reason'>这是原形，需要派生形式</span></li><li class='opt-explain'><b>dreadful</b>：<span class='opt-reason'> — 答案</span> <span class="tag-correct">&#10003;</span></li><li class='opt-explain'><b>dreadfully</b>：<span class='opt-reason'>需要形容词形式（-ful）</span></li><li class='opt-explain'><b>dreaded</b>：<span class='opt-reason'>这是过去式/过去分词，此处需要其他词性</span></li><br>&#128218; <b>题目来源：</b>CET-4 / 考研英语 词性转化专项练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><div class='distractors'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#9888; 干扰项分析</p><p class='distractor-item'><b>dread</b>（恐惧；害怕；担忧）：这是原形，需要派生形式</p><p class='distractor-item'><b>dreadfully</b>（）：需要形容词形式（-ful）</p><p class='distractor-item'><b>dreaded</b>（）：这是过去式/过去分词，此处需要其他词性</p></div></ul><p class='fb-line'>&#128161; <b>解析：</b>dreadful 是形容词，意为&#x27;可怕的&#x27;，修饰 news；dread 是动词/名词；dreadfully 是副词；dreaded 是形容词但常作定语，如 the dreaded day。</p></div></section><section class='q wf-card' data-block='word_forms' data-card='8' data-answer='poison'><div class='qhead'><span class='qn'>&#36716;&#183;08</span><b>&#35789;&#24615;&#36716;&#21270;</b> &#183; <span class='wf-word'>poisonous</span></div><p class='prompt'>选词填空，注意词性转化：</p><div class='wf-stem'>The plant contains a powerful _____ that can cause paralysis.</div><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='wf8' value='poison'> poison</label><label class='opt ' data-correct='0'><input type='radio' name='wf8' value='poisonous'> poisonous</label><label class='opt ' data-correct='0'><input type='radio' name='wf8' value='poisoning'> poisoning</label><label class='opt ' data-correct='0'><input type='radio' name='wf8' value='poisoner'> poisoner</label></div><div class='feedback hidden' data-answer='poison'><p class='fb-line'>&#128204; <b>&#31572;&#26696;&#65306;</b>poison &#8212; 使中毒</p><p class='fb-line'>&#127992; <b>题干翻译：</b>这种植物含有一种能导致瘫痪的强效_____。</p><p class='fb-line'>&#128214; <b>完整句翻译：</b>这种植物含有一种能导致瘫痪的强效poison。</p><p class='fb-line'>&#128221; <b>完整句：</b>The plant contains a powerful poison that can cause paralysis.</p><div class='think-path'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#128300; 解题思路</p><p class='think-step'>① 确定句子空缺处需要什么词性（主语/谓语/宾语/定语/状语）。</p><p class='think-step'>② 原词 <b>poisonous</b>（有毒的，有害的）需要转化为 <b>poison</b> 形式。词性转化</p><p class='think-step'>③ 将 <b>poison</b> 代入原句，检查语法和语义是否通顺。</p></div>词性转化<p class='fb-line'>&#127919; <b>考点：</b><li class='opt-explain'><b>poison</b>：使中毒<span class='opt-reason'> — 答案</span> <span class="tag-correct">&#10003;</span></li><li class='opt-explain'><b>poisonous</b>：有毒的，有害的<span class='opt-reason'>这是原形，需要派生形式</span></li><li class='opt-explain'><b>poisoning</b>：<span class='opt-reason'>这是现在分词形式，此处需要名词/形容词</span></li><li class='opt-explain'><b>poisoner</b>：<span class='opt-reason'>词性/形式不匹配</span></li><br>&#128218; <b>题目来源：</b>CET-4 / 考研英语 词性转化专项练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><div class='distractors'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#9888; 干扰项分析</p><p class='distractor-item'><b>poisonous</b>（有毒的，有害的）：这是原形，需要派生形式</p><p class='distractor-item'><b>poisoning</b>（）：这是现在分词形式，此处需要名词/形容词</p><p class='distractor-item'><b>poisoner</b>（）：词性/形式不匹配</p></div></ul><p class='fb-line'>&#128161; <b>解析：</b>空格前有冠词 a 和形容词 powerful，需要名词。poison 是名词，意为“毒药”。</p></div></section><section class='q wf-card' data-block='word_forms' data-card='9' data-answer='aware'><div class='qhead'><span class='qn'>&#36716;&#183;09</span><b>&#35789;&#24615;&#36716;&#21270;</b> &#183; <span class='wf-word'>awareness</span></div><p class='prompt'>选词填空，注意词性转化：</p><div class='wf-stem'>Many people are not _____ of the health risks associated with a sedentary lifestyle.</div><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='wf9' value='aware'> aware</label><label class='opt ' data-correct='0'><input type='radio' name='wf9' value='awareness'> awareness</label><label class='opt ' data-correct='0'><input type='radio' name='wf9' value='unaware'> unaware</label><label class='opt ' data-correct='0'><input type='radio' name='wf9' value='awarenesses'> awarenesses</label></div><div class='feedback hidden' data-answer='aware'><p class='fb-line'>&#128204; <b>&#31572;&#26696;&#65306;</b>aware &#8212; 意识到的；知道的</p><p class='fb-line'>&#127992; <b>题干翻译：</b>许多人没有意识到久坐不动的生活方式带来的健康风险。</p><p class='fb-line'>&#128214; <b>完整句翻译：</b>许多人没有意识到久坐不动的生活方式带来的健康风险。</p><p class='fb-line'>&#128221; <b>完整句：</b>Many people are not aware of the health risks associated with a sedentary lifestyle.</p><div class='think-path'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#128300; 解题思路</p><p class='think-step'>① 确定句子空缺处需要什么词性（主语/谓语/宾语/定语/状语）。</p><p class='think-step'>② 原词 <b>awareness</b>（意识；察觉；认识）需要转化为 <b>aware</b> 形式。词性转化</p><p class='think-step'>③ 将 <b>aware</b> 代入原句，检查语法和语义是否通顺。</p></div>词性转化<p class='fb-line'>&#127919; <b>考点：</b><li class='opt-explain'><b>aware</b>：意识到的；知道的<span class='opt-reason'> — 答案</span> <span class="tag-correct">&#10003;</span></li><li class='opt-explain'><b>awareness</b>：意识；察觉；认识<span class='opt-reason'>这是原形，需要派生形式</span></li><li class='opt-explain'><b>unaware</b>：<span class='opt-reason'>词性/形式不匹配</span></li><li class='opt-explain'><b>awarenesses</b>：<span class='opt-reason'>这是复数形式，此处需要单数/其他形式</span></li><br>&#128218; <b>题目来源：</b>CET-4 / 考研英语 词性转化专项练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><div class='distractors'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#9888; 干扰项分析</p><p class='distractor-item'><b>awareness</b>（意识；察觉；认识）：这是原形，需要派生形式</p><p class='distractor-item'><b>unaware</b>（）：词性/形式不匹配</p><p class='distractor-item'><b>awarenesses</b>（）：这是复数形式，此处需要单数/其他形式</p></div></ul><p class='fb-line'>&#128161; <b>解析：</b>be aware of 是固定搭配，表示“意识到”，这里需要形容词 aware。</p></div></section><section class='q wf-card' data-block='word_forms' data-card='10' data-answer='coordinator'><div class='qhead'><span class='qn'>&#36716;&#183;10</span><b>&#35789;&#24615;&#36716;&#21270;</b> &#183; <span class='wf-word'>coordination</span></div><p class='prompt'>选词填空，注意词性转化：</p><div class='wf-stem'>She was appointed as the project _____ to ensure smooth communication.</div><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='wf10' value='coordination'> coordination</label><label class='opt ' data-correct='1'><input type='radio' name='wf10' value='coordinator'> coordinator</label><label class='opt ' data-correct='0'><input type='radio' name='wf10' value='coordinate'> coordinate</label><label class='opt ' data-correct='0'><input type='radio' name='wf10' value='coordinated'> coordinated</label></div><div class='feedback hidden' data-answer='coordinator'><p class='fb-line'>&#128204; <b>&#31572;&#26696;&#65306;</b>coordinator &#8212; </p><p class='fb-line'>&#127992; <b>题干翻译：</b>她被任命为项目_____，以确保沟通顺畅。</p><p class='fb-line'>&#128214; <b>完整句翻译：</b>她被任命为项目coordinator，以确保沟通顺畅。</p><p class='fb-line'>&#128221; <b>完整句：</b>She was appointed as the project coordinator to ensure smooth communication.</p><div class='think-path'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#128300; 解题思路</p><p class='think-step'>① 确定句子空缺处需要什么词性（主语/谓语/宾语/定语/状语）。</p><p class='think-step'>② 原词 <b>coordination</b>（协调；配合；协作）需要转化为 <b>coordinator</b> 形式。词性转化</p><p class='think-step'>③ 将 <b>coordinator</b> 代入原句，检查语法和语义是否通顺。</p></div>词性转化<p class='fb-line'>&#127919; <b>考点：</b><li class='opt-explain'><b>coordination</b>：协调；配合；协作<span class='opt-reason'>这是原形，需要派生形式</span></li><li class='opt-explain'><b>coordinator</b>：<span class='opt-reason'> — 答案</span> <span class="tag-correct">&#10003;</span></li><li class='opt-explain'><b>coordinate</b>：使协调，调节<span class='opt-reason'>词性/形式不匹配</span></li><li class='opt-explain'><b>coordinated</b>：<span class='opt-reason'>这是过去式/过去分词，此处需要其他词性</span></li><br>&#128218; <b>题目来源：</b>CET-4 / 考研英语 词性转化专项练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><div class='distractors'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#9888; 干扰项分析</p><p class='distractor-item'><b>coordination</b>（协调；配合；协作）：这是原形，需要派生形式</p><p class='distractor-item'><b>coordinate</b>（使协调，调节）：词性/形式不匹配</p><p class='distractor-item'><b>coordinated</b>（）：这是过去式/过去分词，此处需要其他词性</p></div></ul><p class='fb-line'>&#128161; <b>解析：</b>空处需要名词，指人，所以用 coordinator（协调员）。coordination 是抽象名词，coordinate 是动词，coordinated 是形容词。</p></div></section><section class='q wf-card' data-block='word_forms' data-card='11' data-answer='backwardness'><div class='qhead'><span class='qn'>&#36716;&#183;11</span><b>&#35789;&#24615;&#36716;&#21270;</b> &#183; <span class='wf-word'>backward</span></div><p class='prompt'>选词填空，注意词性转化：</p><div class='wf-stem'>The country&#x27;s economic _____ is a major concern for the government.</div><div class='opts'><label class='opt ' data-correct='0'><input type='radio' name='wf11' value='backward'> backward</label><label class='opt ' data-correct='0'><input type='radio' name='wf11' value='backwards'> backwards</label><label class='opt ' data-correct='1'><input type='radio' name='wf11' value='backwardness'> backwardness</label><label class='opt ' data-correct='0'><input type='radio' name='wf11' value='back'> back</label></div><div class='feedback hidden' data-answer='backwardness'><p class='fb-line'>&#128204; <b>&#31572;&#26696;&#65306;</b>backwardness &#8212; </p><p class='fb-line'>&#127992; <b>题干翻译：</b>该国的经济_____是政府的主要担忧。</p><p class='fb-line'>&#128214; <b>完整句翻译：</b>该国的经济backwardness是政府的主要担忧。</p><p class='fb-line'>&#128221; <b>完整句：</b>The country&amp;#x27;s economic backwardness is a major concern for the government.</p><div class='think-path'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#128300; 解题思路</p><p class='think-step'>① 确定句子空缺处需要什么词性（主语/谓语/宾语/定语/状语）。</p><p class='think-step'>② 原词 <b>backward</b>（向后；倒退的；落后的）需要转化为 <b>backwardness</b> 形式。形容词 -&gt; 名词（-ness 后缀）</p><p class='think-step'>③ 将 <b>backwardness</b> 代入原句，检查语法和语义是否通顺。</p></div>形容词 -&gt; 名词（-ness 后缀）<p class='fb-line'>&#127919; <b>考点：</b><li class='opt-explain'><b>backward</b>：向后；倒退的；落后的<span class='opt-reason'>这是原形，需要派生形式</span></li><li class='opt-explain'><b>backwards</b>：<span class='opt-reason'>需要名词形式（-ness）</span></li><li class='opt-explain'><b>backwardness</b>：<span class='opt-reason'> — 答案</span> <span class="tag-correct">&#10003;</span></li><li class='opt-explain'><b>back</b>：背后；回原处<span class='opt-reason'>需要名词形式（-ness）</span></li><br>&#128218; <b>题目来源：</b>CET-4 / 考研英语 词性转化专项练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><div class='distractors'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#9888; 干扰项分析</p><p class='distractor-item'><b>backward</b>（向后；倒退的；落后的）：这是原形，需要派生形式</p><p class='distractor-item'><b>backwards</b>（）：需要名词形式（-ness）</p><p class='distractor-item'><b>back</b>（背后；回原处）：需要名词形式（-ness）</p></div></ul><p class='fb-line'>&#128161; <b>解析：</b>句子需要名词作主语，backwardness 是名词，意为“落后”；backward 是形容词/副词，backwards 是副词，back 是名词/副词/形容词。</p></div></section><section class='q wf-card' data-block='word_forms' data-card='12' data-answer='charter'><div class='qhead'><span class='qn'>&#36716;&#183;12</span><b>&#35789;&#24615;&#36716;&#21270;</b> &#183; <span class='wf-word'>charter</span></div><p class='prompt'>选词填空，注意词性转化：</p><div class='wf-stem'>The university received a royal _____ in 1836.</div><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='wf12' value='charter'> charter</label><label class='opt ' data-correct='0'><input type='radio' name='wf12' value='chapter'> chapter</label><label class='opt ' data-correct='0'><input type='radio' name='wf12' value='character'> character</label><label class='opt ' data-correct='0'><input type='radio' name='wf12' value='chart'> chart</label></div><div class='feedback hidden' data-answer='charter'><p class='fb-line'>&#128204; <b>&#31572;&#26696;&#65306;</b>charter &#8212; 宪章；特许状</p><p class='fb-line'>&#127992; <b>题干翻译：</b>这所大学在1836年获得了一份皇家_____。</p><p class='fb-line'>&#128214; <b>完整句翻译：</b>这所大学在1836年获得了一份皇家charter。</p><p class='fb-line'>&#128221; <b>完整句：</b>The university received a royal charter in 1836.</p><div class='think-path'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#128300; 解题思路</p><p class='think-step'>题目中给出的词 <b>charter</b> 已经符合句子的词性要求，不需要额外的词形变化。直接填入原形即可。</p></div>词形不变，保持原形<p class='fb-line'>&#127919; <b>考点：</b><li class='opt-explain'><b>charter</b>：宪章；特许状<span class='opt-reason'> — 答案</span> <span class="tag-correct">&#10003;</span></li><li class='opt-explain'><b>chapter</b>：章；回<span class='opt-reason'>词性/形式不匹配</span></li><li class='opt-explain'><b>character</b>：性格；角色<span class='opt-reason'>词性/形式不匹配</span></li><li class='opt-explain'><b>chart</b>：图表；海图<span class='opt-reason'>需要名词形式（-er）</span></li><br>&#128218; <b>题目来源：</b>CET-4 / 考研英语 词性转化专项练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><div class='distractors'><p class='fb-line' style='font-weight:700;font-size:16px;color:var(--navy);'>&#9888; 干扰项分析</p><p class='distractor-item'><b>chapter</b>（章；回）：词性/形式不匹配</p><p class='distractor-item'><b>character</b>（性格；角色）：词性/形式不匹配</p><p class='distractor-item'><b>chart</b>（图表；海图）：需要名词形式（-er）</p></div></ul><p class='fb-line'>&#128161; <b>解析：</b>charter 意为“特许状”，符合句意；chapter 是“章节”；character 是“性格”；chart 是“图表”。</p></div></section><section class='q al-card' data-block='article_logic' data-card='0' data-answer='anxiety'><div class='qhead'><span class='qn'>逻·0</span><b>文章逻辑 · 第 1 段</b></div><p class='prompt'>Read the paragraph and choose the correct word to fill in the blank:</p><div class='para-sentence'>Last Friday, I went on a blind date arranged by a friend. The moment I saw her, I felt a wave of <span class='para-blank'>______</span>. She was beautiful, but I was so clumsy that I spilled coffee on her dress. The silence that followed was awkward and disturbing.</div><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='al0' value='anxiety'> anxiety</label><label class='opt ' data-correct='0'><input type='radio' name='al0' value='despair'> despair</label><label class='opt ' data-correct='0'><input type='radio' name='al0' value='distress'> distress</label><label class='opt ' data-correct='0'><input type='radio' name='al0' value='dread'> dread</label></div><div class='feedback hidden' data-answer='anxiety'><p class='fb-line'>&#128204; <b>答案：</b>anxiety — 焦虑；忧虑</p><p class='fb-line'>&#127992; <b>段落翻译（中文）：</b>相亲时我感到 <span class='tag-correct' style='font-size:12px;padding:2px 6px;'>anxiety</span>，因为 <span class='tag-correct' style='font-size:12px;padding:2px 6px;'>clumsy</span> 打翻了咖啡，气氛很 <span class='tag-correct' style='font-size:12px;padding:2px 6px;'>awkward</span> 和 <span class='tag-correct' style='font-size:12px;padding:2px 6px;'>disturbing</span>。</p><p class='fb-line'>&#128221; <b>完整句：</b>相亲时我感到 anxiety，因为 clumsy 打翻了咖啡，气氛很 awkward 和 disturbing。</p><p class='fb-line'>&#127919; <b>考点：</b>段落主旨理解 + 上下文逻辑推断<br>&#128218; <b>题目来源：</b>小韩英语角 · 读后理解练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><li><b>anxiety</b>：焦虑；忧虑 <span class="tag-correct">✓</span></li><li><b>despair</b>：绝望，完全失去希望的状态。</li><li><b>distress</b>：（精神或身体上的）痛苦、悲痛、危难</li><li><b>dread</b>：恐惧；害怕；担忧</li></ul></div></section><section class='q al-card' data-block='article_logic' data-card='1' data-answer='distress'><div class='qhead'><span class='qn'>逻·1</span><b>文章逻辑 · 第 2 段</b></div><p class='prompt'>Read the paragraph and choose the correct word to fill in the blank:</p><div class='para-sentence'>I tried to apologize, but my words only increased her <span class='para-blank'>______</span>. She looked at me with despair, as if the evening was ruined. I felt a dread that I had made a poisonous mistake. My awareness of the situation only made things worse.</div><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='al1' value='distress'> distress</label><label class='opt ' data-correct='0'><input type='radio' name='al1' value='anxiety'> anxiety</label><label class='opt ' data-correct='0'><input type='radio' name='al1' value='despair'> despair</label><label class='opt ' data-correct='0'><input type='radio' name='al1' value='dread'> dread</label></div><div class='feedback hidden' data-answer='distress'><p class='fb-line'>&#128204; <b>答案：</b>distress — （精神或身体上的）痛苦、悲痛、危难</p><p class='fb-line'>&#127992; <b>段落翻译（中文）：</b>我的道歉增加了她的 <span class='tag-correct' style='font-size:12px;padding:2px 6px;'>distress</span>，她 <span class='tag-correct' style='font-size:12px;padding:2px 6px;'>despair</span> 地看着我，我 <span class='tag-correct' style='font-size:12px;padding:2px 6px;'>dread</span> 自己犯了 <span class='tag-correct' style='font-size:12px;padding:2px 6px;'>poisonous</span> 错误。</p><p class='fb-line'>&#128221; <b>完整句：</b>我的道歉增加了她的 distress，她 despair 地看着我，我 dread 自己犯了 poisonous 错误。</p><p class='fb-line'>&#127919; <b>考点：</b>段落主旨理解 + 上下文逻辑推断<br>&#128218; <b>题目来源：</b>小韩英语角 · 读后理解练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><li><b>distress</b>：（精神或身体上的）痛苦、悲痛、危难 <span class="tag-correct">✓</span></li><li><b>anxiety</b>：焦虑；忧虑</li><li><b>despair</b>：绝望，完全失去希望的状态。</li><li><b>dread</b>：恐惧；害怕；担忧</li></ul></div></section><section class='q al-card' data-block='article_logic' data-card='2' data-answer='backward'><div class='qhead'><span class='qn'>逻·2</span><b>文章逻辑 · 第 3 段</b></div><p class='prompt'>Read the paragraph and choose the correct word to fill in the blank:</p><div class='para-sentence'>To my surprise, she laughed. She said my <span class='para-blank'>______</span> coordination was actually charming. We ended up chartering a boat for a sunset ride. The evening turned out to be wonderful.</div><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='al2' value='backward'> backward</label><label class='opt ' data-correct='0'><input type='radio' name='al2' value='awareness'> awareness</label><label class='opt ' data-correct='0'><input type='radio' name='al2' value='coordination'> coordination</label><label class='opt ' data-correct='0'><input type='radio' name='al2' value='charter'> charter</label></div><div class='feedback hidden' data-answer='backward'><p class='fb-line'>&#128204; <b>答案：</b>backward — 向后；倒退的；落后的</p><p class='fb-line'>&#127992; <b>段落翻译（中文）：</b>她笑了，说我的 <span class='tag-correct' style='font-size:12px;padding:2px 6px;'>backward</span> 协调很可爱，我们 <span class='tag-correct' style='font-size:12px;padding:2px 6px;'>charter</span> 了一艘船看日落。</p><p class='fb-line'>&#128221; <b>完整句：</b>她笑了，说我的 backward 协调很可爱，我们 charter 了一艘船看日落。</p><p class='fb-line'>&#127919; <b>考点：</b>段落主旨理解 + 上下文逻辑推断<br>&#128218; <b>题目来源：</b>小韩英语角 · 读后理解练习</p><p class='fb-line'>&#128270; <b>选项辨析：</b></p><ul class='explain'><li><b>backward</b>：向后；倒退的；落后的 <span class="tag-correct">✓</span></li><li><b>awareness</b>：意识；察觉；认识</li><li><b>coordination</b>：协调；配合；协作</li><li><b>charter</b>：宪章；特许状</li></ul></div></section><section class='q reading-card' data-block='reading' data-card='1'><div class='qhead'><b>③ 语境阅读</b> <span class='hint-inline'>&#x1F50D; 点击任意词 = 查词义（<span style='color:#E85D3A;font-weight:700;'>新词</span> / <span style='color:#8B5CF6;font-weight:700;'>复习</span> / <span style='color:#6B7280;border-bottom:1px dashed #6B7280;'>其他</span>）</span></div><p class='story-title'>情感与关系：一次尴尬的约会</p><audio controls preload='none' src='audio/story.mp3'><source src='audio/story.m4a'></audio><div class='story-body'><p class='story-paragraph'>Last Friday, I went on a blind date arranged by a friend. The moment I saw her, I felt a wave of <span class='dict-word dict-new' data-word='anxiety'>anxiety</span>. She was beautiful, but I was so <span class='dict-word dict-new' data-word='clumsy'>clumsy</span> that I spilled coffee on her dress. The silence that followed was <span class='dict-word dict-new' data-word='awkward'>awkward</span> and <span class='dict-word dict-new' data-word='disturbing'>disturbing</span>.</p><p class='story-paragraph'>I tried to apologize, but my words only increased her <span class='dict-word dict-new' data-word='distress'>distress</span>. She looked at me with <span class='dict-word dict-new' data-word='despair'>despair</span>, as if the evening was ruined. I felt a <span class='dict-word dict-new' data-word='dread'>dread</span> that I had made a <span class='dict-word dict-new' data-word='poisonous'>poisonous</span> mistake. My <span class='dict-word dict-review' data-word='awareness'>awareness</span> of the situation only made things worse.</p><p class='story-paragraph'>To my surprise, she laughed. She said my <span class='dict-word dict-review' data-word='backward'>backward</span> <span class='dict-word dict-review' data-word='coordination'>coordination</span> was actually charming. We ended up <span class='dict-word dict-review' data-word='charter'>charter</span>ing a boat for a sunset ride. The evening turned out to be wonderful.</p></div><details><summary>中文梗概</summary><p>作者讲述了一次尴尬的相亲经历。一开始因为紧张和笨拙，他打翻了咖啡，导致气氛尴尬和令人不安。他感到绝望和恐惧，觉得自己犯了一个严重的错误。但对方却笑了，认为他的笨拙很可爱，最后他们一起租船看日落，结局很美好。</p></details><p class='muted'>读完整篇 → 进入 ④ 输出挑战。</p></section><section class='q cloze' data-block='output' data-card='1' data-answer='anxiety'><div class='qhead'><span class='qn'>完·1</span><b>完形填空</b></div><p class='sentence'>The moment I saw her, I felt a wave of ______.</p><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='clo1' value='anxiety'> anxiety</label><label class='opt ' data-correct='0'><input type='radio' name='clo1' value='despair'> despair</label><label class='opt ' data-correct='0'><input type='radio' name='clo1' value='distress'> distress</label><label class='opt ' data-correct='0'><input type='radio' name='clo1' value='dread'> dread</label></div><div class='feedback hidden' data-answer='anxiety'><p class='fb-line'>📌 <b>答案：</b>anxiety — 焦虑；忧虑</p><p class='fb-line'>📝 <b>完整句子：</b>The moment I saw her, I felt a wave of ______.</p><p class='fb-line'>💡 <b>考点：</b>名词，表示焦虑，符合见到对方时的紧张情绪。</p><p class='fb-line'>🔎 <b>选项辨析：</b></p><ul class='explain'><li><b>anxiety</b>：焦虑；忧虑 <span class="tag-correct">✓</span></li><li><b>despair</b>：绝望，完全失去希望的状态。</li><li><b>distress</b>：（精神或身体上的）痛苦、悲痛、危难</li><li><b>dread</b>：恐惧；害怕；担忧</li></ul></div></section><section class='q cloze' data-block='output' data-card='2' data-answer='clumsy'><div class='qhead'><span class='qn'>完·2</span><b>完形填空</b></div><p class='sentence'>I was so ______ that I spilled coffee on her dress.</p><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='clo2' value='clumsy'> clumsy</label><label class='opt ' data-correct='0'><input type='radio' name='clo2' value='awkward'> awkward</label><label class='opt ' data-correct='0'><input type='radio' name='clo2' value='disturbing'> disturbing</label><label class='opt ' data-correct='0'><input type='radio' name='clo2' value='poisonous'> poisonous</label></div><div class='feedback hidden' data-answer='clumsy'><p class='fb-line'>📌 <b>答案：</b>clumsy — 笨拙的；不灵巧的；不圆滑的</p><p class='fb-line'>📝 <b>完整句子：</b>I was so ______ that I spilled coffee on her dress.</p><p class='fb-line'>💡 <b>考点：</b>形容词，表示笨拙，导致打翻咖啡的动作。</p><p class='fb-line'>🔎 <b>选项辨析：</b></p><ul class='explain'><li><b>clumsy</b>：笨拙的；不灵巧的；不圆滑的 <span class="tag-correct">✓</span></li><li><b>awkward</b>：尴尬的；笨拙的；不自在的</li><li><b>disturbing</b>：扰人的；引起不安的</li><li><b>poisonous</b>：有毒的，有害的</li></ul></div></section><section class='q cloze' data-block='output' data-card='3' data-answer='awkward'><div class='qhead'><span class='qn'>完·3</span><b>完形填空</b></div><p class='sentence'>The silence that followed was ______ and disturbing.</p><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='clo3' value='awkward'> awkward</label><label class='opt ' data-correct='0'><input type='radio' name='clo3' value='clumsy'> clumsy</label><label class='opt ' data-correct='0'><input type='radio' name='clo3' value='disturbing'> disturbing</label><label class='opt ' data-correct='0'><input type='radio' name='clo3' value='poisonous'> poisonous</label></div><div class='feedback hidden' data-answer='awkward'><p class='fb-line'>📌 <b>答案：</b>awkward — 尴尬的；笨拙的；不自在的</p><p class='fb-line'>📝 <b>完整句子：</b>The silence that followed was ______ and disturbing.</p><p class='fb-line'>💡 <b>考点：</b>形容词，表示尴尬，形容沉默的气氛。</p><p class='fb-line'>🔎 <b>选项辨析：</b></p><ul class='explain'><li><b>awkward</b>：尴尬的；笨拙的；不自在的 <span class="tag-correct">✓</span></li><li><b>clumsy</b>：笨拙的；不灵巧的；不圆滑的</li><li><b>disturbing</b>：扰人的；引起不安的</li><li><b>poisonous</b>：有毒的，有害的</li></ul></div></section><section class='q cloze' data-block='output' data-card='4' data-answer='despair'><div class='qhead'><span class='qn'>完·4</span><b>完形填空</b></div><p class='sentence'>She looked at me with ______, as if the evening was ruined.</p><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='clo4' value='despair'> despair</label><label class='opt ' data-correct='0'><input type='radio' name='clo4' value='anxiety'> anxiety</label><label class='opt ' data-correct='0'><input type='radio' name='clo4' value='distress'> distress</label><label class='opt ' data-correct='0'><input type='radio' name='clo4' value='dread'> dread</label></div><div class='feedback hidden' data-answer='despair'><p class='fb-line'>📌 <b>答案：</b>despair — 绝望，完全失去希望的状态。</p><p class='fb-line'>📝 <b>完整句子：</b>She looked at me with ______, as if the evening was ruined.</p><p class='fb-line'>💡 <b>考点：</b>名词，表示绝望，符合她觉得晚上被毁了的情绪。</p><p class='fb-line'>🔎 <b>选项辨析：</b></p><ul class='explain'><li><b>despair</b>：绝望，完全失去希望的状态。 <span class="tag-correct">✓</span></li><li><b>anxiety</b>：焦虑；忧虑</li><li><b>distress</b>：（精神或身体上的）痛苦、悲痛、危难</li><li><b>dread</b>：恐惧；害怕；担忧</li></ul></div></section><section class='q cloze' data-block='output' data-card='5' data-answer='backward'><div class='qhead'><span class='qn'>完·5</span><b>完形填空</b></div><p class='sentence'>She said my ______ coordination was actually charming.</p><div class='opts'><label class='opt ' data-correct='1'><input type='radio' name='clo5' value='backward'> backward</label><label class='opt ' data-correct='0'><input type='radio' name='clo5' value='awareness'> awareness</label><label class='opt ' data-correct='0'><input type='radio' name='clo5' value='coordination'> coordination</label><label class='opt ' data-correct='0'><input type='radio' name='clo5' value='charter'> charter</label></div><div class='feedback hidden' data-answer='backward'><p class='fb-line'>📌 <b>答案：</b>backward — 向后；倒退的；落后的</p><p class='fb-line'>📝 <b>完整句子：</b>She said my ______ coordination was actually charming.</p><p class='fb-line'>💡 <b>考点：</b>形容词，表示反向的，修饰协调，形容笨拙但可爱。</p><p class='fb-line'>🔎 <b>选项辨析：</b></p><ul class='explain'><li><b>backward</b>：向后；倒退的；落后的 <span class="tag-correct">✓</span></li><li><b>awareness</b>：意识；察觉；认识</li><li><b>coordination</b>：协调；配合；协作</li><li><b>charter</b>：宪章；特许状</li></ul></div></section><section class='q writing' data-block='output' data-card='6'><div class='qhead'><b>自由写作</b></div><p class='prompt'>用这三个词写 2-3 句：anxiety、clumsy、awkward</p><textarea rows='4' placeholder='写 2-3 句…'></textarea><button type='button' data-act='check-writing'>检查（LLM 一句反馈）</button><div class='writing-msg'></div></section><section class='q report-card' data-block='report' data-card='1'><div class='report-hero'>🎉</div><h2 class='report-title'>今日学习报告</h2><p class='report-sub'>先思考 → 再输入 → 再输出，完成度记录在这里。</p><div class='report-stats' id='report-stats'></div><div class='report-weak' id='report-weak'></div><p class='report-tip' id='report-tip'></p></section>
+</div>
+<div class="card-nav">
+  <button class="nav-prev" data-nav="prev">← 上一张</button>
+  <span class="nav-pos" id="nav-pos">1 / 1</span>
+  <button class="nav-next" data-nav="next">下一张 →</button>
+</div>
+<div class="footer">小韩陪你学英语 · 先思考 → 再输入 → 再输出</div>
+<div class="study-done hidden" id="study-done">🎉 今日学习完成</div>
+
+<!-- 点读词典弹窗 -->
+<div class="dict-modal" id="dict-modal"><div class="dict-box-wrap">
+  <button class="dict-close" id="dict-close">×</button>
+  <div class="dict-box" id="dict-box"></div>
+</div></div>
+
+<script>
+(function(){
+  var DICT = {"anxiety": {"ph": "UK /æŋ'zaɪətɪ/ US /æŋ'zaɪəti/", "zh": "焦虑；忧虑", "au": "anxiety_en"}, "awkward": {"ph": "UK /ɔːkwəd/ US /ɔkwɚd/", "zh": "尴尬的；笨拙的；不自在的", "au": "awkward_en"}, "clumsy": {"ph": "/klʌmzi/", "zh": "笨拙的；不灵巧的；不圆滑的", "au": "clumsy_en"}, "despair": {"ph": "UK /dɪ'speə/ US /dɪ'spɛr/", "zh": "绝望，完全失去希望的状态。", "au": "despair_en"}, "distress": {"ph": "UK /dɪ'stres/ US /dɪ'strɛs/", "zh": "（精神或身体上的）痛苦、悲痛、危难", "au": "distress_en"}, "disturbing": {"ph": "", "zh": "扰人的；引起不安的", "au": "disturbing_en"}, "dread": {"ph": "UK /dred/ US /drɛd/", "zh": "恐惧；害怕；担忧", "au": "dread_en"}, "poisonous": {"ph": "UK /pɒɪzənəs/ US /pɔɪzənəs/", "zh": "有毒的，有害的", "au": "poisonous_en"}, "awareness": {"ph": "UK /əˈweənəs/ US /ə'wɛrnəs/", "zh": "意识；察觉；认识", "au": "awareness_en"}, "coordination": {"ph": "UK /kəuˌɔːdɪ'neɪʃn/ US /ko,ɔrdɪ'neʃən/", "zh": "协调；配合；协作", "au": "coordination_en"}, "backward": {"ph": "UK /bækwəd/ US /bækwɚd/", "zh": "向后；倒退的；落后的", "au": "backward_en"}, "charter": {"ph": "UK /tʃɑːtə/ US /tʃɑrtɚ/", "zh": "宪章；特许状", "au": "charter_en"}};
+  var DAY = 129;
+  var stage = document.getElementById('stage');
+  var cards = Array.prototype.slice.call(stage.querySelectorAll('.q'));
+  var bar = document.getElementById('bar');
+  var counter = document.getElementById('counter');
+  var blocksEl = document.getElementById('blocks');
+  var BLOCK_NAMES = { 'intro': '开始', 'words': '一词一卡',
+                      'word_forms': '词性转化', 'article_logic': '文章逻辑',
+                      'reading': '阅读', 'output': '输出', 'report': '报告' };
+  var groups = {};
+  cards.forEach(function(c){
+    var b = c.getAttribute('data-block');
+    (groups[b] = groups[b] || []).push(c);
+  });
+  var firstCardOfBlock = {};
+  Object.keys(groups).forEach(function(b){
+    firstCardOfBlock[b] = groups[b][0];
+    var btn = document.createElement('button');
+    btn.textContent = BLOCK_NAMES[b] || b;
+    btn.setAttribute('data-block', b);
+    btn.addEventListener('click', function(){ showCard(firstCardOfBlock[b]); });
+    blocksEl.appendChild(btn);
+  });
+  var curIdx = 0;
+  function showCard(c){
+    cards.forEach(function(x){ x.classList.remove('active'); });
+    c.classList.add('active');
+    curIdx = cards.indexOf(c);
+    bar.style.width = (100 * (curIdx + 1) / cards.length) + '%';
+    counter.textContent = (curIdx + 1) + ' / ' + cards.length;
+    Array.prototype.forEach.call(blocksEl.children, function(b){
+      b.classList.toggle('on', b.getAttribute('data-block') === c.getAttribute('data-block'));
+    });
+    document.getElementById('nav-pos').textContent = (curIdx + 1) + ' / ' + cards.length;
+    document.querySelectorAll('.card-nav button').forEach(function(b){
+      var dir = b.getAttribute('data-nav');
+      b.disabled = (dir === 'prev' && curIdx === 0) || (dir === 'next' && curIdx === cards.length - 1);
+    });
+    window.scrollTo(0, 0);
+  }
+  function navNext(){ if (curIdx < cards.length - 1) showCard(cards[curIdx + 1]); }
+  function navPrev(){ if (curIdx > 0) showCard(cards[curIdx - 1]); }
+  document.body.addEventListener('click', function(e){
+    var t = e.target.closest('[data-nav]');
+    if (!t) return;
+    if (t.getAttribute('data-nav') === 'next') navNext(); else navPrev();
+  });
+
+  // 词卡：评分 → 揭晓输入 + 展开输出（含进度计数 / 离线兜底 / 自动完成）
+  var ratings = {};  // word -> quality（会话内）
+  var wcards = Array.prototype.slice.call(document.querySelectorAll('.wcard'));
+  var ratedSet = {};  // word -> true（含 localStorage 恢复）
+  var LS_RATINGS = 'xiaohan_ratings_' + DAY;
+  var LS_PENDING = 'xiaohan_pending_' + DAY;
+  function lsGet(k){ try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch(e){ return null; } }
+  function lsSet(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+  var savedRatings = lsGet(LS_RATINGS) || {};
+  Object.keys(savedRatings).forEach(function(w){
+    if (savedRatings[w]) ratedSet[w] = true;
+  });
+  function ratedCount(){
+    var n = 0;
+    wcards.forEach(function(c){
+      if (ratedSet[c.getAttribute('data-word')]) n++;
+    });
+    return n;
+  }
+  function refreshRateChip(){
+    var chip = document.getElementById('rate-chip');
+    if (!chip) return;
+    var n = ratedCount(), total = wcards.length;
+    chip.textContent = '词卡 ' + n + '/' + total;
+    chip.classList.toggle('done', n === total);
+    if (n === total) chip.textContent += ' · 学完';
+  }
+  function showStudyDone(offlineOnly){
+    var el = document.getElementById('study-done');
+    if (!el) return;
+    el.textContent = offlineOnly
+      ? '🎉 今日词卡已全部评分（离线已存，联网后自动同步）'
+      : '🎉 今日学习完成！';
+    el.classList.remove('hidden');
+  }
+  // 同步端点列表：依次尝试，任一成功即视为已同步。
+  // 1) 同源相对路径（经本地服务页 http://127.0.0.1:8090/ 打开时）
+  // 2) 本地服务绝对地址（从桌面 file:// 直接打开学习单时，跨源 CORS 推送）
+  var SYNC_ENDPOINTS = ['/api/review', 'http://127.0.0.1:8090/api/review'];
+  function postSync(path, body){
+    var payload = {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(body)
+    };
+    var chain = Promise.resolve(false);
+    SYNC_ENDPOINTS.forEach(function(base){
+      var url = (base.indexOf('http') === 0 ? base : '');
+      chain = chain.then(function(ok){
+        if (ok) return true;
+        return fetch(url + path, payload).then(function(resp){ return resp.ok; }, function(){ return false; });
+      });
+    });
+    return chain;
+  }
+  function sendReview(word, q){
+    return postSync('/api/review', {word: word, quality: q, channel: 'study', day_num: DAY});
+  }
+  function flushPending(){
+    var pend = lsGet(LS_PENDING) || [];
+    if (!pend.length) return Promise.resolve();
+    var next = [];
+    pend.forEach(function(p){ next.push({word: p.word, q: p.q}); });
+    var queue = next.slice();
+    return queue.reduce(function(acc, item){
+      return acc.then(function(){ return sendReview(item.word, item.q); }).then(function(ok){
+        if (!ok) return;
+        var rest = [];
+        pend.forEach(function(p){
+          if (!(p.word === item.word && p.q === item.q)) rest.push(p);
+        });
+        pend = rest;
+        lsSet(LS_PENDING, pend);
+      });
+    }, Promise.resolve());
+  }
+  function maybeComplete(){
+    flushPending().then(function(){
+      return postSync('/api/study-complete', {day_num: DAY});
+    }).then(function(ok){
+      if (ok) showStudyDone(false); else showStudyDone(true);
+    }).catch(function(){ showStudyDone(true); });
+  }
+  function rateWord(card, q){
+    var word = card.getAttribute('data-word');
+    ratings[word] = q;
+    ratedSet[word] = true;
+    var s = lsGet(LS_RATINGS) || {};
+    s[word] = q;
+    lsSet(LS_RATINGS, s);
+    refreshRateChip();
+    sendReview(word, q).then(function(ok){
+      if (!ok) {
+        var pend = lsGet(LS_PENDING) || [];
+        pend.push({word: word, q: q});
+        lsSet(LS_PENDING, pend);
+      }
+      if (ratedCount() >= wcards.length) maybeComplete();
+    });
+  }
+  document.querySelectorAll('.wcard .rate').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var q = parseInt(btn.getAttribute('data-q'), 10);
+      var card = btn.closest('.wcard');
+      card.querySelectorAll('.rate').forEach(function(b){ b.classList.remove('sel'); });
+      btn.classList.add('sel');
+      card.querySelector('.phase-input').classList.remove('hidden');
+      card.querySelector('.phase-output').classList.remove('hidden');
+      var labels = {1: '忘了', 3: '模糊', 4: '想起', 5: '熟练'};
+      card.querySelector('.rate-msg').textContent = '已记录「' + (labels[q] || q) + '」—— 答案和讲解展开啦';
+      rateWord(card, q);
+    });
+  });
+  refreshRateChip();
+  // 打开页面即自动补推历史遗留评分（避免漏同步）
+  flushPending();
+
+  // 词卡输出小练习：选完立刻反馈
+  document.querySelectorAll('.wcard .opts input').forEach(function(r){
+    r.addEventListener('change', function(){
+      var card = r.closest('.wcard');
+      var word = card.getAttribute('data-word');
+      var ok = r.value === word;
+      card.querySelectorAll('label.opt').forEach(function(l){
+        l.classList.remove('right', 'wrong', 'soft');
+        if (l.getAttribute('data-correct') === '1') l.classList.add('right');
+        else if (l.querySelector('input').checked) l.classList.add('wrong');
+        else l.classList.add('soft');
+      });
+      var fb = card.querySelector('.out-fb');
+      if (fb) fb.classList.remove('hidden');
+    });
+  });
+
+  // 阅读点读词典 — 点击任意词访问小字典
+  function showDict(word, info) {
+    var audioHtml = info.au ? "<audio controls autoplay preload='auto' src='audio/" + info.au + ".mp3'></audio>" : '';
+    var defHtml = '';
+    if (info.def) {
+      defHtml = "<div class='d-def'>" + info.def + "</div>";
+    }
+    document.getElementById('dict-box').innerHTML =
+      "<div class='d-en'>" + word + "</div>" +
+      "<div class='d-ph'>" + (info.ph || '') + "</div>" +
+      "<div class='d-zh'>" + (info.zh || '') + "</div>" + defHtml +
+      audioHtml;
+    document.getElementById('dict-modal').classList.add('show');
+  }
+
+  // 已知词（当日目标词）的点击
+  document.querySelectorAll('.dict-word').forEach(function(sw){
+    sw.addEventListener('click', function(e){
+      e.stopPropagation();
+      var w = sw.getAttribute('data-word');
+      var info = DICT[w] || {};
+      showDict(w, info);
+    });
+  });
+
+  // 任意词点击查询 — 通过在线词典 API
+  document.querySelectorAll('.story-paragraph, .story-body').forEach(function(el){
+    el.addEventListener('click', function(e){
+      // 如果已经是 .dict-word 的点击，不要重复处理
+      if (e.target.closest('.dict-word')) return;
+      // 如果点击的是普通文本节点，获取选中的词
+      var sel = window.getSelection();
+      if (!sel || !sel.toString().trim()) {
+        // 没有选中文字，尝试获取点击位置的词
+        var t = e.target;
+        if (t.nodeType === 3) { // Text node
+          var text = t.textContent;
+          var range = document.createRange();
+          range.selectNodeContents(t);
+          var pos = e.offsetX;
+          // 简单处理：获取点击位置附近的词
+          var words = text.match(/\w+/g) || [];
+          if (words.length > 0) {
+            var word = words[Math.floor(words.length / 2)];
+            lookupWord(word);
+          }
+          return;
+        }
+        return;
+      }
+      var word = sel.toString().trim().toLowerCase();
+      if (word && word.length > 0 && word.length < 30) {
+        lookupWord(word);
+      }
+      sel.removeAllRanges();
+    });
+  });
+
+  function lookupWord(word) {
+    // 先查本地词典
+    var info = DICT[word];
+    if (info) {
+      showDict(word, info);
+      return;
+    }
+    // 再尝试在线 API
+    var apiUrl = 'https://api.dictionaryapi.dev/api/v2/entries/en/' + encodeURIComponent(word);
+    fetch(apiUrl)
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        if (Array.isArray(data) && data.length > 0) {
+          var entry = data[0];
+          var ph = entry.phonetic || (entry.phonetics && entry.phonetics[0] ? entry.phonetics[0].text : '') || '';
+          var meanings = entry.meanings || [];
+          var defs = [];
+          meanings.forEach(function(m){
+            (m.definitions || []).slice(0, 2).forEach(function(d){
+              defs.push('<span class="d-pos">' + (m.partOfSpeech || '') + '</span> ' + (d.definition || ''));
+            });
+          });
+          var defHtml = defs.join('<br>');
+          // 网络翻译（简单处理）
+          var zh = '';
+          if (meanings.length > 0 && meanings[0].definitions && meanings[0].definitions[0]) {
+            var syn = meanings[0].synonyms || [];
+            if (syn.length > 0) zh = '同义词：' + syn.slice(0, 3).join(', ');
+          }
+          showDict(word, {ph: ph, zh: zh, def: defHtml, au: ''});
+        } else {
+          showDict(word, {ph: '', zh: '未找到该词的定义', def: '', au: ''});
+        }
+      })
+      .catch(function(){
+        showDict(word, {ph: '', zh: '网络查询失败', def: '', au: ''});
+      });
+  }
+  document.getElementById('dict-close').addEventListener('click', function(){
+    document.getElementById('dict-modal').classList.remove('show');
+  });
+  document.getElementById('dict-modal').addEventListener('click', function(e){
+    if (e.target === this) this.classList.remove('show');
+  });
+
+  // 完形 / 预热共用反馈
+  function revealFeedback(card, isCorrect){
+    card.querySelectorAll('label.opt').forEach(function(l){
+      var input = l.querySelector('input');
+      l.classList.remove('right', 'wrong', 'soft');
+      if (l.getAttribute('data-correct') === '1') l.classList.add('right');
+      else if (input && input.checked) l.classList.add('wrong');
+      else l.classList.add('soft');
+    });
+    var fb = card.querySelector('.feedback');
+    if (fb) {
+      fb.classList.remove('hidden');
+      fb.classList.toggle('wrong', !isCorrect);
+    }
+  }
+  cards.forEach(function(card){
+    if (card.classList.contains('wcard')) return;
+    card.querySelectorAll('input[type=radio]').forEach(function(r){
+      r.addEventListener('change', function(){
+        var ans = card.getAttribute('data-answer');
+        revealFeedback(card, r.value === ans);
+      });
+    });
+  });
+
+  // 写作反馈
+  document.querySelectorAll('[data-act="check-writing"]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var card = btn.closest('.q');
+      var ta = card.querySelector('textarea');
+      var sentence = (ta.value || '').trim();
+      if (!sentence) { card.querySelector('.writing-msg').textContent = '请先写一句'; return; }
+      var prompt = card.querySelector('.prompt').textContent;
+      var m = prompt.match(/用.{0,20}?(\w+)[、，](\w+)[、，](\w+)/);
+      var word = m ? m[1] : 'word';
+      btn.disabled = true; btn.textContent = '反馈中…';
+      fetch('/api/check', {
+        method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({word: word, sentence: sentence})
+      }).then(function(r){ return r.json(); }).then(function(d){
+        var msg = card.querySelector('.writing-msg');
+        if (d.error) { msg.textContent = d.error; return; }
+        msg.textContent = (d.ok ? '✓ ' : '⚠ ') + d.feedback;
+      }).catch(function(e){
+        card.querySelector('.writing-msg').textContent = '反馈失败：' + e;
+      }).finally(function(){ btn.disabled = false; btn.textContent = '检查（LLM 一句反馈）'; });
+    });
+  });
+
+  // 键盘
+  document.addEventListener('keydown', function(e){
+    if (e.target && (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT')) return;
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); navNext(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); navPrev(); }
+    else if (['1','2','3','4'].indexOf(e.key) >= 0) {
+      var cur = cards[curIdx];
+      if (!cur || !cur.classList.contains('wcard')) return;
+      var map = {'1': 1, '2': 3, '3': 4, '4': 5};
+      var q = map[e.key];
+      var btn = cur.querySelector('.rate[data-q="' + q + '"]');
+      if (btn) btn.click();
+    }
+  });
+
+  // 学习报告：会话内汇总
+  function renderReport(){
+    var stats = {'1': 0, '3': 0, '4': 0, '5': 0};
+    var weak = [];
+    Object.keys(ratings).forEach(function(w){
+      stats[ratings[w]]++;
+      if (ratings[w] <= 3) weak.push(w);
+    });
+    var labels = {1: '忘了', 3: '模糊', 4: '想起', 5: '熟练'};
+    var cols = ['1','3','4','5'].map(function(q){
+      return "<div class='stat'><b>" + stats[q] + "</b><span>" + labels[q] + "</span></div>";
+    }).join('');
+    document.getElementById('report-stats').innerHTML = cols;
+    var weakEl = document.getElementById('report-weak');
+    if (weak.length) {
+      weakEl.innerHTML = "⚠️ 明天优先复习：<b>" + weak.join('、') + "</b><br>" +
+        "睡前再听一遍故事音频，回忆这些词出现的语境。";
+    } else {
+      weakEl.innerHTML = "🌟 今天没有弱项！每个词都记牢了，太棒了。";
+    }
+  }
+  var reportCard = document.querySelector('.report-card');
+  if (reportCard) {
+    // 进入报告卡时渲染（在 showCard 里通过 MutationObserver 太复杂，直接监听点击）
+    var obs = new MutationObserver(function(){
+      if (reportCard.classList.contains('active')) renderReport();
+    });
+    obs.observe(reportCard, {attributes: true, attributeFilter: ['class']});
+  }
+
+  if (cards.length > 0) showCard(cards[0]);
+})();
+</script>
+</body>
+</html>
